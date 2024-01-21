@@ -1,15 +1,22 @@
 package com.jvc.scmb;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.jvc.scmb.entities.Credentials;
 import com.jvc.scmb.entities.Customer;
+import com.jvc.scmb.entities.Employee;
+import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.entities.Order;
 import com.jvc.scmb.entities.OrderedItem;
 import com.jvc.scmb.entities.Stock;
 import com.jvc.scmb.repositories.CustomerRepository;
+import com.jvc.scmb.repositories.EmployeeRepository;
+import com.jvc.scmb.repositories.InvoiceRepository;
 import com.jvc.scmb.repositories.OrderRepository;
 import com.jvc.scmb.repositories.OrderedItemRepository;
 import com.jvc.scmb.repositories.StockRepository;
@@ -23,6 +30,8 @@ public class Seeder implements CommandLineRunner {
 	private final OrderRepository orderRepository;
 	private final OrderedItemRepository orderedItemRepository;
 	private final StockRepository stockRepository;
+	private final InvoiceRepository invoiceRepository;
+	private final EmployeeRepository employeeRepository;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -31,31 +40,37 @@ public class Seeder implements CommandLineRunner {
 		item1.setName("Blinds");
 		item1.setDescription("42\" x 72\" Blinds");
 		item1.setCount(100);
+		item1.setPrice(29.99);
 		
 		Stock item2 = new Stock();
 		item2.setName("Ice Melt");
 		item2.setDescription("50lbs Bag of Ice Melt");
 		item2.setCount(50);
+		item2.setPrice(49.99);
 		
 		Stock item3 = new Stock();
 		item3.setName("AAA Batteries");
 		item3.setDescription("24 Pack of AAA Batteries");
 		item3.setCount(1000);
+		item3.setPrice(12.99);
 		
 		Stock item4 = new Stock();
 		item4.setName("AA Batteries");
 		item4.setDescription("24 Pack of AA Batteries");
 		item4.setCount(1000);
+		item4.setPrice(12.99);
 		
 		Stock item5 = new Stock();
 		item5.setName("9V Batteries");
 		item5.setDescription("12 Pack of 9V Batteries");
 		item5.setCount(500);
+		item5.setPrice(14.99);
 		
 		Stock item6 = new Stock();
 		item6.setName("Rags");
 		item6.setDescription("6 Pack of Shop Rags");
 		item6.setCount(1000);
+		item6.setPrice(7.99);
 		
 		stockRepository.saveAllAndFlush(Arrays.asList(item1, item2, item3, item4, item5, item6));;
 		
@@ -71,6 +86,31 @@ public class Seeder implements CommandLineRunner {
 		customer2.setLastName("Test");
 		customer2.setAddress("123 Test St., Testtown, TS 10101");
 		customerRepository.saveAndFlush(customer2);
+		
+		//-- Employees --
+		Employee employee1 = new Employee();
+		employee1.setActive(true);
+		employee1.setAdmin(true);
+		Credentials credentials1 = new Credentials();
+		credentials1.setUsername("jchiarella");
+		credentials1.setPassword("jasonspassword");
+		employee1.setCredentials(credentials1);
+		employee1.setFirstName("Jason");
+		employee1.setLastName("Chiarella");
+		
+		employeeRepository.saveAndFlush(employee1);
+		
+		Employee employee2 = new Employee();
+		employee2.setActive(true);
+		employee2.setAdmin(false);
+		Credentials credentials2 = new Credentials();
+		credentials2.setUsername("ttesty");
+		credentials2.setPassword("testspassword");
+		employee2.setCredentials(credentials2);
+		employee2.setFirstName("Test");
+		employee2.setLastName("Testy");
+		
+		employeeRepository.saveAndFlush(employee2);
 		
 		 //-- Orders --
 		//---------------------------------------
@@ -97,10 +137,22 @@ public class Seeder implements CommandLineRunner {
 		item3.setCount(item3.getCount()-20);
 		item6.setCount(item6.getCount()-5);
 
-		orderRepository.save(order1);
+		orderRepository.saveAndFlush(order1);
 		orderedItemRepository.saveAllAndFlush(Arrays.asList(oi1, oi2, oi3));
 		stockRepository.saveAllAndFlush(Arrays.asList(item1, item2, item3, item4, item5, item6));
-		orderRepository.saveAndFlush(order1);
+		
+		//create invoice
+		Invoice invoice1 = new Invoice(order1);
+		invoice1.setEmployee(employee1);
+		
+		//assign employee to invoice
+		List<Invoice> newList1 = new ArrayList<>();
+		newList1 = employee1.getInvoices();
+		newList1.add(invoice1);
+		employee1.setInvoices(newList1);
+		
+		invoiceRepository.saveAndFlush(invoice1);
+		employeeRepository.saveAndFlush(employee1);
 		
 		//---------------------------------------
 		Order order2 = new Order();
@@ -126,10 +178,22 @@ public class Seeder implements CommandLineRunner {
 		item5.setCount(item5.getCount()-24);
 		item6.setCount(item6.getCount()-15);
 		
-		orderRepository.save(order2);
+		orderRepository.saveAndFlush(order2);
 		orderedItemRepository.saveAllAndFlush(Arrays.asList(oi4, oi5, oi6));
 		stockRepository.saveAllAndFlush(Arrays.asList(item1, item2, item3, item4, item5, item6));
-		orderRepository.saveAndFlush(order2);
+		
+		//create invoice
+		Invoice invoice2 = new Invoice(order2);
+		invoice2.setEmployee(employee1);
+		
+		//assign employee to invoice
+		List<Invoice> newList2 = new ArrayList<>();
+		newList2 = employee1.getInvoices();
+		newList2.add(invoice2);
+		employee1.setInvoices(newList2);
+		
+		invoiceRepository.saveAndFlush(invoice2);
+		employeeRepository.saveAndFlush(employee1);
 		
 		//---------------------------------------
 		Order order3 = new Order();
@@ -150,10 +214,22 @@ public class Seeder implements CommandLineRunner {
 		item1.setCount(item2.getCount()-1);
 		item3.setCount(item3.getCount()-20);
 		
-		orderRepository.save(order3);
+		orderRepository.saveAndFlush(order3);
 		orderedItemRepository.saveAllAndFlush(Arrays.asList(oi7, oi8));
 		stockRepository.saveAllAndFlush(Arrays.asList(item1, item2, item3, item4, item5, item6));
-		orderRepository.saveAndFlush(order3);
+		
+		//create invoice
+		Invoice invoice3 = new Invoice(order3);
+		invoice3.setEmployee(employee1);
+		
+		//assign employee to invoice
+		List<Invoice> newList3 = new ArrayList<>();
+		newList3 = employee1.getInvoices();
+		newList3.add(invoice3);
+		employee1.setInvoices(newList3);
+		
+		invoiceRepository.saveAndFlush(invoice3);
+		employeeRepository.saveAndFlush(employee1);
 		
 		//---------------------------------------
 		Order order4 = new Order();
@@ -189,10 +265,21 @@ public class Seeder implements CommandLineRunner {
 		item4.setCount(item4.getCount()-20);
 		item5.setCount(item5.getCount()-5);
 		
-		orderRepository.save(order4);
+		orderRepository.saveAndFlush(order4);
 		orderedItemRepository.saveAllAndFlush(Arrays.asList(oi9, oi10, oi11, oi12, oi13));
 		stockRepository.saveAllAndFlush(Arrays.asList(item1, item2, item3, item4, item5, item6));
-		orderRepository.saveAndFlush(order4);
 		
+		//create invoice
+		Invoice invoice4 = new Invoice(order4);
+		invoice4.setEmployee(employee2);
+		
+		//assign employee to invoice
+		List<Invoice> newList4 = new ArrayList<>();
+		newList4 = employee2.getInvoices();
+		newList4.add(invoice4);
+		employee2.setInvoices(newList4);
+		
+		invoiceRepository.saveAndFlush(invoice4);
+		employeeRepository.saveAndFlush(employee2);
 	}
 }
