@@ -3,6 +3,7 @@ package com.jvc.scmb.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,11 +22,16 @@ public class Customer {
 	@GeneratedValue
 	private Long id;
 	
+	@Embedded
+	private Credentials credentials;
+	
 	private String firstName;
 	
 	private String lastName;
 	
 	private String address;
+	
+	private String phoneNumber;
 	
 	@OneToMany(mappedBy = "customer")
 	private List<Order> orders = new ArrayList<>();

@@ -79,22 +79,32 @@ public class Seeder implements CommandLineRunner {
 		customer1.setFirstName("Jason");
 		customer1.setLastName("Chiarella");
 		customer1.setAddress("666 Devil Way, Shithole, MS 69696");
+		customer1.setPhoneNumber("111-111-1111");
+		Credentials credentials1 = new Credentials();
+		credentials1.setUsername("jcustomer");
+		credentials1.setPassword("password");
+		customer1.setCredentials(credentials1);
 		customerRepository.saveAndFlush(customer1);
 		
 		Customer customer2 = new Customer();
 		customer2.setFirstName("Testy");
 		customer2.setLastName("Test");
 		customer2.setAddress("123 Test St., Testtown, TS 10101");
+		customer2.setPhoneNumber("222-222-2222");
+		Credentials credentials2 = new Credentials();
+		credentials2.setUsername("tcustomer");
+		credentials2.setPassword("password");
+		customer2.setCredentials(credentials2);
 		customerRepository.saveAndFlush(customer2);
 		
 		//-- Employees --
 		Employee employee1 = new Employee();
 		employee1.setActive(true);
 		employee1.setAdmin(true);
-		Credentials credentials1 = new Credentials();
-		credentials1.setUsername("jchiarella");
-		credentials1.setPassword("jasonspassword");
-		employee1.setCredentials(credentials1);
+		Credentials credentials3 = new Credentials();
+		credentials3.setUsername("jchiarella");
+		credentials3.setPassword("jasonspassword");
+		employee1.setCredentials(credentials3);
 		employee1.setFirstName("Jason");
 		employee1.setLastName("Chiarella");
 		
@@ -103,10 +113,10 @@ public class Seeder implements CommandLineRunner {
 		Employee employee2 = new Employee();
 		employee2.setActive(true);
 		employee2.setAdmin(false);
-		Credentials credentials2 = new Credentials();
-		credentials2.setUsername("ttesty");
-		credentials2.setPassword("testspassword");
-		employee2.setCredentials(credentials2);
+		Credentials credentials4 = new Credentials();
+		credentials4.setUsername("ttesty");
+		credentials4.setPassword("testspassword");
+		employee2.setCredentials(credentials4);
 		employee2.setFirstName("Test");
 		employee2.setLastName("Testy");
 		
