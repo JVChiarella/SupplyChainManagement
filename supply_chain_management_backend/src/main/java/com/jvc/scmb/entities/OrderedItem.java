@@ -1,6 +1,8 @@
 package com.jvc.scmb.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,10 +24,12 @@ public class OrderedItem {
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn
+	@JsonBackReference
 	private Order order;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn
+	@JsonBackReference
 	private Stock stock;
 	
 	private int amount;

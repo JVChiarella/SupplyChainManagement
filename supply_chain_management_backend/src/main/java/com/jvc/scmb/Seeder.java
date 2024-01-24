@@ -80,6 +80,7 @@ public class Seeder implements CommandLineRunner {
 		customer1.setLastName("Chiarella");
 		customer1.setAddress("666 Devil Way, Shithole, MS 69696");
 		customer1.setPhoneNumber("111-111-1111");
+		customer1.setActive(true);
 		Credentials credentials1 = new Credentials();
 		credentials1.setUsername("jcustomer");
 		credentials1.setPassword("password");
@@ -91,6 +92,7 @@ public class Seeder implements CommandLineRunner {
 		customer2.setLastName("Test");
 		customer2.setAddress("123 Test St., Testtown, TS 10101");
 		customer2.setPhoneNumber("222-222-2222");
+		customer2.setActive(true);
 		Credentials credentials2 = new Credentials();
 		credentials2.setUsername("tcustomer");
 		credentials2.setPassword("password");

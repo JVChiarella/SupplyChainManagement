@@ -3,6 +3,9 @@ package com.jvc.scmb.entities;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,11 +26,13 @@ public class Invoice {
 	private Long id;
 	
 	@OneToOne(cascade = CascadeType.MERGE)
+	@JsonBackReference
 	private Order order;
 	
 	private double totalPrice = 0.0;
 	
 	@ManyToOne
+	@JsonBackReference
 	private Employee employee;
 	
 	//unfulfilled / in-progress / fulfilled

@@ -33,6 +33,8 @@ public class Customer {
 	
 	private String phoneNumber;
 	
+	private Boolean active;
+	
 	@OneToMany(mappedBy = "customer")
 	private List<Order> orders = new ArrayList<>();
 }

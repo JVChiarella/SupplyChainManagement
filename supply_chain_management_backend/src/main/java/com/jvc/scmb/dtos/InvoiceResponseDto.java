@@ -1,5 +1,6 @@
 package com.jvc.scmb.dtos;
 
+import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Order;
 
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class InvoiceResponseDto {
 	private Order order;
+	
+	private Customer customer;
 	
 	private double totalPrice;
 	

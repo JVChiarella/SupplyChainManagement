@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,12 +34,12 @@ public class Order {
 	
 	@ManyToOne
 	@JoinColumn
+	@JsonBackReference
 	private Customer customer;
 	
 	@OneToMany(fetch = FetchType.EAGER,
 			   cascade = CascadeType.MERGE,
 			   mappedBy = "order")
-
 	private List<OrderedItem> ordered_items = new ArrayList<>();
 	
 	@CreatedDate
