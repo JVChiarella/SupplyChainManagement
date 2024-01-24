@@ -14,7 +14,7 @@ export class AuthService {
   isLogin = false;
   roleAs!: string | null;
   noUser = false;
-  user!: User
+  user!: any;
 
   constructor(private http: HttpClient, private router: Router, private userService: UserService, private errorService: ErrorService, private cookieService : CookieService) {
 }

@@ -41,8 +41,29 @@ export class UserService {
   username : string = "";
   password : string = "";
   admin : boolean = false;
+  user : any;
 
   constructor(private errorService: ErrorService, private cookieService: CookieService) {}
+
+  setUser(user: any, username : string, password : string){
+    this.user = user;
+
+    //check if user is employee or customer 
+
+    //--WIP--
+    if (!user.admin) {
+
+    }
+    this.username = username;
+    this.password = password;
+    this.admin = user['admin'];
+
+    this.cookieService.set("username", username.toString(), undefined, "/");
+  }
+
+  getUser() {
+    return this.user;
+  }
 
   async getAllCustomers(): Promise<Customer[]> {
     const endpoint = 'customers';
