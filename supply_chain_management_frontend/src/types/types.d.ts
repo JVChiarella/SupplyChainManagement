@@ -52,3 +52,16 @@ type Employee = {
     active: boolean;
     orders?: Order[];
 };
+
+type User = {
+    id?: number;
+    credentials: UserCredentials;
+    firstName: string;
+    lastName: string;
+    email: string;
+    active: boolean;
+    address? : string;
+    phoneNumber?: string;
+    admin?: boolean;
+    orders?: Order[];
+};
