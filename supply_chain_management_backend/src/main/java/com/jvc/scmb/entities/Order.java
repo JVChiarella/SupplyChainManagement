@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -46,5 +47,23 @@ public class Order {
     private Timestamp date = Timestamp.valueOf(LocalDateTime.now());
 	
 	@OneToOne(mappedBy = "order")
+	@JsonBackReference("order->invoice")
 	private Invoice invoice;
+	
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+ 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Order other = (Order) obj;
+        return Objects.equals(id, other.getId());
+    }
 }

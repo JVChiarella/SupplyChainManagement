@@ -1,6 +1,8 @@
 package com.jvc.scmb.entities;
 
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
@@ -33,4 +35,21 @@ public class OrderedItem {
 	private Stock stock;
 	
 	private int amount;
+	
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+ 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        OrderedItem other = (OrderedItem) obj;
+        return Objects.equals(id, other.getId());
+    }
 }

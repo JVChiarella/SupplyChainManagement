@@ -14,5 +14,5 @@ public interface StockMapper {
 	
 	Stock requestDtoToEntity(StockRequestDto stockRequestDto);
 	
-	List<Stock> requestEntitiesToDtos(List<StockRequestDto> stockRequestDtos);
+	List<StockResponseDto> requestEntitiesToDtos(List<Stock> stockItems);
 }

@@ -2,6 +2,7 @@ package com.jvc.scmb.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -34,4 +35,21 @@ public class Employee {
 	
 	@OneToMany(mappedBy = "employee")
 	private List<Invoice> invoices = new ArrayList<>();
+	
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+ 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Employee other = (Employee) obj;
+        return Objects.equals(id, other.getId());
+    }
 }

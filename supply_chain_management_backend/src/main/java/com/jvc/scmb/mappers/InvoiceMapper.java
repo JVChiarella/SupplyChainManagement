@@ -8,7 +8,7 @@ import com.jvc.scmb.dtos.InvoiceRequestDto;
 import com.jvc.scmb.dtos.InvoiceResponseDto;
 import com.jvc.scmb.entities.Invoice;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { OrderMapper.class } )
 public interface InvoiceMapper {
 
 	InvoiceResponseDto entityToDto(Invoice invoice);

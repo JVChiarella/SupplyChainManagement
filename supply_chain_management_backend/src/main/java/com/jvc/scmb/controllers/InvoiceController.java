@@ -13,13 +13,13 @@ import com.jvc.scmb.services.InvoiceService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("invoices")
 @RequiredArgsConstructor
 public class InvoiceController {
 	
 	private final InvoiceService invoiceService;
 
-	@GetMapping
+	@GetMapping("/{id}")
 	public InvoiceResponseDto getInvoice(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
 		return invoiceService.getInvoice(id, userRequestDto);
 	}
