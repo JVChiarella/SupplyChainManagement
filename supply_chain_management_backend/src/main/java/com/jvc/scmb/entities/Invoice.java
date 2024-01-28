@@ -26,13 +26,13 @@ public class Invoice {
 	private Long id;
 	
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JsonBackReference
+	@JsonBackReference("invoice->order")
 	private Order order;
 	
 	private double totalPrice = 0.0;
 	
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference("invoice->employee")
 	private Employee employee;
 	
 	//unfulfilled / in-progress / fulfilled

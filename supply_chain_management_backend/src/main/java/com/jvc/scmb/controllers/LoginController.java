@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
 import com.jvc.scmb.dtos.EmployeeResponseDto;
 import com.jvc.scmb.services.LoginService;
@@ -20,12 +20,12 @@ public class LoginController {
 	private final LoginService loginService;
 	
 	@GetMapping("/customer")
-	public CustomerResponseDto loginCustomer(@RequestBody CredentialsRequestDto credentialsRequestDto) {
+	public CustomerResponseDto loginCustomer(@RequestBody CredentialsDto credentialsRequestDto) {
 		return loginService.loginCustomer(credentialsRequestDto);
 	}
 	
 	@GetMapping("/employee")
-	public EmployeeResponseDto loginEmployee(@RequestBody CredentialsRequestDto credentialsRequestDto) {
+	public EmployeeResponseDto loginEmployee(@RequestBody CredentialsDto credentialsRequestDto) {
 		return loginService.loginEmployee(credentialsRequestDto);
 	}
 

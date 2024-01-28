@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.exceptions.NotAuthorizedException;
 import com.jvc.scmb.exceptions.NotFoundException;
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.EmployeeRequestDto;
 import com.jvc.scmb.dtos.EmployeeResponseDto;
 import com.jvc.scmb.entities.Credentials;
@@ -89,7 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	//delete an employee
 	@Override
-	public EmployeeResponseDto deleteEmployee(Long id, CredentialsRequestDto credentialsRequestDto) {
+	public EmployeeResponseDto deleteEmployee(Long id, CredentialsDto credentialsRequestDto) {
 		//check valid credentials were provided
         if(credentialsRequestDto.getUsername() == null || credentialsRequestDto.getPassword() == null) {
             throw new BadRequestException("one or more fields missing in request");

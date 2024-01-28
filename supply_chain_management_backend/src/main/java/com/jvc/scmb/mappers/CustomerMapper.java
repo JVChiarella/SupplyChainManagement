@@ -8,7 +8,7 @@ import com.jvc.scmb.dtos.CustomerRequestDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
 import com.jvc.scmb.entities.Customer;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { CredentialsMapper.class } )
 public interface CustomerMapper {
 	CustomerResponseDto entityToDto(Customer customer);
 	

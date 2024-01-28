@@ -24,12 +24,12 @@ public class OrderedItem {
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn
-	@JsonBackReference
+	@JsonBackReference("ordered_item->order")
 	private Order order;
 	
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn
-	@JsonBackReference
+	@JsonBackReference("ordered_item->stock")
 	private Stock stock;
 	
 	private int amount;

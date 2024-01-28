@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
 import com.jvc.scmb.dtos.EmployeeResponseDto;
 import com.jvc.scmb.entities.Customer;
@@ -29,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
 	private final EmployeeMapper employeeMapper;
 	
 	@Override
-	public CustomerResponseDto loginCustomer(CredentialsRequestDto credentialsRequestDto) {
+	public CustomerResponseDto loginCustomer(CredentialsDto credentialsRequestDto) {
 		//check credentials, username, password, and name were provided
         if(credentialsRequestDto.getUsername() == null || credentialsRequestDto.getPassword() == null ) {
             throw new BadRequestException("one or more fields missing in request");
@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	@Override
-	public EmployeeResponseDto loginEmployee(CredentialsRequestDto credentialsRequestDto) {
+	public EmployeeResponseDto loginEmployee(CredentialsDto credentialsRequestDto) {
 		//check credentials, username, password, and name were provided
         if(credentialsRequestDto.getUsername() == null || credentialsRequestDto.getPassword() == null ) {
             throw new BadRequestException("one or more fields missing in request");

@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.CustomerRequestDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
+import com.jvc.scmb.dtos.UserRequestDto;
 import com.jvc.scmb.services.CustomerService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,15 +46,15 @@ public class CustomerController {
 	
 	//delete an customer via patch -- soft delete
 	@PatchMapping("/delete/{id}")
-	public CustomerResponseDto deleteCustomer(@PathVariable Long id, @RequestBody CredentialsRequestDto credentialsRequestDto) {
+	public CustomerResponseDto deleteCustomer(@PathVariable Long id, @RequestBody CredentialsDto credentialsRequestDto) {
 		return customerService.deleteCustomer(id, credentialsRequestDto);
 	}
 	
 	//patch an customer's info
 	//pass current customer's credentials in requestDto for validation; everything else is patching customer's info
 	@PatchMapping("/patch/{id}")
-	public CustomerResponseDto patchCustomer(@PathVariable Long id, @RequestBody CustomerRequestDto customerRequestDto) {
-		return customerService.patchCustomer(id, customerRequestDto);
+	public CustomerResponseDto patchCustomer(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
+		return customerService.patchCustomer(id, userRequestDto);
 	}
 
 }

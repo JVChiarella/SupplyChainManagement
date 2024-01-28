@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.EmployeeRequestDto;
 import com.jvc.scmb.dtos.EmployeeResponseDto;
 import com.jvc.scmb.services.EmployeeService;
@@ -45,7 +45,7 @@ public class EmployeeController {
 	
 	//delete an employee via patch -- soft delete
 	@PatchMapping("/delete/{id}")
-	public EmployeeResponseDto deleteEmployee(@PathVariable Long id, @RequestBody CredentialsRequestDto credentialsRequestDto) {
+	public EmployeeResponseDto deleteEmployee(@PathVariable Long id, @RequestBody CredentialsDto credentialsRequestDto) {
 		return employeeService.deleteEmployee(id, credentialsRequestDto);
 	}
 	

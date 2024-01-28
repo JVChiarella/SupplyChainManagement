@@ -162,9 +162,11 @@ public class Seeder implements CommandLineRunner {
 		newList1 = employee1.getInvoices();
 		newList1.add(invoice1);
 		employee1.setInvoices(newList1);
+		order1.setInvoice(invoice1);
 		
 		invoiceRepository.saveAndFlush(invoice1);
 		employeeRepository.saveAndFlush(employee1);
+		orderRepository.saveAndFlush(order1);
 		
 		//---------------------------------------
 		Order order2 = new Order();
@@ -203,9 +205,11 @@ public class Seeder implements CommandLineRunner {
 		newList2 = employee1.getInvoices();
 		newList2.add(invoice2);
 		employee1.setInvoices(newList2);
+		order2.setInvoice(invoice2);
 		
 		invoiceRepository.saveAndFlush(invoice2);
 		employeeRepository.saveAndFlush(employee1);
+		orderRepository.saveAndFlush(order2);
 		
 		//---------------------------------------
 		Order order3 = new Order();
@@ -239,9 +243,11 @@ public class Seeder implements CommandLineRunner {
 		newList3 = employee1.getInvoices();
 		newList3.add(invoice3);
 		employee1.setInvoices(newList3);
+		order3.setInvoice(invoice3);
 		
 		invoiceRepository.saveAndFlush(invoice3);
 		employeeRepository.saveAndFlush(employee1);
+		orderRepository.saveAndFlush(order3);
 		
 		//---------------------------------------
 		Order order4 = new Order();
@@ -290,8 +296,10 @@ public class Seeder implements CommandLineRunner {
 		newList4 = employee2.getInvoices();
 		newList4.add(invoice4);
 		employee2.setInvoices(newList4);
+		order4.setInvoice(invoice4);
 		
 		invoiceRepository.saveAndFlush(invoice4);
 		employeeRepository.saveAndFlush(employee2);
+		orderRepository.saveAndFlush(order4);
 	}
 }

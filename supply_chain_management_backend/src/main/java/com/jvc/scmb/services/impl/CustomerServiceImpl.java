@@ -5,9 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.CustomerRequestDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
+import com.jvc.scmb.dtos.UserRequestDto;
 import com.jvc.scmb.entities.Credentials;
 import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
@@ -60,23 +61,6 @@ public class CustomerServiceImpl implements CustomerService {
                 customerRequestDto.getLastName() == null || customerRequestDto.getAddress() == null || customerRequestDto.getPhoneNumber() == null) {
             throw new BadRequestException("one or more fields missing in request");
         }
-
-        //credentials should be a valid customer; only an active employee can add a new customer
-        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(customerRequestDto.getCredentials().getUsername());
-        if(optionalUser.isEmpty()) {
-        	throw new NotAuthorizedException("user with provided credentials not found");
-        }
-
-        //check that found user is active
-        Employee foundEmployee = optionalUser.get();
-        if(!foundEmployee.getActive()) {
-        	throw new NotAuthorizedException("non-active user");
-        }
-        
-        //check password of employee making new customer request
-        if(!foundEmployee.getCredentials().getPassword().equals(customerRequestDto.getCredentials().getPassword())) {
-            throw new NotAuthorizedException("password incorrect");
-        }
 		
 		//convert dto to new customer obj
 		Customer newCustomer = new Customer();
@@ -84,8 +68,8 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		//set default username and password for new customer
 		Credentials newCredentials = new Credentials();
-		newCredentials.setUsername(newCustomer.getFirstName().substring(0, 1) + newCustomer.getLastName());
-		newCredentials.setPassword("password");
+		newCredentials.setUsername(customerRequestDto.getCredentials().getUsername());
+		newCredentials.setPassword(customerRequestDto.getCredentials().getPassword());
 		newCustomer.setCredentials(newCredentials);
 		
 		//add new customer to db, save and return
@@ -94,7 +78,7 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	//delete a customer
 	@Override
-	public CustomerResponseDto deleteCustomer(Long id, CredentialsRequestDto credentialsRequestDto) {
+	public CustomerResponseDto deleteCustomer(Long id, CredentialsDto credentialsRequestDto) {
 		//check valid credentials were provided
         if(credentialsRequestDto.getUsername() == null || credentialsRequestDto.getPassword() == null) {
             throw new BadRequestException("one or more fields missing in request");
@@ -137,35 +121,18 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	//patch customer
 	@Override
-	public CustomerResponseDto patchCustomer(Long id, CustomerRequestDto customerRequestDto) {
+	public CustomerResponseDto patchCustomer(Long id, UserRequestDto userRequestDto) {
 		//check credentials, username, password, and customer data was provided
-        if(customerRequestDto.getCredentials() == null || customerRequestDto.getCredentials().getUsername() == null ||
-                customerRequestDto.getCredentials().getPassword() == null || customerRequestDto.getFirstName() == null ||
-                customerRequestDto.getLastName() == null) {
+        if(userRequestDto.getCredentials() == null || userRequestDto.getCredentials().getUsername() == null ||
+                userRequestDto.getCredentials().getPassword() == null || userRequestDto.getCustomerRequestDto().getFirstName() == null ||
+                userRequestDto.getCustomerRequestDto().getLastName() == null || userRequestDto.getCustomerRequestDto().getActive() == null ||
+                userRequestDto.getCustomerRequestDto().getPhoneNumber() == null || userRequestDto.getCustomerRequestDto().getAddress() == null ||
+                userRequestDto.getCustomerRequestDto().getCredentials() == null) {
             throw new BadRequestException("one or more fields missing in request");
         }
 
-        //credentials should be a valid employee; only an active employee can patch a customer's info
-        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(customerRequestDto.getCredentials().getUsername());
-        if(optionalUser.isEmpty()) {
-        	throw new NotAuthorizedException("user with provided credentials not found");
-        }
-
-        //check that found user is active
-        Employee loggedEmployee = optionalUser.get();
-        if(!loggedEmployee.getActive()) {
-        	throw new NotAuthorizedException("non-active user");
-        }
-        
-        //check password of employee making patch customer request
-        if(!loggedEmployee.getCredentials().getPassword().equals(customerRequestDto.getCredentials().getPassword())) {
-            throw new NotAuthorizedException("password incorrect");
-        }
-        
-        //check that logged in user is an admin
-        if(!loggedEmployee.getAdmin()) {
-        	throw new NotAuthorizedException("logged in user is not an admin -- cannot delete an customer");
-        }
+        //check credentials
+        checkCredentials(userRequestDto);
         
         //find customer whose data is to be updated
         Optional<Customer> optionalCus = customerRepository.findById(id);
@@ -176,13 +143,64 @@ public class CustomerServiceImpl implements CustomerService {
         Customer foundCustomer = optionalCus.get();
 		
 		//update customer data with new data
-		foundCustomer.setActive(customerRequestDto.getActive());
-		foundCustomer.setFirstName(customerRequestDto.getFirstName());
-		foundCustomer.setLastName(customerRequestDto.getLastName());
-		foundCustomer.setAddress(customerRequestDto.getAddress());
-		foundCustomer.setPhoneNumber(customerRequestDto.getPhoneNumber());
+		foundCustomer.setActive(userRequestDto.getCustomerRequestDto().getActive());
+		foundCustomer.setFirstName(userRequestDto.getCustomerRequestDto().getFirstName());
+		foundCustomer.setLastName(userRequestDto.getCustomerRequestDto().getLastName());
+		foundCustomer.setAddress(userRequestDto.getCustomerRequestDto().getAddress());
+		foundCustomer.setPhoneNumber(userRequestDto.getCustomerRequestDto().getPhoneNumber());
+		foundCustomer.getCredentials().setUsername(userRequestDto.getCustomerRequestDto().getCredentials().getUsername());
+		foundCustomer.getCredentials().setPassword(userRequestDto.getCustomerRequestDto().getCredentials().getPassword());
 		
 		//save customer info to db, save and return
 		return customerMapper.entityToDto(customerRepository.saveAndFlush(foundCustomer));
+	}
+	
+	private void checkCredentials(UserRequestDto userRequestDto) {
+		//check credentials were provided
+        if(userRequestDto.getCredentials().getUsername() == null || userRequestDto.getCredentials().getPassword() == null ) {
+            throw new BadRequestException("one or more fields missing in request");
+        }
+        
+		//check what type of user is making request
+		if(userRequestDto.getType().equals("employee")) {
+	        //credentials should be a valid employee
+	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
+	        if(optionalUser.isEmpty()) {
+	        	throw new NotAuthorizedException("user with provided credentials not found");
+	        }
+
+	        //check that found user is active
+	        Employee foundEmployee = optionalUser.get();
+	        if(!foundEmployee.getActive()) {
+	        	throw new NotAuthorizedException("non-active user");
+	        }
+	        
+	        //check password of employee making request
+	        if(!foundEmployee.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
+	            throw new NotAuthorizedException("password incorrect");
+	        }
+	        return;
+		} else if(userRequestDto.getType().equals("customer")) {
+	        //credentials should be a valid customer
+	        Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
+	        if(optionalUser.isEmpty()) {
+	        	throw new NotAuthorizedException("user with provided credentials not found");
+	        }
+
+	        //check that found user is active
+	        Customer foundCustomer = optionalUser.get();
+	        if(!foundCustomer.getActive()) {
+	        	throw new NotAuthorizedException("non-active user");
+	        }
+	        
+	        //check password of employee making request
+	        if(!foundCustomer.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
+	            throw new NotAuthorizedException("password incorrect");
+	        }
+	        return;
+			
+		} else {
+			throw new BadRequestException("invalid type provided");
+		}
 	}
 }

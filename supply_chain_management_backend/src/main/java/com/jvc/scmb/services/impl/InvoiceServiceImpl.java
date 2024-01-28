@@ -30,15 +30,30 @@ public class InvoiceServiceImpl implements InvoiceService{
 	
 	@Override
 	public InvoiceResponseDto getInvoice(Long id, UserRequestDto userRequestDto) {
+		//check credentials
+		checkCredentials(userRequestDto);
+			
+		//look for invoice
+		Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
+		if(optionalInvoice.isEmpty()) {
+			throw new BadRequestException("invoice with provided id not found");
+		}
+		
+		//convert invoice to dto and return
+		Invoice foundInvoice = optionalInvoice.get();
+		return invoiceMapper.entityToDto(foundInvoice);
+	}
+	
+	private void checkCredentials(UserRequestDto userRequestDto) {
 		//check credentials were provided
-        if(userRequestDto.getCredentialsRequestDto().getUsername() == null || userRequestDto.getCredentialsRequestDto().getPassword() == null ) {
+        if(userRequestDto.getCredentials().getUsername() == null || userRequestDto.getCredentials().getPassword() == null ) {
             throw new BadRequestException("one or more fields missing in request");
         }
         
 		//check what type of user is making request
 		if(userRequestDto.getType().equals("employee")) {
 	        //credentials should be a valid employee
-	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(userRequestDto.getCredentialsRequestDto().getUsername());
+	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
 	        if(optionalUser.isEmpty()) {
 	        	throw new NotAuthorizedException("user with provided credentials not found");
 	        }
@@ -50,12 +65,13 @@ public class InvoiceServiceImpl implements InvoiceService{
 	        }
 	        
 	        //check password of employee making request
-	        if(!foundEmployee.getCredentials().getPassword().equals(userRequestDto.getCredentialsRequestDto().getPassword())) {
+	        if(!foundEmployee.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
 	            throw new NotAuthorizedException("password incorrect");
 	        }
+	        return;
 		} else if(userRequestDto.getType().equals("customer")) {
 	        //credentials should be a valid customer
-	        Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(userRequestDto.getCredentialsRequestDto().getUsername());
+	        Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
 	        if(optionalUser.isEmpty()) {
 	        	throw new NotAuthorizedException("user with provided credentials not found");
 	        }
@@ -67,22 +83,13 @@ public class InvoiceServiceImpl implements InvoiceService{
 	        }
 	        
 	        //check password of employee making request
-	        if(!foundCustomer.getCredentials().getPassword().equals(userRequestDto.getCredentialsRequestDto().getPassword())) {
+	        if(!foundCustomer.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
 	            throw new NotAuthorizedException("password incorrect");
 	        }
+	        return;
 			
 		} else {
 			throw new BadRequestException("invalid type provided");
 		}
-			
-		//look for invoice
-		Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
-		if(optionalInvoice.isEmpty()) {
-			throw new BadRequestException("invoice with provided id not found");
-		}
-		
-		//convert invoice to dto and return
-		Invoice foundInvoice = optionalInvoice.get();
-		return invoiceMapper.entityToDto(foundInvoice);
 	}
 }

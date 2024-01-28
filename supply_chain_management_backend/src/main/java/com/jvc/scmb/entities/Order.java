@@ -34,7 +34,7 @@ public class Order {
 	
 	@ManyToOne
 	@JoinColumn
-	@JsonBackReference
+	@JsonBackReference("order->customer")
 	private Customer customer;
 	
 	@OneToMany(fetch = FetchType.EAGER,

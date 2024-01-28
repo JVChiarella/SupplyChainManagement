@@ -2,9 +2,10 @@ package com.jvc.scmb.services;
 
 import java.util.List;
 
-import com.jvc.scmb.dtos.CredentialsRequestDto;
+import com.jvc.scmb.dtos.CredentialsDto;
 import com.jvc.scmb.dtos.CustomerRequestDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
+import com.jvc.scmb.dtos.UserRequestDto;
 
 public interface CustomerService {
 
@@ -14,8 +15,8 @@ public interface CustomerService {
 
 	CustomerResponseDto addCustomer(CustomerRequestDto customerRequestDto);
 
-	CustomerResponseDto deleteCustomer(Long id, CredentialsRequestDto credentialsRequestDto);
+	CustomerResponseDto deleteCustomer(Long id, CredentialsDto credentialsRequestDto);
 
-	CustomerResponseDto patchCustomer(Long id, CustomerRequestDto customerRequestDto);
+	CustomerResponseDto patchCustomer(Long id, UserRequestDto userRequestDto);
 
 }
