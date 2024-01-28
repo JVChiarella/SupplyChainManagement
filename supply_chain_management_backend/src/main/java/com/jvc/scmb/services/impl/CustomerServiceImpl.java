@@ -5,15 +5,15 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.jvc.scmb.exceptions.BadRequestException;
-import com.jvc.scmb.exceptions.NotAuthorizedException;
-import com.jvc.scmb.exceptions.NotFoundException;
 import com.jvc.scmb.dtos.CredentialsRequestDto;
 import com.jvc.scmb.dtos.CustomerRequestDto;
 import com.jvc.scmb.dtos.CustomerResponseDto;
 import com.jvc.scmb.entities.Credentials;
 import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
+import com.jvc.scmb.exceptions.BadRequestException;
+import com.jvc.scmb.exceptions.NotAuthorizedException;
+import com.jvc.scmb.exceptions.NotFoundException;
 import com.jvc.scmb.mappers.CustomerMapper;
 import com.jvc.scmb.mappers.EmployeeMapper;
 import com.jvc.scmb.repositories.CustomerRepository;
@@ -45,10 +45,10 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new NotFoundException("customer with that id not found");
 		}
 		
-		Customer foundcustomer = customer.get();
+		Customer foundCustomer = customer.get();
 		
 		//return found customer
-		return customerMapper.entityToDto(foundcustomer);
+		return customerMapper.entityToDto(foundCustomer);
 	}
 	
 	//add customer to DB
@@ -61,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException("one or more fields missing in request");
         }
 
-        //credentials should be a valid customer; only an active customer can add a new customer
+        //credentials should be a valid customer; only an active employee can add a new customer
         Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(customerRequestDto.getCredentials().getUsername());
         if(optionalUser.isEmpty()) {
         	throw new NotAuthorizedException("user with provided credentials not found");
@@ -73,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
         	throw new NotAuthorizedException("non-active user");
         }
         
-        //check password of customer making new customer request
+        //check password of employee making new customer request
         if(!foundEmployee.getCredentials().getPassword().equals(customerRequestDto.getCredentials().getPassword())) {
             throw new NotAuthorizedException("password incorrect");
         }
@@ -100,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException("one or more fields missing in request");
         }
 
-        //credentials should be a valid customer; only an active admin customer can delete an customer
+        //credentials should be a valid customer; only an active admin employee can delete an customer
         Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(credentialsRequestDto.getUsername());
         if(optionalUser.isEmpty()) {
         	throw new NotAuthorizedException("user with provided credentials not found");
@@ -112,7 +112,7 @@ public class CustomerServiceImpl implements CustomerService {
         	throw new NotAuthorizedException("non-active user");
         }
         
-        //check password of customer making new customer request
+        //check password of employee making new customer request
         if(!loggedEmployee.getCredentials().getPassword().equals(credentialsRequestDto.getPassword())) {
             throw new NotAuthorizedException("password incorrect");
         }
@@ -145,7 +145,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException("one or more fields missing in request");
         }
 
-        //credentials should be a valid customer; only an active customer can add a new customer
+        //credentials should be a valid employee; only an active employee can patch a customer's info
         Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(customerRequestDto.getCredentials().getUsername());
         if(optionalUser.isEmpty()) {
         	throw new NotAuthorizedException("user with provided credentials not found");
@@ -157,7 +157,7 @@ public class CustomerServiceImpl implements CustomerService {
         	throw new NotAuthorizedException("non-active user");
         }
         
-        //check password of customer making patch customer request
+        //check password of employee making patch customer request
         if(!loggedEmployee.getCredentials().getPassword().equals(customerRequestDto.getCredentials().getPassword())) {
             throw new NotAuthorizedException("password incorrect");
         }
@@ -182,7 +182,7 @@ public class CustomerServiceImpl implements CustomerService {
 		foundCustomer.setAddress(customerRequestDto.getAddress());
 		foundCustomer.setPhoneNumber(customerRequestDto.getPhoneNumber());
 		
-		//add new customer to db, save and return
+		//save customer info to db, save and return
 		return customerMapper.entityToDto(customerRepository.saveAndFlush(foundCustomer));
 	}
 }
