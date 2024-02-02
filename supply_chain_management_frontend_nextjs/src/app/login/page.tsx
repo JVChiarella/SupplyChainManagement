@@ -2,9 +2,12 @@
 import React from 'react'
 import { FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import UserService from '@/app/services/user.service';
 
 function LoginPage() {
   const router = useRouter()
+
+  const user : UserService = new UserService();
  
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -17,13 +20,19 @@ function LoginPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
-    })
- 
-    if (response.ok) {
-      router.push('/home')
-    } else {
-      // Handle errors
-    }
+    }).then(async (response) => {
+        if(response.ok){
+          const result = await response.json();
+          localStorage.setItem("user", JSON.stringify(result));
+          //console.log(result);
+          console.log(localStorage.getItem("user"));
+          user.setEmployee(result, username, password);
+          router.push('/home')
+        } else {
+          //handle errors
+        }
+      }
+    )
   }
  
   return (

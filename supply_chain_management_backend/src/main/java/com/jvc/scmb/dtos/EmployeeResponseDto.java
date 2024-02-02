@@ -2,7 +2,7 @@ package com.jvc.scmb.dtos;
 
 import java.util.List;
 
-import com.jvc.scmb.entities.Order;
+import com.jvc.scmb.entities.Invoice;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +21,6 @@ public class EmployeeResponseDto {
 	
 	private Boolean admin;
 	
-	private List<Order> orders;
+	private List<Invoice> invoices;
 
 }
