@@ -3,10 +3,10 @@ import NavButton from './navButton/navButton';
 
 const Navbar = () => {
   return (
-    <main>
+    <div className="navbar-container">
         <NavButton name="home"></NavButton>
         <NavButton name="users"></NavButton>
-    </main>
+    </div>
   )
 }
 

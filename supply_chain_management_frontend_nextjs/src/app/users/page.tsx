@@ -5,7 +5,7 @@ const UsersPage = () => {
   return (
     <main>
       <Navbar></Navbar>
-        <div>UsersPage</div>
+        <div>Users Page</div>
     </main>
   )
 }

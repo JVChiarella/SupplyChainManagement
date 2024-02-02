@@ -5,7 +5,7 @@ export default function Home() {
     <main>
       <Navbar></Navbar>
       <h2>
-        Hello World
+        Home Page
       </h2>
     </main>
   );

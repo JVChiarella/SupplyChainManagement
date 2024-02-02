@@ -28,32 +28,18 @@ body {
 }
 
 .navbar-container {
-  display:flex;     
+  display: flex;
+  height: 100px; 
+  font-family: 'Montserrat', sans-serif; 
 }
-
-.navbar-child {
-    width: 60%;
-    text-align: left;
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 40px;
-}
-
-.navbar-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 30px;
-    color: #3F86CC;
-}
-
 .navbar-button {
     background-color: #111827;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 25px;
-    width: 45%;
-    height: 60%;
+    color: #3F86CC;
+    font-size: 30px;
+    width: 10%;
+    height: 50%;
     border-radius:20px;
     text-align: center;
-    margin-top: 10px;  
     margin-right: 20px;
-    vertical-align: middle;
+    margin-top: 25px;
 }
