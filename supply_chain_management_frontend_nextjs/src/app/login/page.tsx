@@ -3,6 +3,7 @@ import React from 'react'
 import { FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import UserService from '@/app/services/user.service';
+import { PostEmployee } from '../api/login/route';
 
 function LoginPage() {
   const router = useRouter()
@@ -16,23 +17,18 @@ function LoginPage() {
     const username = formData.get('username')
     const password = formData.get('password')
  
-    const response = await fetch('http://localhost:8080/login/employee', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    }).then(async (response) => {
-        if(response.ok){
-          const result = await response.json();
-          localStorage.setItem("user", JSON.stringify(result));
-          //console.log(result);
-          console.log(localStorage.getItem("user"));
-          user.setEmployee(result, username, password);
-          router.push('/home')
-        } else {
-          //handle errors
-        }
+    const response = await PostEmployee(username, password).then((response) => {
+      console.log(response);
+      if(response != null){
+        //login success
+        console.log("im here");
+        router.push("/home");
+      } else {
+        //login failed
+        console.log("i shouldnt be here");
+        router.push("/");
       }
-    )
+    })
   }
  
   return (
