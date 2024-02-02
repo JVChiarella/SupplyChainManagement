@@ -173,6 +173,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		//return all old items to stock
 		List<OrderedItem> itemsToDelete = new ArrayList<>();
+		List<Stock> stockChanges = new ArrayList<>();
 		for(OrderedItem item : order.getOrdered_items()) {
 			Long item_id = item.getStock().getId();
 			Optional<Stock> optStock = stockRepository.findById(item_id);
@@ -182,18 +183,20 @@ public class OrderServiceImpl implements OrderService {
 			
 			Stock stock = optStock.get();
 			stock.setCount(stock.getCount() + item.getAmount());
-			stockRepository.saveAndFlush(stock);
-			
+			stockChanges.add(stock);
 			itemsToDelete.add(item);
 		}
+		//remove ordered items list from order and update all changes to db
+		order.getOrdered_items().removeAll(itemsToDelete);
+		orderRepository.save(order);
 		orderedItemRepository.deleteAll(itemsToDelete);
-		//order.getOrdered_items().removeAll(itemsToDelete);
-		orderRepository.saveAndFlush(order);
+		stockRepository.saveAll(stockChanges);
 		
+		//bug is in here (concurrent modification?)--------------------------------------
 		//update order to new items and update stock
 		//loop through ordered items and add to ordered items array + update stock numbers
 		List<OrderedItem> items = new ArrayList<>();
-		List<Stock> stockChanges = new ArrayList<>();
+		stockChanges.clear();
 		for(OrderedItemDto oi : orderRequestDto.getOrdered_items()) {
 			OrderedItem item = new OrderedItem();
 			Optional<Stock> optStock = stockRepository.findById(oi.getStock_id());
@@ -212,13 +215,11 @@ public class OrderServiceImpl implements OrderService {
 		}
 		order.setOrdered_items(items);
 		
+		//create invoice, save all to database and return
 		orderRepository.saveAndFlush(order);
 		orderedItemRepository.saveAllAndFlush(items);
 		stockRepository.saveAllAndFlush(stockChanges);
 		
-		//delete old invoice, create new invoice, save all to database and return
-		Invoice invoice = order.getInvoice();
-		invoiceRepository.delete(invoice);
 		Invoice newInvoice = new Invoice(order);
 		invoiceRepository.saveAndFlush(newInvoice);
 		order.setInvoice(newInvoice);
