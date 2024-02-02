@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 
 const NavButton = (props : any) => {
-    if(props.name === "home"){
+    if(props.name === "logout"){
         return(
             <div className= "navbar-button">
                 <Link href= {"./"}>{props.name}</Link>

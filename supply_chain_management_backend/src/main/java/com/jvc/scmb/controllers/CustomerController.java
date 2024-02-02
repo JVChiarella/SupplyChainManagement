@@ -2,6 +2,7 @@ package com.jvc.scmb.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("customers")
 @RequiredArgsConstructor
+@CrossOrigin(origins="*")
 public class CustomerController {
 	
 	private final CustomerService customerService;

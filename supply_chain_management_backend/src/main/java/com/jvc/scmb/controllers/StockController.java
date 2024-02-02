@@ -2,7 +2,7 @@ package com.jvc.scmb.controllers;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,24 +20,25 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("stock")
 @RequiredArgsConstructor
+@CrossOrigin(origins="*")
 public class StockController {
 	
 	private final StockService StockService;
 	
 	//get one stock item by id
-	@GetMapping("/{id}")
+	@PostMapping("/{id}")
 	public StockResponseDto getStock(@PathVariable Long id, @RequestBody EmployeeRequestDto employeeRequestDto) {
 		return StockService.getStock(id, employeeRequestDto);
 	}
 	
 	//get all items in stock
-	@GetMapping()
+	@PostMapping()
 	public List<StockResponseDto> getAllStockItems(@RequestBody EmployeeRequestDto employeeRequestDto){
 		return StockService.getAllStockItems(employeeRequestDto);
 	}
 	
 	//post a new item to stock
-	@PostMapping()
+	@PostMapping("/new")
 	public StockResponseDto addStock(@RequestBody StockRequestDto stockRequestDto) {
 		return StockService.addStock(stockRequestDto);
 	}

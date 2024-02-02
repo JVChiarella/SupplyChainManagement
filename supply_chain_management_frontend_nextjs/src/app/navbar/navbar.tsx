@@ -6,6 +6,7 @@ const Navbar = () => {
     <div className="navbar-container">
         <NavButton name="home"></NavButton>
         <NavButton name="users"></NavButton>
+        <NavButton name="logout"></NavButton>
     </div>
   )
 }
