@@ -2,7 +2,6 @@
 import React from 'react'
 import { FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import { PostEmployee } from '../api/login/route';
 import { signIn } from 'next-auth/react';
 
 function LoginPage() {
