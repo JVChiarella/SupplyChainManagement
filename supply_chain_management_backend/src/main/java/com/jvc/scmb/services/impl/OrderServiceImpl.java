@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.jvc.scmb.dtos.OrderRequestDto;
 import com.jvc.scmb.dtos.OrderResponseDto;
 import com.jvc.scmb.dtos.OrderedItemDto;
-import com.jvc.scmb.dtos.UserRequestDto;
 import com.jvc.scmb.entities.Customer;
-import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.entities.Order;
 import com.jvc.scmb.entities.OrderedItem;
 import com.jvc.scmb.entities.Stock;
 import com.jvc.scmb.exceptions.BadRequestException;
-import com.jvc.scmb.exceptions.NotAuthorizedException;
 import com.jvc.scmb.mappers.CustomerMapper;
 import com.jvc.scmb.mappers.OrderMapper;
 import com.jvc.scmb.repositories.CustomerRepository;
@@ -28,6 +28,9 @@ import com.jvc.scmb.repositories.OrderedItemRepository;
 import com.jvc.scmb.repositories.StockRepository;
 import com.jvc.scmb.services.OrderService;
 
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -43,15 +46,37 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderedItemRepository orderedItemRepository;
 	private final StockRepository stockRepository;
 	
+	@Value("${jwt.secret}")
+	private String secret;
+	
 	//get one order
 	@Override
-	public OrderResponseDto getOrder(Long id, UserRequestDto userRequestDto) {
-		//check credentials
-		Boolean customerFlag = false;
-		if(checkCredentials(userRequestDto).equals("customer")){
-			customerFlag = true;
+	public OrderResponseDto getOrder(Long id, String token) {
+		//verify jwt from header of request
+		if(token == null) {
+			throw new IllegalArgumentException("jwt authoriozation failed");
 		}
-			
+		
+		if(!token.startsWith("Bearer")){
+			throw new IllegalArgumentException("jwt authoriozation failed");
+		}
+		
+		//remove token prefix
+		token = token.replace("Bearer ", "");
+		token = token.replace("\"",""); 
+		System.out.println("TOKEN: " + token);
+		
+		//verify token
+		//SignatureAlgorithm sa = SignatureAlgorithm.HS256;
+		//SecretKeySpec secretKeySpec = new SecretKeySpec("${jwt.secret}".getBytes(), sa.getJcaName());
+		
+		try {
+			Jwts.parser().setSigningKey(secret).parse(token);
+		    //Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+		} catch (Exception e) {
+		    throw new IllegalArgumentException("Could not verify JWT token integrity!", e);
+		}
+		
 		//look for order
 		Optional<Order> optionalOrder = orderRepository.findById(id);
 		if(optionalOrder.isEmpty()) {
@@ -60,26 +85,12 @@ public class OrderServiceImpl implements OrderService {
 		
 		Order foundOrder = optionalOrder.get();
 		
-		//if user is a customer, make sure it is the customer that placed the order
-		if(customerFlag) {
-			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-			Customer customer = optCus.get();
-			if(!foundOrder.getCustomer().equals(customer)) {
-				throw new NotAuthorizedException("only the customer who placed the order or an employee can view it");
-			}
-		}
 		return orderMapper.entityToDto(foundOrder);
 	}
 	
 	//get all orders made by customer
 	@Override
-	public List<OrderResponseDto> getAllOrdersByCustomer(Long id, UserRequestDto userRequestDto) {
-		//check credentials
-		Boolean customerFlag = false;
-		if(checkCredentials(userRequestDto).equals("customer")){
-			customerFlag = true;
-		}
-			
+	public List<OrderResponseDto> getAllOrdersByCustomer(Long id) {
 		//look up customer who's id was provided
 		Optional<Customer> optionalCustomer = customerRepository.findById(id);
 		if(optionalCustomer.isEmpty()) {
@@ -89,24 +100,11 @@ public class OrderServiceImpl implements OrderService {
 		Customer customer = optionalCustomer.get();
 		List<Order> foundOrders = customer.getOrders();
 		
-		//if user is a customer, make sure it is the customer that placed the order
-		if(customerFlag) {
-			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-			Customer customer2 = optCus.get();
-			if(!customer.equals(customer2)) {
-				throw new NotAuthorizedException("only the customer who placed the order or an employee can view it");
-			}
-		}
 		return orderMapper.requestEntitiesToDtos(foundOrders);
 	}
 	
 	@Override
 	public OrderResponseDto addOrder(OrderRequestDto orderRequestDto) {
-		//check credentials - only a customer can place an order
-		if(!checkCredentials(orderRequestDto.getUserRequestDto()).equals("customer")) {
-			throw new BadRequestException("only a customer can place an order");
-		}
-		
 		//create new order and set customer from db
 		Order newOrder = orderMapper.requestDtoToEntity(orderRequestDto);
 		Optional<Customer> optCus = customerRepository.findByCredentialsUsername(orderRequestDto.getUserRequestDto().getCredentials().getUsername());
@@ -148,12 +146,6 @@ public class OrderServiceImpl implements OrderService {
 	//bug here. not currently working -----------------------------------------
 	@Override
 	public OrderResponseDto patchOrder(Long id, OrderRequestDto orderRequestDto) {
-		//check credentials
-		Boolean customerFlag = false;
-		if(checkCredentials(orderRequestDto.getUserRequestDto()).equals("customer")){
-			customerFlag = true;
-		}
-		
 		//find order in db
 		Optional<Order> optionalOrder = orderRepository.findById(id);
 		if(optionalOrder.isEmpty()) {
@@ -161,15 +153,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		Order order = optionalOrder.get();
-		
-		//if user is a customer, make sure it is the customer that placed the order
-		if(customerFlag) {
-			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(orderRequestDto.getUserRequestDto().getCredentials().getUsername());
-			Customer customer = optCus.get();
-			if(!customer.equals(order.getCustomer())) {
-				throw new NotAuthorizedException("only the customer who placed the order or an employee can view it");
-			}
-		}
 		
 		//return all old items to stock
 		List<OrderedItem> itemsToDelete = new ArrayList<>();
@@ -227,13 +210,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public OrderResponseDto deleteOrder(Long id, UserRequestDto userRequestDto) {
-		//check credentials
-		Boolean customerFlag = false;
-		if(checkCredentials(userRequestDto).equals("customer")){
-			customerFlag = true;
-		}
-		
+	public OrderResponseDto deleteOrder(Long id) {
 		//find order in db
 		Optional<Order> optionalOrder = orderRepository.findById(id);
 		if(optionalOrder.isEmpty()) {
@@ -242,17 +219,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		Order order = optionalOrder.get();
 		
-		//if user is a customer, make sure it is the customer that placed the order
-		if(customerFlag) {
-			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-			Customer customer = optCus.get();
-			if(!customer.equals(order.getCustomer())) {
-				throw new NotAuthorizedException("only the customer who placed the order or an employee can view it");
-			}
-		}
-		
 		//return ordered items to stock
-		//return all old items to stock
 		for(OrderedItem item : order.getOrdered_items()) {
 			Long item_id = item.getStock().getId();
 			Optional<Stock> optStock = stockRepository.findById(item_id);
@@ -271,58 +238,5 @@ public class OrderServiceImpl implements OrderService {
 		invoice.setStatus("cancelled");
 		invoiceRepository.saveAndFlush(invoice);
 		return orderMapper.entityToDto(order);
-	}
-	
-	public String checkCredentials(UserRequestDto userRequestDto) {
-		//check credentials were provided
-        if(userRequestDto.getCredentials().getUsername() == null || 
-        		userRequestDto.getCredentials().getPassword() == null ) {
-            throw new BadRequestException("one or more fields missing in request");
-        }
-        
-		//check what type of user is making request
-		if(userRequestDto.getType().equals("employee")) {
-	        //credentials should be a valid employee
-	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-	        if(optionalUser.isEmpty()) {
-	        	throw new NotAuthorizedException("user with provided credentials not found");
-	        }
-
-	        //check that found user is active
-	        Employee foundEmployee = optionalUser.get();
-	        if(!foundEmployee.getActive()) {
-	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making request
-	        if(!foundEmployee.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
-	            throw new NotAuthorizedException("password incorrect");
-	        }
-	        
-	        String result = "employee";
-	        return result;
-		} else if(userRequestDto.getType().equals("customer")) {
-	        //credentials should be a valid customer
-	        Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-	        if(optionalUser.isEmpty()) {
-	        	throw new NotAuthorizedException("user with provided credentials not found");
-	        }
-
-	        //check that found user is active
-	        Customer foundCustomer = optionalUser.get();
-	        if(!foundCustomer.getActive()) {
-	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making request
-	        if(!foundCustomer.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
-	            throw new NotAuthorizedException("password incorrect");
-	        }
-	        
-	        String result = "customer";
-	        return result;
-		} else {
-			throw new BadRequestException("invalid type provided");
-		}
 	}
 }

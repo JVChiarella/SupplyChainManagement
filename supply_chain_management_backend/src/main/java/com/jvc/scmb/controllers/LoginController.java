@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jvc.scmb.dtos.CredentialsDto;
-import com.jvc.scmb.dtos.CustomerResponseDto;
+import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.services.JwtGenerator;
 import com.jvc.scmb.services.LoginService;
@@ -26,8 +26,9 @@ public class LoginController {
 	private final JwtGenerator jwtGenerator;
 	
 	@PostMapping("/customer")
-	public CustomerResponseDto loginCustomer(@RequestBody CredentialsDto credentialsRequestDto) {
-		return loginService.loginCustomer(credentialsRequestDto);
+	public ResponseEntity<?> loginCustomer(@RequestBody CredentialsDto credentialsRequestDto) {
+		Customer customer = loginService.loginCustomer(credentialsRequestDto);
+		return new ResponseEntity<>(jwtGenerator.generateCustomerToken(customer), HttpStatus.OK);
 	}
 	
 	@PostMapping("/employee")

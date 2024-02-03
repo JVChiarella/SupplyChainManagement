@@ -9,10 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
+import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.services.JwtGenerator;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 @Service
 public class JwtGeneratorImpl implements JwtGenerator{
@@ -42,4 +46,19 @@ public class JwtGeneratorImpl implements JwtGenerator{
 	    jwtTokenGen.put("message", message);
 	    return jwtTokenGen;
 	}
+	
+  public boolean validateJwtToken(String authToken) {
+	    try {
+	      Jwts.parser().setSigningKey(secret.getBytes()).parse(authToken);
+	      return true;
+	    } catch (MalformedJwtException e) {
+	      throw new BadRequestException("Invalid JWT token: {}" + e.getMessage());
+	    } catch (ExpiredJwtException e) {
+		  throw new BadRequestException("JWT token is expired: {}" + e.getMessage());
+	    } catch (UnsupportedJwtException e) {
+		  throw new BadRequestException("JWT token is unsupported: {}" + e.getMessage());
+	    } catch (IllegalArgumentException e) {
+		  throw new IllegalArgumentException("JWT claims string is empty: {}" + e.getMessage());
+	    }
+  	}
 }
