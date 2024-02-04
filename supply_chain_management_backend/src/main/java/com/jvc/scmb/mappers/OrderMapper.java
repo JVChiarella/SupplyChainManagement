@@ -14,7 +14,7 @@ public interface OrderMapper {
 
 	OrderResponseDto entityToDto(Order order);
 	
-	@Mapping(target = "customer", source = "userRequestDto.customerRequestDto")
+	@Mapping(target = "customer", source = "customerRequestDto")
 	Order requestDtoToEntity(OrderRequestDto orderRequestDto);
 	
 	List<OrderResponseDto> requestEntitiesToDtos(List<Order> foundOrders);

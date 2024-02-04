@@ -151,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
 		    }
     	 
 			//find customer from db
-			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(orderRequestDto.getUserRequestDto().getCredentials().getUsername());
+			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(orderRequestDto.getCustomerRequestDto().getCredentials().getUsername());
 			Customer customer = optCus.get();
 			
 			//check that jwt and customer making request match

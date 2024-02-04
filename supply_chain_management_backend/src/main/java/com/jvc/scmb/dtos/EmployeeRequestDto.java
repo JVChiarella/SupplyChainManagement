@@ -2,8 +2,7 @@ package com.jvc.scmb.dtos;
 
 import java.util.List;
 
-import com.jvc.scmb.entities.Credentials;
-import com.jvc.scmb.entities.Order;
+import com.jvc.scmb.entities.Invoice;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,8 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class EmployeeRequestDto {
-	@NotNull(message = "credentials must be provided to perform request")
-	private Credentials credentials;
+	private CredentialsDto credentials;
 	
 	@NotNull(message = "employee's first name must be provided")
 	private String firstName;
@@ -27,5 +25,5 @@ public class EmployeeRequestDto {
 	
 	private Boolean admin;
 	
-	private List<Order> orders;
+	private List<Invoice> invoices;
 }

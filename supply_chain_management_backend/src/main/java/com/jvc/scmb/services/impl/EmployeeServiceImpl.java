@@ -208,9 +208,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		            .parseClaimsJws(token);
 	    	 
 			//check credentials, username, password, and employee data was provided
-	        if(employeeRequestDto.getCredentials() == null || employeeRequestDto.getCredentials().getUsername() == null ||
-	                employeeRequestDto.getCredentials().getPassword() == null || employeeRequestDto.getFirstName() == null ||
-	                employeeRequestDto.getLastName() == null) {
+	        if(employeeRequestDto.getFirstName() == null || employeeRequestDto.getLastName() == null ||
+	           employeeRequestDto.getActive() == null || employeeRequestDto.getAdmin() == null) {
 	            throw new BadRequestException("one or more fields missing in request");
 	        }
 	

@@ -2,7 +2,6 @@ package com.jvc.scmb.dtos;
 
 import java.util.List;
 
-import com.jvc.scmb.entities.Credentials;
 import com.jvc.scmb.entities.Order;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class CustomerRequestDto {
 	
-	private Credentials credentials;
+	private CredentialsDto credentials;
 	
 	private String firstName;
 	
