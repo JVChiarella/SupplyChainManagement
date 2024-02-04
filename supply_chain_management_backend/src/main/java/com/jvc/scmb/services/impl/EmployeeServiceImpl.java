@@ -115,7 +115,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	        //credentials should be a valid employee; only an active employee can add a new employee
 	        String username = (String)jwt.getBody().get("username");
-	        String password = (String)jwt.getBody().get("password");
 	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
 	        if(optionalUser.isEmpty()) {
 	        	throw new NotAuthorizedException("user with provided credentials not found");
@@ -125,11 +124,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        Employee foundEmployee = optionalUser.get();
 	        if(!foundEmployee.getActive()) {
 	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making new employee request
-	        if(!foundEmployee.getCredentials().getPassword().equals(password)) {
-	            throw new NotAuthorizedException("password incorrect");
 	        }
 			
 			//convert dto to new Employee obj
@@ -167,7 +161,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	        //credentials should be a valid employee; only an active admin employee can delete an employee
 	        String username = (String)jwt.getBody().get("username");
-	        String password = (String)jwt.getBody().get("password");
 	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
 	        if(optionalUser.isEmpty()) {
 	        	throw new NotAuthorizedException("user with provided credentials not found");
@@ -177,11 +170,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        Employee loggedEmployee = optionalUser.get();
 	        if(!loggedEmployee.getActive()) {
 	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making new employee request
-	        if(!loggedEmployee.getCredentials().getPassword().equals(password)) {
-	            throw new NotAuthorizedException("password incorrect");
 	        }
 	        
 	        //check that logged in user is an admin
@@ -228,7 +216,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	        //credentials should be a valid employee; only an active employee can add a new employee
 	        String username = (String)jwt.getBody().get("username");
-	        String password = (String)jwt.getBody().get("password");
 	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
 	        if(optionalUser.isEmpty()) {
 	        	throw new NotAuthorizedException("user with provided credentials not found");
@@ -238,11 +225,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        Employee loggedEmployee = optionalUser.get();
 	        if(!loggedEmployee.getActive()) {
 	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making patch employee request
-	        if(!loggedEmployee.getCredentials().getPassword().equals(password)) {
-	            throw new NotAuthorizedException("password incorrect");
 	        }
 	        
 	        //check that logged in user is an admin

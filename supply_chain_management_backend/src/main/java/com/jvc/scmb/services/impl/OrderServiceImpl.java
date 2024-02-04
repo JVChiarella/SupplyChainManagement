@@ -150,16 +150,23 @@ public class OrderServiceImpl implements OrderService {
 		    	throw new BadRequestException("only a customer can place an order");
 		    }
     	 
-			//create new order and set customer from db
-			Order newOrder = orderMapper.requestDtoToEntity(orderRequestDto);
+			//find customer from db
 			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(orderRequestDto.getUserRequestDto().getCredentials().getUsername());
 			Customer customer = optCus.get();
-			newOrder.setCustomer(customer);
 			
 			//check that jwt and customer making request match
 			if(!jwt.getBody().get("username").equals(customer.getCredentials().getUsername())) {
 		    	throw new BadRequestException("customer placing order and owner of jwt do not match");
 		    }
+			
+			//check that customer is active
+			if(!customer.getActive()) {
+				throw new BadRequestException("only active customers can place orders");
+			}
+			
+			//create new order from dto
+			Order newOrder = orderMapper.requestDtoToEntity(orderRequestDto);
+			newOrder.setCustomer(customer);
 			
 			//loop through ordered items and add to ordered items array + update stock numbers
 			List<OrderedItem> items = new ArrayList<>();
