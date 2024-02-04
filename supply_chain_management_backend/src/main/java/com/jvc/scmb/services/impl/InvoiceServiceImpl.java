@@ -1,22 +1,26 @@
 package com.jvc.scmb.services.impl;
 
+import java.security.Key;
 import java.util.Optional;
 
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.jvc.scmb.dtos.InvoiceResponseDto;
-import com.jvc.scmb.dtos.UserRequestDto;
-import com.jvc.scmb.entities.Customer;
-import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.exceptions.BadRequestException;
-import com.jvc.scmb.exceptions.NotAuthorizedException;
 import com.jvc.scmb.mappers.InvoiceMapper;
 import com.jvc.scmb.repositories.CustomerRepository;
 import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.repositories.InvoiceRepository;
 import com.jvc.scmb.services.InvoiceService;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,68 +32,59 @@ public class InvoiceServiceImpl implements InvoiceService{
 	private final EmployeeRepository employeeRepository;
 	private final CustomerRepository customerRepository;
 	
+	@Value("${jwt.secret}")
+	private String secret;
+	
 	@Override
-	public InvoiceResponseDto getInvoice(Long id, UserRequestDto userRequestDto) {
-		//check credentials
-		checkCredentials(userRequestDto);
-			
-		//look for invoice
-		Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
-		if(optionalInvoice.isEmpty()) {
-			throw new BadRequestException("invoice with provided id not found");
-		}
+	public InvoiceResponseDto getInvoice(Long id, String token) {
+		//verify jwt from header of request
+		token = JwtVerification(token);
 		
-		//convert invoice to dto and return
-		Invoice foundInvoice = optionalInvoice.get();
-		return invoiceMapper.entityToDto(foundInvoice);
+	    Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+
+	    try {
+	    	 Jws<Claims> jwt = Jwts.parserBuilder()
+		            .setSigningKey(key)
+		            .build()
+		            .parseClaimsJws(token);
+	    	 
+			//look for invoice
+			Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
+			if(optionalInvoice.isEmpty()) {
+				throw new BadRequestException("invoice with provided id not found");
+			}
+			Invoice foundInvoice = optionalInvoice.get();
+	    	 
+		    //check that jwt belongs to the customer who placed the order or an employee
+		    if(jwt.getBody().getSubject().equals("employee")) {
+		    	;
+		    } else if(jwt.getBody().getSubject().equals("customer")) {
+		    	if(!foundInvoice.getOrder().getCustomer().getCredentials().getUsername().equals(jwt.getBody().get("username"))) {
+		    		throw new BadRequestException("only an employee or the customer who placed the orders can view their details");
+		    	}
+		    } else {
+		    	throw new BadRequestException("only an employee or the customer who placed the orders can view their details");
+		    }
+    	 
+			return invoiceMapper.entityToDto(foundInvoice);
+	    } catch (Exception e) {
+	    	throw new BadRequestException("invalid jwt in request");
+	    }
 	}
 	
-	private void checkCredentials(UserRequestDto userRequestDto) {
-		//check credentials were provided
-        if(userRequestDto.getCredentials().getUsername() == null || userRequestDto.getCredentials().getPassword() == null ) {
-            throw new BadRequestException("one or more fields missing in request");
-        }
-        
-		//check what type of user is making request
-		if(userRequestDto.getType().equals("employee")) {
-	        //credentials should be a valid employee
-	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-	        if(optionalUser.isEmpty()) {
-	        	throw new NotAuthorizedException("user with provided credentials not found");
-	        }
-
-	        //check that found user is active
-	        Employee foundEmployee = optionalUser.get();
-	        if(!foundEmployee.getActive()) {
-	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making request
-	        if(!foundEmployee.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
-	            throw new NotAuthorizedException("password incorrect");
-	        }
-	        return;
-		} else if(userRequestDto.getType().equals("customer")) {
-	        //credentials should be a valid customer
-	        Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(userRequestDto.getCredentials().getUsername());
-	        if(optionalUser.isEmpty()) {
-	        	throw new NotAuthorizedException("user with provided credentials not found");
-	        }
-
-	        //check that found user is active
-	        Customer foundCustomer = optionalUser.get();
-	        if(!foundCustomer.getActive()) {
-	        	throw new NotAuthorizedException("non-active user");
-	        }
-	        
-	        //check password of employee making request
-	        if(!foundCustomer.getCredentials().getPassword().equals(userRequestDto.getCredentials().getPassword())) {
-	            throw new NotAuthorizedException("password incorrect");
-	        }
-	        return;
-			
-		} else {
-			throw new BadRequestException("invalid type provided");
+	public String JwtVerification(String token) {
+		if(token == null) {
+			throw new IllegalArgumentException("jwt authoriozation failed");
 		}
+		
+		if(!token.startsWith("Bearer")){
+			throw new IllegalArgumentException("jwt authoriozation failed");
+		}
+		
+		//remove token prefix
+		token = token.replace("Bearer ", "");
+		token = token.replace("\"",""); 
+		//System.out.println("TOKEN: " + token);
+		return token;
 	}
 }
