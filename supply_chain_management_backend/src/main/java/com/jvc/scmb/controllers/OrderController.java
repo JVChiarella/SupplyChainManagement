@@ -33,26 +33,26 @@ public class OrderController {
 	
 	//get all orders from a customer (by customer id)
 	@GetMapping("/customer/{id}")
-	public List<OrderResponseDto> getAllOrdersByCustomer(@PathVariable Long id){
-		return orderService.getAllOrdersByCustomer(id);
+	public List<OrderResponseDto> getAllOrdersByCustomer(@PathVariable Long id, @RequestHeader (name="Authorization") String token){
+		return orderService.getAllOrdersByCustomer(id, token);
 	}
 	
 	//post order
 	@PostMapping("/new")
-	public OrderResponseDto addOrder(@RequestBody OrderRequestDto orderRequestDto) {
-		return orderService.addOrder(orderRequestDto);
+	public OrderResponseDto addOrder(@RequestBody OrderRequestDto orderRequestDto, @RequestHeader (name="Authorization") String token) {
+		return orderService.addOrder(orderRequestDto, token);
 	}
 	
 	//patch order
 	@PatchMapping("/{id}")
-	public OrderResponseDto patchOrder(@PathVariable Long id, @RequestBody OrderRequestDto orderRequestDto) {
-		return orderService.patchOrder(id, orderRequestDto);
+	public OrderResponseDto patchOrder(@PathVariable Long id, @RequestBody OrderRequestDto orderRequestDto, @RequestHeader (name="Authorization") String token) {
+		return orderService.patchOrder(id, orderRequestDto, token);
 	}
 	
 	//delete order (soft delete via patch)
 	@PatchMapping("/delete/{id}")
-	public OrderResponseDto deleteOrder(@PathVariable Long id) {
-		return orderService.deleteOrder(id);
+	public OrderResponseDto deleteOrder(@PathVariable Long id,@RequestHeader (name="Authorization") String token) {
+		return orderService.deleteOrder(id, token);
 	}
 
 }

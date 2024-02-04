@@ -9,12 +9,12 @@ public interface OrderService {
 
 	OrderResponseDto getOrder(Long id, String token);
 
-	List<OrderResponseDto> getAllOrdersByCustomer(Long id);
+	List<OrderResponseDto> getAllOrdersByCustomer(Long id, String token);
 
-	OrderResponseDto addOrder(OrderRequestDto orderRequestDto);
+	OrderResponseDto addOrder(OrderRequestDto orderRequestDto, String token);
 
-	OrderResponseDto patchOrder(Long id, OrderRequestDto orderRequestDto);
+	OrderResponseDto patchOrder(Long id, OrderRequestDto orderRequestDto, String token);
 
-	OrderResponseDto deleteOrder(Long id);
+	OrderResponseDto deleteOrder(Long id, String token);
 
 }
