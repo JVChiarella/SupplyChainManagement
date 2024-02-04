@@ -1,8 +1,14 @@
 package com.jvc.scmb.services.impl;
 
+import java.security.Key;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,8 +35,20 @@ public class JwtGeneratorImpl implements JwtGenerator{
 	
 	@Override
 	public Map<String, String> generateEmployeeToken(Employee employee) {
-	    String jwtToken="";
-	    jwtToken = Jwts.builder().setSubject(employee.getCredentials().getUsername()).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secret").compact();
+	    //String jwtToken="";
+	    //jwtToken = Jwts.builder().setSubject(employee.getCredentials().getUsername()).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secret").compact();
+		Key hmacKey = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+
+		Instant now = Instant.now();
+		String jwtToken = Jwts.builder()
+		.claim("username",  employee.getCredentials().getUsername())
+		.claim("password",  employee.getCredentials().getPassword())
+		.setSubject(employee.getCredentials().getUsername())
+		.setId(UUID.randomUUID().toString())
+		.setIssuedAt(Date.from(now))
+		.signWith(hmacKey)
+		.compact();
+		
 	    Map<String, String> jwtTokenGen = new HashMap<>();
 	    jwtTokenGen.put("token", jwtToken);
 	    jwtTokenGen.put("message", message);

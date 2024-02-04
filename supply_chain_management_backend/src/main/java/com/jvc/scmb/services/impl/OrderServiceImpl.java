@@ -1,6 +1,8 @@
 package com.jvc.scmb.services.impl;
 
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,8 @@ import com.jvc.scmb.repositories.OrderedItemRepository;
 import com.jvc.scmb.repositories.StockRepository;
 import com.jvc.scmb.services.OrderService;
 
-import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -69,13 +72,22 @@ public class OrderServiceImpl implements OrderService {
 		//verify token
 		//SignatureAlgorithm sa = SignatureAlgorithm.HS256;
 		//SecretKeySpec secretKeySpec = new SecretKeySpec("${jwt.secret}".getBytes(), sa.getJcaName());
-		
+		/*
 		try {
 			Jwts.parser().setSigningKey(secret).parse(token);
 		    //Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
 		} catch (Exception e) {
 		    throw new IllegalArgumentException("Could not verify JWT token integrity!", e);
 		}
+		*/
+		
+	    Key hmacKey = new SecretKeySpec(secret.getBytes(), 
+	                                    SignatureAlgorithm.HS256.getJcaName());
+
+	    Jws<Claims> jwt = Jwts.parserBuilder()
+	            .setSigningKey(hmacKey)
+	            .build()
+	            .parseClaimsJws(token);
 		
 		//look for order
 		Optional<Order> optionalOrder = orderRepository.findById(id);
