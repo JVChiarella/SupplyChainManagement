@@ -30,6 +30,7 @@ public class JwtGeneratorImpl implements JwtGenerator{
 	
 	@Override
 	public Map<String, String> generateEmployeeToken(Employee employee) {
+		//Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_16LE), SignatureAlgorithm.HS256.getJcaName());
 		Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 		Instant now = Instant.now();
 		

@@ -1,5 +1,6 @@
 package com.jvc.scmb.services.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
