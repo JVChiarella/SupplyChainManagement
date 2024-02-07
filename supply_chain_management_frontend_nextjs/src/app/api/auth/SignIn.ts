@@ -1,4 +1,8 @@
+'use server'
 import jwt from "jsonwebtoken";
+import { serialize } from "cookie";
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers'
 
 interface credentials {
     username: any;
@@ -23,13 +27,44 @@ export default async function SignIn(credentials : credentials) {
         //invalid login
         return null
     }
+    //return jwt['token'];
+    cookies().set({
+        name: 'AuthJWT', 
+        value: jwt['token'],
+        httpOnly: true,
+        path: "/"
+    });
 
-    if (verifyJWT(jwt['token'])) {
-        return "logged in successfully"
-    } else {
-        //invalid jwt
-        return null
-    }
+    return "authenticated succesfully"
+
+    /*
+    const response = NextResponse.json({ message : "authenicated" })
+
+    response.cookies.set("AuthJwt", jwt['token'], {
+        httpOnly: false,
+        path: "/",
+    });
+
+    return response;
+    */
+
+    /*
+    const serialized = serialize("AuthJWT", jwt['token'], {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+    });
+
+    const response = {
+        message: "Authenticated",
+    };
+
+    return new Response(JSON.stringify(response), {
+        status: 200,
+        headers: { "Set-Cookie": serialized },
+    });
+    */
 }
 
 function verifyJWT(token : any){

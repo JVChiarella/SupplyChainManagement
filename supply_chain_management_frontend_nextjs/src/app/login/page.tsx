@@ -25,7 +25,7 @@ function LoginPage() {
     if(result === null){
       setLoginFailState(true);
     } else {
-      router.push("./home")
+      //router.push("./home")
     }
   }
 
@@ -46,7 +46,7 @@ function LoginPage() {
     if(result === null){
       setLoginFailState(true);
     } else {
-      router.push("./home")
+      //router.push("./home")
     }
   }
 
