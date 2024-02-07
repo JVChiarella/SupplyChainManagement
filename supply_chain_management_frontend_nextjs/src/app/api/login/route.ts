@@ -1,16 +1,17 @@
-'use server'
+import { COOKIE_NAME } from "@/app/constants";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers'
+import { NextResponse } from "next/server";
 
-interface credentials {
+interface Credentials {
     username: any;
     password: any; 
     userType: String;
 }
 
-export default async function SignIn(credentials : credentials) {
+export async function POST(request : Request) {
+    const credentials : Credentials = await request.json();
+
     const res = await fetch(`http://localhost:8080/login/${credentials.userType}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -20,58 +21,51 @@ export default async function SignIn(credentials : credentials) {
     });
     const jwt = await res.json();
 
-    console.log(jwt);
-    //console.log(jwt['token']);
+    //console.log(jwt);
 
     if(jwt['token'] === undefined){
         //invalid login
-        return null
+        return NextResponse.json(
+            {
+                message: "Unauthorizaed",
+            },
+            {
+                status: 401,
+            }
+        );
     }
-    //return jwt['token'];
+
+    /*
     cookies().set({
-        name: 'AuthJWT', 
+        name: COOKIE_NAME, 
         value: jwt['token'],
         httpOnly: true,
+        sameSite: 'strict',
+        path: "/"
+    });
+    */
+
+    //verifyJWT(jwt['token']);
+    
+    const serialized = serialize(COOKIE_NAME, jwt['token'], {
+        httpOnly: true,
+        sameSite: 'strict',
         path: "/"
     });
 
-    return "authenticated succesfully"
-
-    /*
-    const response = NextResponse.json({ message : "authenicated" })
-
-    response.cookies.set("AuthJwt", jwt['token'], {
-        httpOnly: false,
-        path: "/",
-    });
-
-    return response;
-    */
-
-    /*
-    const serialized = serialize("AuthJWT", jwt['token'], {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        path: "/",
-    });
-
-    const response = {
-        message: "Authenticated",
-    };
-
-    return new Response(JSON.stringify(response), {
+    return new Response("Authenticated", {
         status: 200,
-        headers: { "Set-Cookie": serialized },
-    });
-    */
+        headers: { "Set-Cookie": serialized }
+    })
 }
 
 function verifyJWT(token : any){
     let authentication = true;
+    const secret = process.env.SECRET_KEY || "";
+    
     //cant get verification to work. skipping for now; jwt verification works on backend
     /*
-    jwt.verify(token, "fjalskdjfaudcvbkzxzxcvvbajksdhlflkajsdhlfk", {algorithms : ['HS256'] }
+    jwt.verify(token, secret, {algorithms : ['HS256'] },
     (err : any, decoded : any) => {
         if (err){
             console.log("error: " + err);
@@ -81,6 +75,15 @@ function verifyJWT(token : any){
             authentication = true;
         }
     });
-    */
+
+   try{
+        jwt.verify(token, secret, {algorithms : ['HS256'] });
+        console.log("jwt verification success")
+   }catch(e){
+        authentication = false;
+        console.log("jwt verification failed")
+   }
+   */
+
     return authentication;
 }

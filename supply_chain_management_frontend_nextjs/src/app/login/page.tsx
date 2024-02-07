@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import { FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import  SignIn from '../api/auth/SignIn'
  
 function LoginPage() {
   const router = useRouter()
@@ -15,17 +14,19 @@ function LoginPage() {
     const name = formData.get('username')
     const pass = formData.get('password')
 
-    const result = await SignIn({ 
-      username: name,
-      password: pass,
-      userType: "customer",
-    })
+    const result = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: name,
+                             password: pass,
+                             userType: "customer",
+      }),
+    });
 
-    //console.log(result);
     if(result === null){
       setLoginFailState(true);
     } else {
-      //router.push("./home")
+      router.push("./home")
     }
   }
 
@@ -36,17 +37,19 @@ function LoginPage() {
     const name = formData.get('username')
     const pass = formData.get('password')
 
-    const result = await SignIn({ 
-      username: name,
-      password: pass,
-      userType: "employee",
-    })
+    const result = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: name,
+                             password: pass,
+                             userType: "employee",
+      }),
+    });
 
-    //console.log(result);
     if(result === null){
       setLoginFailState(true);
     } else {
-      //router.push("./home")
+      router.push("./home")
     }
   }
 
