@@ -21,8 +21,6 @@ export async function POST(request : Request) {
     });
     const jwt = await res.json();
 
-    //console.log(jwt);
-
     if(jwt['token'] === undefined){
         //invalid login
         return NextResponse.json(
@@ -34,16 +32,6 @@ export async function POST(request : Request) {
             }
         );
     }
-
-    /*
-    cookies().set({
-        name: COOKIE_NAME, 
-        value: jwt['token'],
-        httpOnly: true,
-        sameSite: 'strict',
-        path: "/"
-    });
-    */
 
     //verifyJWT(jwt['token']);
     

@@ -12,18 +12,19 @@ export default function HomePageLayout({
     const router = useRouter();
 
     useEffect(() => {
-        (async () => {
+        const getData = async () => {
             const { user, error } = await getUser();
 
-            console.log("user");
-
+            //unsuccesful login, redirect back to login page
             if(error){
                 router.push("/")
+                return
             }
             
             //successful login
             setIsLoggedIn(true);
-        });
+        };
+        getData();
     }, [router]);
 
     if(!isLoggedIn){
@@ -47,8 +48,7 @@ async function getUser() {
         });
 
         const data = res.json();
-        console.log(data);
-        
+
         return {
             user: data,
             error: null,
