@@ -19,7 +19,6 @@ export async function POST(request : Request) {
                            password: credentials?.password  
             }),
     });
-    console.log(res)
     const jwt = await res.json();
 
     if(jwt['token'] === undefined){
@@ -34,7 +33,7 @@ export async function POST(request : Request) {
         );
     }
 
-    //verifyJWT(jwt['token']);
+    verifyJWT(jwt['token']);
     
     const serialized = serialize(COOKIE_NAME, jwt['token'], {
         httpOnly: true,
@@ -68,9 +67,10 @@ function verifyJWT(token : any){
             authentication = true;
         }
     });
+    
 
    try{
-        jwt.verify(token, secret, {algorithms : ['HS256'] });
+        jwt.verify(token, Buffer.from(secret, 'base64'), {algorithms : ['HS256'] });
         console.log("jwt verification success")
    }catch(e){
         authentication = false;

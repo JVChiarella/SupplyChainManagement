@@ -32,7 +32,6 @@ type StockItem = {
 
 type Customer = {
     id?: number;
-    credentials: UserCredentials;
     firstName: string;
     lastName: string;
     email: string;
@@ -44,24 +43,10 @@ type Customer = {
 
 type Employee = {
     id?: number;
-    credentials: UserCredentials;
     firstName: string;
     lastName: string;
     email: string;
     admin: boolean;
     active: boolean;
-    orders?: Order[];
-};
-
-type User = {
-    id?: number;
-    credentials: UserCredentials;
-    firstName: string;
-    lastName: string;
-    email: string;
-    active: boolean;
-    address? : string;
-    phoneNumber?: string;
-    admin?: boolean;
-    orders?: Order[];
+    invoices?: Invoice[];
 };

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class EmployeeResponseDto {
+	private Long id;
 	
 	private String firstName;
 	
