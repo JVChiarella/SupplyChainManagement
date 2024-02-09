@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function HomePageLayout({
+export default function UsersPageLayout({
     children,
 }:{
     children: React.ReactNode;

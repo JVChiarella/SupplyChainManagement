@@ -18,7 +18,11 @@ export async function GET(){
     }
 
     const token = cookieStore.delete(COOKIE_NAME);
-    return new Response("User Logged Out", {
+    const response = {
+        message: "token found and removed"
+    };
+
+    return new Response(JSON.stringify(response), {
         status: 200,
-    });
+    })
 }

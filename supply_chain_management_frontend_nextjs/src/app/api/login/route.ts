@@ -19,6 +19,7 @@ export async function POST(request : Request) {
                            password: credentials?.password  
             }),
     });
+    console.log(res)
     const jwt = await res.json();
 
     if(jwt['token'] === undefined){
@@ -41,7 +42,11 @@ export async function POST(request : Request) {
         path: "/"
     });
 
-    return new Response("Authenticated", {
+    const response = {
+        message: "user authenitcated"
+    };
+
+    return new Response(JSON.stringify(response), {
         status: 200,
         headers: { "Set-Cookie": serialized }
     })

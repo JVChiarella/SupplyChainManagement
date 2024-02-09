@@ -9,13 +9,17 @@ export async function GET(){
     if(token){
         //verify jwt once working
 
-        return new Response("Token Authenticated", {
+        const response = {
+            message: "token found and authenticated"
+        };
+
+        return new Response(JSON.stringify(response), {
             status: 200,
         })
     } else {
         return NextResponse.json(
             {
-                message: "Unauthorizaed",
+                message: "Unauthorized",
             },
             {
                 status: 401,
