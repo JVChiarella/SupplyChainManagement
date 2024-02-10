@@ -55,7 +55,6 @@ public class JwtGeneratorImpl implements JwtGenerator{
 		
 		String jwtToken = Jwts.builder()
 		.claim("username",  customer.getCredentials().getUsername())
-		.claim("password",  customer.getCredentials().getPassword())
 		.setSubject("customer")
 		.setId(UUID.randomUUID().toString())
 		.setIssuedAt(Date.from(now))
