@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class InvoiceResponseDto {
 	
+	private Long id;
+	
 	@JsonIgnoreProperties("invoice")
 	private Order order;
 	

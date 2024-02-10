@@ -1,6 +1,5 @@
 package com.jvc.scmb.services.impl;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
@@ -32,7 +31,7 @@ public class JwtGeneratorImpl implements JwtGenerator{
 	@Override
 	public Map<String, String> generateEmployeeToken(Employee employee) {
 		//Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_16LE), SignatureAlgorithm.HS256.getJcaName());
-		Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
+		Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 		Instant now = Instant.now();
 		
 		String jwtToken = Jwts.builder()
@@ -40,7 +39,7 @@ public class JwtGeneratorImpl implements JwtGenerator{
 		.setSubject("employee")
 		.setId(UUID.randomUUID().toString())
 		.setIssuedAt(Date.from(now))
-		.signWith(key, SignatureAlgorithm.HS256)
+		.signWith(key)
 		.compact();
 		
 	    Map<String, String> jwtTokenGen = new HashMap<>();

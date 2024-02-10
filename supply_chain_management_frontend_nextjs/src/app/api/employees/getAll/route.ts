@@ -7,13 +7,31 @@ export async function GET(){
     const token = cookieStore.get(COOKIE_NAME);
     const auth = "Bearer " + token?.value;
 
-    //fetch data from spring api
-    const res = await fetch(`http://localhost:8080/employees`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' ,
-                'Authorization': auth},
-    });
+    //verify jwt in spring (jsonwebtoken auth in node does not work?)
+    const response = await fetch(`http://localhost:8080/verification`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' ,
+                    'Authorization': auth},
+        }).then(async (res) => {
+            const result = await res.json();
+            if(result.message == "verified successfully"){
+                //fetch requested data from spring api after token verification
+                const result2 = await fetch(`http://localhost:8080/employees`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' ,
+                            'Authorization': auth},
+                });
 
-    const users = await res.json();
-    return new Response(JSON.stringify(users))
+                const users = await result2.json();
+                return new Response(JSON.stringify(users), {
+                    status: 200,
+                })
+            }
+        }, () => {
+            return new Response(JSON.stringify("JWT validation failed"), {
+                status: 401,
+            })
+        })
+
+    return response;
 }

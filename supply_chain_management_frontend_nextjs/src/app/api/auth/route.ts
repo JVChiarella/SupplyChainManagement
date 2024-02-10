@@ -1,29 +1,36 @@
 import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
-import { NextResponse } from "next/server";
 
 export async function GET(){
     const cookieStore = cookies();
 
     const token = cookieStore.get(COOKIE_NAME);
     if(token){
-        //verify jwt once working
-
-        const response = {
-            message: "token found and authenticated"
-        };
-
-        return new Response(JSON.stringify(response), {
-            status: 200,
-        })
+        //add token prefix
+        const auth = "Bearer " + token?.value;
+    
+        //verify jwt in spring (jsonwebtoken auth in node does not work?)
+        const response = await fetch(`http://localhost:8080/verification`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' ,
+                    'Authorization': auth},
+        }).then(async (res) => {
+                const result = await res.json();
+                if(result.message == "verified successfully"){
+                    return new Response(JSON.stringify(result), {
+                        status: 200,
+                    })
+                }
+            }, () => {
+                return new Response(JSON.stringify("JWT validation failed"), {
+                    status: 401,
+                })
+            })
+    
+        return response;
     } else {
-        return NextResponse.json(
-            {
-                message: "Unauthorized",
-            },
-            {
-                status: 401,
-            }
-        );
+        return new Response(JSON.stringify("JWT validation failed"), {
+            status: 401,
+        })
     }
 }

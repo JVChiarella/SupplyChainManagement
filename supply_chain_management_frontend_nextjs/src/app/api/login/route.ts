@@ -1,7 +1,5 @@
 import { COOKIE_NAME } from "@/app/constants";
-import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
-import { NextResponse } from "next/server";
 
 interface Credentials {
     username: any;
@@ -23,18 +21,16 @@ export async function POST(request : Request) {
 
     if(jwt['token'] === undefined){
         //invalid login
-        return NextResponse.json(
-            {
-                message: "Unauthorizaed",
-            },
-            {
-                status: 401,
-            }
-        );
+        return new Response(JSON.stringify("JWT validation failed"), {
+            status: 401,
+        })
+
     }
 
+    //verify jwt by sending back to spring api (b/c node jsonwebtoken verify does not work)
     verifyJWT(jwt['token']);
     
+    //serialize token as cookie and send back to be stored in browser
     const serialized = serialize(COOKIE_NAME, jwt['token'], {
         httpOnly: true,
         sameSite: 'strict',
@@ -51,32 +47,25 @@ export async function POST(request : Request) {
     })
 }
 
-function verifyJWT(token : any){
+async function verifyJWT(token : any){
     let authentication = true;
     const secret = process.env.SECRET_KEY || "";
-    
-    //cant get verification to work. skipping for now; jwt verification works on backend
-    /*
-    jwt.verify(token, secret, {algorithms : ['HS256'] },
-    (err : any, decoded : any) => {
-        if (err){
-            console.log("error: " + err);
-            authentication = false;
-        } else {
-            console.log(decoded);
-            authentication = true;
-        }
-    });
-    
 
-   try{
-        jwt.verify(token, Buffer.from(secret, 'base64'), {algorithms : ['HS256'] });
-        console.log("jwt verification success")
-   }catch(e){
+    //add prefix to token
+    const auth = "Bearer " + token;
+
+    //verify jwt in spring (jsonwebtoken auth in node does not work?)
+    const response = await fetch(`http://localhost:8080/verification`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' ,
+                'Authorization': auth},
+    })
+
+    //check response from spring api
+    const res = await response.json();
+    if(res.message !== "verified successfully"){
         authentication = false;
-        console.log("jwt verification failed")
-   }
-   */
+    }
 
     return authentication;
 }
