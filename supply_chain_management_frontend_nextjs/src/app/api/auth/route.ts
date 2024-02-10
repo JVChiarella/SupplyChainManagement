@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
+import jwt from "jsonwebtoken";
 
 export async function GET(){
     const cookieStore = cookies();
@@ -17,9 +18,23 @@ export async function GET(){
         }).then(async (res) => {
                 const result = await res.json();
                 if(result.message == "verified successfully"){
-                    return new Response(JSON.stringify(result), {
-                        status: 200,
-                    })
+                    //check if user is emplyoee or customer; access varies
+                    const options : any = jwt.decode(token?.value)
+                    if(options.sub == "employee"){
+                        let obj1 = result;
+                        let obj2 = {type: "employee"}
+                        let newResponse = {...obj1, ...obj2};
+                        return new Response(JSON.stringify(newResponse), {
+                            status: 200,
+                        })
+                    } else {
+                        let obj1 = result;
+                        let obj2 = {type: "customer"}
+                        let newResponse = {...obj1, ...obj2};
+                        return new Response(JSON.stringify(newResponse), {
+                            status: 200,
+                        })
+                    }
                 }
             }, () => {
                 return new Response(JSON.stringify("JWT validation failed"), {

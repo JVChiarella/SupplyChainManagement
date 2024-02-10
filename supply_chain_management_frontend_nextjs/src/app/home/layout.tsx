@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "../navbar/navbar";
 
 export default function HomePageLayout({
     children,
@@ -10,15 +11,21 @@ export default function HomePageLayout({
 }){
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const router = useRouter();
+    const [ isCustomer, setIsCustomer ] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
             const { user, error } = await getUser();
 
-            //unsuccesful login, redirect back to login page
+            //unsuccesful authorization, redirect back to login page
             if(error){
                 router.push("/")
                 return
+            }
+
+            //customer logged in; save in state
+            if(user.type == "customer"){
+                setIsCustomer(true);
             }
             
             //successful login
@@ -32,12 +39,23 @@ export default function HomePageLayout({
         <p>
             Loading...
         </p>
-    )} else { 
-    return (
-        <main>
-            {children}
-        </main>
-    )}
+    )} else {
+        //customer home page
+        if(isCustomer){
+            return (
+                <main>
+                    <Navbar type="customer"></Navbar>
+                    {children}
+                </main>
+        )} else {
+        //employee home page
+        return (
+            <main>
+                <Navbar></Navbar>
+                {children}
+            </main>
+        )}
+    }
 }
 
 async function getUser() {
@@ -46,7 +64,7 @@ async function getUser() {
         headers: { 'Content-Type': 'application/json' },
     });
     
-    //if auth api returns anything but success, redirect user to home
+    //if auth api returns anything but success, throw error and redirect to login
     if(res.statusText != "OK"){
         return {
             user: null,
@@ -54,7 +72,7 @@ async function getUser() {
         }
     }
 
-    const data = res.json();
+    const data = await res.json();
     return {
         user: data,
         error: null,

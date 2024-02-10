@@ -15,9 +15,15 @@ export default function UsersPageLayout({
         const getData = async () => {
             const { user, error } = await getUser();
 
-            //unsuccesful login, redirect back to login page
+            //unsuccesful authorization, redirect back to login page
             if(error){
                 router.push("/")
+                return
+            }
+
+            //customer logged in; redirect to home
+            if(user.type == "customer"){
+                router.push("/home")
                 return
             }
             
@@ -46,7 +52,7 @@ async function getUser() {
         headers: { 'Content-Type': 'application/json' },
     });
     
-    //if auth api returns anything but success, redirect user to home
+    //if auth api returns anything but success, throw error and redirect to login
     if(res.statusText != "OK"){
         return {
             user: null,
@@ -54,7 +60,7 @@ async function getUser() {
         }
     }
 
-    const data = res.json();
+    const data = await res.json();
     return {
         user: data,
         error: null,
