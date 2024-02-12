@@ -23,6 +23,7 @@ const GetAllEmployees = () => {
         return (
             <div>
                 <h1>Employees</h1>
+                <div>-----------------------</div>
                 <ul>
                     {employees.map(user => <li key={user.id}>{user.admin}{user.active}{user.firstName}{user.lastName}</li>)}
                 </ul>

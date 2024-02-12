@@ -137,7 +137,7 @@ public class CustomerServiceImpl implements CustomerService {
 			newCustomer = customerMapper.requestDtoToEntity(customerRequestDto);
 			
 			//set default username and password for customer if not provided
-			if(customerRequestDto.getCredentials() == null) {
+			if(customerRequestDto.getCredentials().getUsername().equals("") || customerRequestDto.getCredentials().getPassword().equals("")) {
 				Credentials newCredentials = new Credentials();
 				newCredentials.setUsername(newCustomer.getFirstName().substring(0, 1) + newCustomer.getLastName());
 				newCredentials.setPassword("password");

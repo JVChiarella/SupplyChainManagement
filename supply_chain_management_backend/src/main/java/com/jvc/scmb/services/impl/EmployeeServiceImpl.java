@@ -131,7 +131,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			newEmployee = employeeMapper.requestDtoToEntity(employeeRequestDto);
 			
 			//set default username and password for new employee if username and pass not provided
-			if(employeeRequestDto.getCredentials() == null) {
+			if(employeeRequestDto.getCredentials().getUsername().equals("") && employeeRequestDto.getCredentials().getPassword().equals("")) {
 				Credentials newCredentials = new Credentials();
 				newCredentials.setUsername(newEmployee.getFirstName().substring(0, 1) + newEmployee.getLastName());
 				newCredentials.setPassword("password");

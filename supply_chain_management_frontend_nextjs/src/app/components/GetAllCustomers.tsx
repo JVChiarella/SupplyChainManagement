@@ -23,6 +23,7 @@ const GetAllCustomers = () => {
         return (
             <div>
                 <h1>Customers</h1>
+                <div>-----------------------</div>
                 <ul>
                 {customers.map(user => <li key={user.id}>{user.active}{user.firstName}{user.lastName}{user.phoneNumber}{user.address}{user.email}</li>)}
                 </ul>
