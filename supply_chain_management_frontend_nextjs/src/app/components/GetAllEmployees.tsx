@@ -5,16 +5,23 @@ const GetAllEmployees = () => {
 
     const defaultEmployees : Employee[] = [];
     const [gotUsers, setGotUsers] = useState(false);
-    const [employees, setEmployees] = useState(defaultEmployees)
+    const [employees, setEmployees] = useState(defaultEmployees);
+    const [error, setError] = useState(false);
+
     useEffect(() => {
         const getData = async () => {
             //fetch data from spring api
-            const data : Employee[] = await getEmployees();
+            const data : Employee[] | any = await getEmployees();
 
-            //update state and return
-            setEmployees(data);
-            setGotUsers(true);
-            return
+            if(data['message']){
+                //handle error
+                setError(true)
+            } else {        
+                //update state and return
+                setEmployees(data);
+                setGotUsers(true);
+                return
+            }
         };
         getData();
     }, []);
@@ -27,6 +34,12 @@ const GetAllEmployees = () => {
                 <ul>
                     {employees.map(user => <li key={user.id}>{user.admin}{user.active}{user.firstName}{user.lastName}</li>)}
                 </ul>
+            </div>
+        )
+    } else if(error){
+        return (
+            <div>
+                --An Error Occured While Loading Employees--
             </div>
         )
     } else {

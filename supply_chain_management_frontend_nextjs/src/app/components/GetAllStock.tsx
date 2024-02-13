@@ -1,58 +1,57 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
-const GetAllOrdersByCustomer = () => {
+const GetAllStock = () => {
 
-    const defaultOrders : Order[] = [];
-    const [gotOrders, setGotOrders] = useState(false);
-    const [orders, setOrders] = useState(defaultOrders);
-    const [error, setError] = useState(false);
+    const defaultStock : StockItem[] = [];
+    const [gotStock, setGotStock] = useState(false);
+    const [stock, setStock] = useState(defaultStock)
+    const [error, setError] = useState(false)
     
     useEffect(() => {
         const getData = async () => {
             //fetch data from spring api
-            const data : Order[] | any = await getOrders();
+            const data : StockItem[] | any = await getStock();
 
             if(data['message']){
                 //handle error
                 setError(true)
-            } else {       
+            } else {           
                 //update state and return
-                setOrders(data);
-                setGotOrders(true);
+                setStock(data);
+                setGotStock(true);
                 return
             }
         };
         getData();
     }, []);
   
-    if(gotOrders){
+    if(gotStock){
         return (
             <div>
-                <h1>Orders</h1>
-                <div>-----------------------</div>
+                <div>---------------------------------------------------------------------</div>
                 <ul>
-                {orders.map(order => <li key={order.id}>{order.id}</li>)}
+                {stock.map(item=> <li key={item.id}>{item.name}{item.description}{item.count}{item.price}</li>)}
                 </ul>
             </div>
         )
     } else if(error){
         return (
             <div>
-                --An Error Occured While Loading Orders--
+                --An Error Occured While Loading Stock--
             </div>
         )
     } else {
         return (
             <div>
-                Loading Orders...
+                Loading Stock...
             </div>
         )
     }
 }
 
-async function getOrders(){
-    const res = await fetch('/api/orders/customer/getAll', {
+async function getStock(){
+    const res = await fetch('/api/stock/getAll', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -61,5 +60,5 @@ async function getOrders(){
     return users;
 }
 
-export default GetAllOrdersByCustomer
+export default GetAllStock
   

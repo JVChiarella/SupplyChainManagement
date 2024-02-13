@@ -10,43 +10,49 @@ export async function POST(request : Request){
     const token = cookieStore.get(COOKIE_NAME);
     const auth = "Bearer " + token?.value;
 
-    //verify jwt in spring
-    if(token){
-        const response = await fetch(`http://localhost:8080/verification`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' ,
-                        'Authorization': auth},
-            }).then(async (res) => {
-                const result = await res.json();
-                if(result.message == "verified successfully"){
-                    //fetch requested data from spring api after token verification
-                    const result2 = await fetch(`http://localhost:8080/orders/new`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' ,
-                                'Authorization': auth},
-                    body: JSON.stringify({ credentials: { username: data?.username, 
-                                                          password: data?.password },
-                                           firstName: data?.firstName,
-                                           lastName: data?.lastName,
-                                           active: true,
-                                           admin: data?.admin,
+    try{
+        //verify jwt in spring
+        if(token){
+            const response = await fetch(`http://localhost:8080/verification`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' ,
+                            'Authorization': auth},
+                }).then(async (res) => {
+                    const result = await res.json();
+                    if(result.message == "verified successfully"){
+                        //fetch requested data from spring api after token verification
+                        const result2 = await fetch(`http://localhost:8080/orders/new`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' ,
+                                    'Authorization': auth},
+                        body: JSON.stringify({ credentials: { username: data?.username, 
+                                                            password: data?.password },
+                                            firstName: data?.firstName,
+                                            lastName: data?.lastName,
+                                            active: true,
+                                            admin: data?.admin,
+                            })
+                        });
+
+                        const orders = await result2.json();
+                        return new Response(JSON.stringify(orders), {
+                            status: 200,
                         })
-                    });
-
-                    const orders = await result2.json();
-                    return new Response(JSON.stringify(orders), {
-                        status: 200,
+                    }
+                }, () => {
+                    return new Response(JSON.stringify("JWT validation failed"), {
+                        status: 401,
                     })
-                }
-            }, () => {
-                return new Response(JSON.stringify("JWT validation failed"), {
-                    status: 401,
                 })
-            })
 
-        return response;
-    } else {
-        return new Response(JSON.stringify("JWT not found in cookies"), {
+            return response;
+        } else {
+            return new Response(JSON.stringify("JWT not found in cookies"), {
+                status: 401,
+            })
+        }
+    } catch(error){
+        return new Response(JSON.stringify(error), {
             status: 401,
         })
     }

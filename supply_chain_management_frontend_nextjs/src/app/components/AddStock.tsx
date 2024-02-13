@@ -33,7 +33,7 @@ const AddStock = () => {
     if(postComplete){
         return (
             <div>
-                <div>-----------------------</div>
+                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
                 <h3>Add a New Product to Stock:</h3>
 
                 <form onSubmit={handleNewStockSubmit}>
@@ -50,7 +50,7 @@ const AddStock = () => {
     } else {
         return (
             <div>
-                <div>-----------------------</div>
+                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
                 <h3>Add a New Product to Stock:</h3>
 
                 <form onSubmit={handleNewStockSubmit}>

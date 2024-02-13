@@ -8,43 +8,49 @@ interface Credentials {
 }
 
 export async function POST(request : Request) {
-    const credentials : Credentials = await request.json();
+    try{
+        const credentials : Credentials = await request.json();
 
-    const res = await fetch(`http://localhost:8080/login/${credentials.userType}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username: credentials?.username, 
-                           password: credentials?.password  
-            }),
-    });
-    const jwt = await res.json();
+        const res = await fetch(`http://localhost:8080/login/${credentials.userType}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: credentials?.username, 
+                            password: credentials?.password  
+                }),
+        });
+        const jwt = await res.json();
 
-    if(jwt['token'] === undefined){
-        //invalid login
-        return new Response(JSON.stringify("JWT validation failed"), {
+        if(jwt['token'] === undefined){
+            //invalid login
+            return new Response(JSON.stringify("JWT validation failed"), {
+                status: 401,
+            })
+
+        }
+
+        //verify jwt by sending back to spring api
+        if(await verifyJWT(jwt['token'])){   
+            //serialize token as cookie and send back to be stored in browser
+            const serialized = serialize(COOKIE_NAME, jwt['token'], {
+                httpOnly: true,
+                sameSite: 'strict',
+                path: "/"
+            });
+
+            const response = {
+                message: "user authenitcated"
+            };
+
+            return new Response(JSON.stringify(response), {
+                status: 200,
+                headers: { "Set-Cookie": serialized }
+            })
+        }
+    } catch(error){
+        return new Response(JSON.stringify(error), {
             status: 401,
         })
-
     }
-
-    //verify jwt by sending back to spring api
-    verifyJWT(jwt['token']);
-    
-    //serialize token as cookie and send back to be stored in browser
-    const serialized = serialize(COOKIE_NAME, jwt['token'], {
-        httpOnly: true,
-        sameSite: 'strict',
-        path: "/"
-    });
-
-    const response = {
-        message: "user authenitcated"
-    };
-
-    return new Response(JSON.stringify(response), {
-        status: 200,
-        headers: { "Set-Cookie": serialized }
-    })
 }
 
 async function verifyJWT(token : any){

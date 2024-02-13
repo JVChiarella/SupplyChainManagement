@@ -5,17 +5,23 @@ const GetAllCustomers = () => {
 
     const defaultCustomers : Customer[] = [];
     const [gotUsers, setGotUsers] = useState(false);
-    const [customers, setCustomers] = useState(defaultCustomers)
+    const [customers, setCustomers] = useState(defaultCustomers);
+    const [error, setError] = useState(false);
     
     useEffect(() => {
         const getData = async () => {
             //fetch data from spring api
-            const data : Customer[] = await getCustomers();
+            const data : Customer[] | any = await getCustomers();
 
-            //update state and return
-            setCustomers(data);
-            setGotUsers(true);
-            return
+            if(data['message']){
+                //handle error
+                setError(true)
+            } else {        
+                //update state and return
+                setCustomers(data);
+                setGotUsers(true);
+                return
+            }
         };
         getData();
     }, []);
@@ -28,6 +34,12 @@ const GetAllCustomers = () => {
                 <ul>
                 {customers.map(user => <li key={user.id}>{user.active}{user.firstName}{user.lastName}{user.phoneNumber}{user.address}{user.email}</li>)}
                 </ul>
+            </div>
+        )
+    } else if(error){
+        return (
+            <div>
+                --An Error Occured While Loading Customers--
             </div>
         )
     } else {

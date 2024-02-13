@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.jvc.scmb.dtos.StockRequestDto;
 import com.jvc.scmb.dtos.StockResponseDto;
+import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Stock;
 import com.jvc.scmb.exceptions.BadRequestException;
@@ -52,18 +53,27 @@ public class StockServiceImpl implements StockService {
 		            .build()
 		            .parseClaimsJws(token);
         
-	    	//credentials should be a valid employee; only an active employee can look at stock
+		    //check if user is employee or customer
 	        String username = (String)jwt.getBody().get("username");
-	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
-	        if(optionalUser.isEmpty()) {
-	        	throw new NotAuthorizedException("user with provided credentials not found");
-	        }
-	
-	        //check that found user is active
-	        Employee loggedEmployee = optionalUser.get();
-	        if(!loggedEmployee.getActive()) {
-	        	throw new NotAuthorizedException("non-active user");
-	        }
+		    if(jwt.getBody().getSubject().equals("employee")) {
+		    	Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
+		    	Employee loggedUser = optionalUser.get();
+		    	
+		        //check that found user is active
+		        if(!loggedUser.getActive()) {
+		        	throw new NotAuthorizedException("non-active user");
+		        }
+		    } else if(jwt.getBody().getSubject().equals("customer")) {
+		    	Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(username);
+		    	Customer loggedUser = optionalUser.get();
+		    	
+		        //check that found user is active
+		        if(!loggedUser.getActive()) {
+		        	throw new NotAuthorizedException("non-active user");
+		        }
+		    } else {
+		    	throw new BadRequestException("logged in user not found");
+		    }
 	        
 			//look for stock item
 			Optional<Stock> optionalStock = stockRepository.findById(id);
@@ -92,18 +102,27 @@ public class StockServiceImpl implements StockService {
 		            .build()
 		            .parseClaimsJws(token);
         
-	    	//credentials should be a valid employee; only an active employee can look at stock
+		    //check if user is employee or customer
 	        String username = (String)jwt.getBody().get("username");
-	        Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
-	        if(optionalUser.isEmpty()) {
-	        	throw new NotAuthorizedException("user with provided credentials not found");
-	        }
-	
-	        //check that found user is active
-	        Employee loggedEmployee = optionalUser.get();
-	        if(!loggedEmployee.getActive()) {
-	        	throw new NotAuthorizedException("non-active user");
-	        }
+		    if(jwt.getBody().getSubject().equals("employee")) {
+		    	Optional<Employee> optionalUser = employeeRepository.findByCredentialsUsername(username);
+		    	Employee loggedUser = optionalUser.get();
+		    	
+		        //check that found user is active
+		        if(!loggedUser.getActive()) {
+		        	throw new NotAuthorizedException("non-active user");
+		        }
+		    } else if(jwt.getBody().getSubject().equals("customer")) {
+		    	Optional<Customer> optionalUser = customerRepository.findByCredentialsUsername(username);
+		    	Customer loggedUser = optionalUser.get();
+		    	
+		        //check that found user is active
+		        if(!loggedUser.getActive()) {
+		        	throw new NotAuthorizedException("non-active user");
+		        }
+		    } else {
+		    	throw new BadRequestException("logged in user not found");
+		    }
 			
 			//get all stock and return
 			List<Stock> stockItems = stockRepository.findAll();

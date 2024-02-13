@@ -26,6 +26,8 @@ type OrderedItem = {
 
 type StockItem = {
     id? : number;
+    name: string,
+    description: string,
     count : number;
     price : number;
 }
