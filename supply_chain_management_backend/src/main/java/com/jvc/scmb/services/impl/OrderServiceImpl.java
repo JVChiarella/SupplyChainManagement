@@ -19,10 +19,8 @@ import com.jvc.scmb.entities.Order;
 import com.jvc.scmb.entities.OrderedItem;
 import com.jvc.scmb.entities.Stock;
 import com.jvc.scmb.exceptions.BadRequestException;
-import com.jvc.scmb.mappers.CustomerMapper;
 import com.jvc.scmb.mappers.OrderMapper;
 import com.jvc.scmb.repositories.CustomerRepository;
-import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.repositories.InvoiceRepository;
 import com.jvc.scmb.repositories.OrderRepository;
 import com.jvc.scmb.repositories.OrderedItemRepository;
@@ -42,8 +40,6 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderRepository orderRepository;
 	private final OrderMapper orderMapper;
 	private final CustomerRepository customerRepository;
-	private final CustomerMapper customerMapper;
-	private final EmployeeRepository employeeRepository;
 	private final InvoiceRepository invoiceRepository;
 	private final OrderedItemRepository orderedItemRepository;
 	private final StockRepository stockRepository;
@@ -151,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
 		    }
     	 
 			//find customer from db
-			Optional<Customer> optCus = customerRepository.findByCredentialsUsername(orderRequestDto.getCustomerRequestDto().getCredentials().getUsername());
+			Optional<Customer> optCus = customerRepository.findById(orderRequestDto.getCustomer_id());
 			Customer customer = optCus.get();
 			
 			//check that jwt and customer making request match
@@ -199,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
 			newOrder.setInvoice(newInvoice);
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(newOrder));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 

@@ -9,8 +9,6 @@ import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.exceptions.NotAuthorizedException;
-import com.jvc.scmb.mappers.CustomerMapper;
-import com.jvc.scmb.mappers.EmployeeMapper;
 import com.jvc.scmb.repositories.CustomerRepository;
 import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.services.LoginService;
@@ -22,9 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginServiceImpl implements LoginService {
 	
 	private final CustomerRepository customerRepository;
-	private final CustomerMapper customerMapper;
 	private final EmployeeRepository employeeRepository;
-	private final EmployeeMapper employeeMapper;
 	
 	@Override
 	public Customer loginCustomer(CredentialsDto credentialsRequestDto) {

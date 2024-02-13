@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
 
 export async function POST(request : Request){
-    debugger
     //convert body of request
     const data = await request.json();
 

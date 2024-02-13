@@ -12,9 +12,9 @@ import com.jvc.scmb.entities.Order;
 @Mapper(componentModel = "spring", uses = { CustomerMapper.class, InvoiceMapper.class, CredentialsMapper.class} )
 public interface OrderMapper {
 
+	@Mapping(target = "customer_id", source = "customer.id")
 	OrderResponseDto entityToDto(Order order);
 	
-	@Mapping(target = "customer", source = "customerRequestDto")
 	Order requestDtoToEntity(OrderRequestDto orderRequestDto);
 	
 	List<OrderResponseDto> requestEntitiesToDtos(List<Order> foundOrders);

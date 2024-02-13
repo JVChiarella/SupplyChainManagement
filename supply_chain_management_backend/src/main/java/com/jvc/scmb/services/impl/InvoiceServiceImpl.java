@@ -12,8 +12,6 @@ import com.jvc.scmb.dtos.InvoiceResponseDto;
 import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.mappers.InvoiceMapper;
-import com.jvc.scmb.repositories.CustomerRepository;
-import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.repositories.InvoiceRepository;
 import com.jvc.scmb.services.InvoiceService;
 
@@ -29,8 +27,6 @@ public class InvoiceServiceImpl implements InvoiceService{
 
 	private final InvoiceRepository invoiceRepository;
 	private final InvoiceMapper invoiceMapper;
-	private final EmployeeRepository employeeRepository;
-	private final CustomerRepository customerRepository;
 	
 	@Value("${jwt.secret}")
 	private String secret;
