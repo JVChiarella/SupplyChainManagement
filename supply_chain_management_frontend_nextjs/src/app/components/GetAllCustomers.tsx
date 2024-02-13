@@ -6,6 +6,7 @@ const GetAllCustomers = () => {
     const defaultCustomers : Customer[] = [];
     const [gotUsers, setGotUsers] = useState(false);
     const [customers, setCustomers] = useState(defaultCustomers)
+    
     useEffect(() => {
         const getData = async () => {
             //fetch data from spring api

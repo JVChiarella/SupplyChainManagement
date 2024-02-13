@@ -8,6 +8,7 @@ const Navbar = (props : any) => {
     return(
       <div className="navbar-container">
         <NavButton name="home"></NavButton>
+        <NavButton name="orders"></NavButton>
         <SignOutButton></SignOutButton>
       </div>
   )} else {

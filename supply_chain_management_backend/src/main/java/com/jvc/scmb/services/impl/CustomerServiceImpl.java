@@ -18,7 +18,6 @@ import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.exceptions.NotAuthorizedException;
 import com.jvc.scmb.exceptions.NotFoundException;
 import com.jvc.scmb.mappers.CustomerMapper;
-import com.jvc.scmb.mappers.EmployeeMapper;
 import com.jvc.scmb.repositories.CustomerRepository;
 import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.services.CustomerService;
@@ -36,7 +35,6 @@ public class CustomerServiceImpl implements CustomerService {
 	private final CustomerRepository customerRepository;
 	private final CustomerMapper customerMapper;
 	private final EmployeeRepository employeeRepository;
-	private final EmployeeMapper employeeMapper;
 	
 	@Value("${jwt.secret}")
 	private String secret;
@@ -139,7 +137,7 @@ public class CustomerServiceImpl implements CustomerService {
 			//set default username and password for customer if not provided
 			if(customerRequestDto.getCredentials().getUsername().equals("") || customerRequestDto.getCredentials().getPassword().equals("")) {
 				Credentials newCredentials = new Credentials();
-				newCredentials.setUsername(newCustomer.getFirstName().substring(0, 1) + newCustomer.getLastName());
+				newCredentials.setUsername(newCustomer.getFirstName().substring(0, 1).toLowerCase() + newCustomer.getLastName().substring(0, 1).toLowerCase() + newCustomer.getLastName().substring(1));
 				newCredentials.setPassword("password");
 				newCustomer.setCredentials(newCredentials);
 			}

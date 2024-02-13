@@ -6,7 +6,7 @@ const AddCustomer = () => {
     const [ postComplete, setPostComplete ] = useState(false)
 
     async function handleNewCustomerSubmit(event: FormEvent<HTMLFormElement>){
-        event?.preventDefault
+        event?.preventDefault()
         const formData = new FormData(event.currentTarget)
         const name = formData?.get('username')
         const pass = formData?.get('password')
