@@ -195,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
 			newOrder.setInvoice(newInvoice);
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(newOrder));
 	    } catch (Exception e) {
-	    	throw new BadRequestException(e.getMessage());
+	    	throw new BadRequestException("invalid jwt in request");
 	    }
 	}
 

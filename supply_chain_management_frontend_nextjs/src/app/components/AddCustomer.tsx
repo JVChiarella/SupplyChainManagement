@@ -31,8 +31,6 @@ const AddCustomer = () => {
             return "error"
         } else{
             setPostComplete(true);
-            //const newUser = await res.json();
-            //console.log("new user created: ", newUser)
         }
     }
 

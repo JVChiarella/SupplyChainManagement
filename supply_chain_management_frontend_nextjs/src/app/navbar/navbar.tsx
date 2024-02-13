@@ -9,6 +9,7 @@ const Navbar = (props : any) => {
       <div className="navbar-container">
         <NavButton name="home"></NavButton>
         <NavButton name="orders"></NavButton>
+        <NavButton name="stock"></NavButton>
         <SignOutButton></SignOutButton>
       </div>
   )} else {
@@ -17,6 +18,7 @@ const Navbar = (props : any) => {
       <div className="navbar-container">
           <NavButton name="home"></NavButton>
           <NavButton name="users"></NavButton>
+          <NavButton name="stock"></NavButton>
           <SignOutButton></SignOutButton>
       </div>
   )}

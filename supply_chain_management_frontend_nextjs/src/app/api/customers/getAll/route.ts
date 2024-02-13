@@ -7,7 +7,7 @@ export async function GET(){
     const token = cookieStore.get(COOKIE_NAME);
     const auth = "Bearer " + token?.value;
 
-    //verify jwt in spring (jsonwebtoken auth in node does not work?)
+    //verify jwt in spring
     const response = await fetch(`http://localhost:8080/verification`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' ,

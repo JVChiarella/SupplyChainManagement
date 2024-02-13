@@ -10,7 +10,7 @@ export async function GET(){
         //add token prefix
         const auth = "Bearer " + token?.value;
     
-        //verify jwt in spring (jsonwebtoken auth in node does not work?)
+        //verify jwt in spring
         const response = await fetch(`http://localhost:8080/verification`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' ,

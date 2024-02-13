@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../navbar/navbar";
+import { userAuth } from "../components/UserAuth";
 
-export default function HomePageLayout({
+export default function OrderPageLayout({
     children,
 }:{
     children: React.ReactNode;
@@ -15,7 +16,7 @@ export default function HomePageLayout({
 
     useEffect(() => {
         const getData = async () => {
-            const { user, error } = await getUser();
+            const { user, error } = await userAuth();
 
             //unsuccesful authorization, redirect back to login page
             if(error){
@@ -49,31 +50,10 @@ export default function HomePageLayout({
         //only customers can go to orders page
         if(isCustomer){
             return (
-                <main>
-                    <Navbar type="customer"></Navbar>
-                    {children}
-                </main>
+            <main>
+                <Navbar type="customer"></Navbar>
+                {children}
+            </main>
         )}
     }
-}
-
-async function getUser() {
-    const res = await fetch('/api/auth', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    });
-    
-    //if auth api returns anything but success, throw error and redirect to login
-    if(res.statusText != "OK"){
-        return {
-            user: null,
-            error: "Unauthorized"
-        }
-    }
-
-    const data = await res.json();
-    return {
-        user: data,
-        error: null,
-    };
 }

@@ -2,15 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "../navbar/navbar";
+import AddStock from "../components/AddStock";
 import { userAuth } from "../components/UserAuth";
 
-export default function UsersPageLayout({
+export default function StockPageLayout({
     children,
 }:{
     children: React.ReactNode;
 }){
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const router = useRouter();
+    const [ isCustomer, setIsCustomer ] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -22,10 +25,9 @@ export default function UsersPageLayout({
                 return
             }
 
-            //customer logged in; redirect to home
+            //customer logged in; save in state
             if(user.type == "customer"){
-                router.push("/home")
-                return
+                setIsCustomer(true);
             }
             
             //successful login
@@ -39,10 +41,22 @@ export default function UsersPageLayout({
         <p>
             Loading...
         </p>
-    )} else { 
-    return (
-        <main>
-            {children}
-        </main>
-    )}
+    )} else {
+        //customer page
+        if(isCustomer){
+            return (
+                <main>
+                    <Navbar type="customer"></Navbar>
+                    {children}
+                </main>
+        )} else {
+        //employee page
+        return (
+            <main>
+                <Navbar></Navbar>
+                {children}
+                <AddStock></AddStock>
+            </main>
+        )}
+    }
 }

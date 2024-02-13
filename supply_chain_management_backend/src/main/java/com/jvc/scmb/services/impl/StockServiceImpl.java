@@ -150,6 +150,7 @@ public class StockServiceImpl implements StockService {
 			return stockMapper.entityToDto(stockRepository.saveAndFlush(stock));
 			
 	    } catch (Exception e) {
+	    	System.out.println("exception: " + e.getMessage());
 	    	throw new BadRequestException("invalid jwt in request");
 	    }
 	}

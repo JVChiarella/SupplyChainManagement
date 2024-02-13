@@ -27,7 +27,7 @@ export async function POST(request : Request) {
 
     }
 
-    //verify jwt by sending back to spring api (b/c node jsonwebtoken verify does not work)
+    //verify jwt by sending back to spring api
     verifyJWT(jwt['token']);
     
     //serialize token as cookie and send back to be stored in browser
@@ -54,7 +54,7 @@ async function verifyJWT(token : any){
     //add prefix to token
     const auth = "Bearer " + token;
 
-    //verify jwt in spring (jsonwebtoken auth in node does not work?)
+    //verify jwt in spring
     const response = await fetch(`http://localhost:8080/verification`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' ,

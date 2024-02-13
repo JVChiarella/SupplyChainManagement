@@ -19,22 +19,19 @@ export async function POST(request : Request){
             const result = await res.json();
             if(result.message == "verified successfully"){
                 //post new employee to spring api after token verification
-                const post = await fetch(`http://localhost:8080/customers/add`, {
+                const post = await fetch(`http://localhost:8080/stock/new`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' ,
                                'Authorization': auth},
-                    body: JSON.stringify({ credentials: { username: data?.username, 
-                                                          password: data?.password },
-                                           firstName: data?.firstName,
-                                           lastName: data?.lastName,
-                                           active: true,
-                                           address: data.address,
-                                           phoneNumber: data.phoneNumber,
+                    body: JSON.stringify({name: data.name,
+                                          description: data.description,
+                                          count: data.count,
+                                          price: data.price,
                     })
                 });
 
-                const newCustomer = await post.json();
-                return new Response(JSON.stringify(newCustomer), {
+                const newStock = await post.json();
+                return new Response(JSON.stringify(newStock), {
                     status: 200,
                 })}
         }, () => {
