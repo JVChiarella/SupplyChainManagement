@@ -6,6 +6,7 @@ import Navbar from "../navbar/navbar";
 import AddStock from "../components/AddStock";
 import { userAuth } from "../components/UserAuth";
 import DeleteStock from "../components/DeleteStock";
+import PatchStock from "../components/PatchStock";
 
 export default function StockPageLayout({
     children,
@@ -57,6 +58,7 @@ export default function StockPageLayout({
                 <Navbar></Navbar>
                 {children}
                 <AddStock></AddStock>
+                <PatchStock></PatchStock>
                 <DeleteStock></DeleteStock>
             </main>
         )}

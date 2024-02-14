@@ -221,12 +221,22 @@ public class StockServiceImpl implements StockService {
 			
 			Stock foundStock = optionalStock.get();
 			
-			//apply changes, convert entity to dto and return
+			//apply supplied changes, convert entity to dto and return
+			//if nums were not provided on frontend, they were set to -1 to avoid java default value of 0
 			Stock newStock = stockMapper.requestDtoToEntity(stockRequestDto);
-			foundStock.setCount(newStock.getCount());
-			foundStock.setDescription(newStock.getDescription());
-			foundStock.setName(newStock.getName());
-			foundStock.setPrice(newStock.getPrice());
+			if(!newStock.getName().equals("")) {
+				foundStock.setName(newStock.getName());
+			}
+			if(!(newStock.getCount() < 0)) {
+				foundStock.setCount(newStock.getCount());
+			}
+			if(!newStock.getDescription().equals("")) {
+				foundStock.setDescription(newStock.getDescription());
+			}
+			if(!(newStock.getPrice() < 0)) {
+				foundStock.setPrice(newStock.getPrice());
+			}
+			
 			return stockMapper.entityToDto(stockRepository.saveAndFlush(foundStock));
 	    } catch (Exception e) {
 	    	throw new BadRequestException("invalid jwt in request");
