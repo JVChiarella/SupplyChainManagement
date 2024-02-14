@@ -235,7 +235,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			
 			//update employee data with provided new data
 	        Employee newEmployeeData = employeeMapper.requestDtoToEntity(employeeRequestDto);
-			if(!newEmployeeData.getAdmin().equals(foundEmployee.getAdmin())) {
+			if(!(newEmployeeData.getAdmin() == null)) {
 				foundEmployee.setAdmin(newEmployeeData.getAdmin());
 			}
 			if(!newEmployeeData.getFirstName().equals("")) {

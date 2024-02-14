@@ -15,15 +15,21 @@ const AddCustomer = () => {
         const address = formData.get('address')
         const phone = formData.get('phoneNumber')
 
-        const res = await fetch('/api/customers/add', {
+        //create necessary body to send to api for request
+        const endpoint = "customers/add"
+        const payload = { credentials: { username: name, 
+                                         password: pass },
+                          firstName: first,
+                          lastName: last,
+                          active: true,
+                          address: address,
+                          phoneNumber: phone }
+
+        const res = await fetch('/api/crud/post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: name,
-                                 password: pass,
-                                 firstName: first,
-                                 lastName: last,
-                                 address: address,
-                                 phoneNumber: phone,
+          body: JSON.stringify({ endpoint: endpoint,
+                                 payload: payload
           }),
         })
 

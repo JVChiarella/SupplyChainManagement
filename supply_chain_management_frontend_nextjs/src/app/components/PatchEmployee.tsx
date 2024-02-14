@@ -1,25 +1,23 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const PatchCustomer = () => {
+const PatchEmployee = () => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
-    async function handlePatchCustomerSubmit(event: FormEvent<HTMLFormElement>){
+    async function handlePatchEmployeeSubmit(event: FormEvent<HTMLFormElement>){
         event?.preventDefault()
         const formData = new FormData(event.currentTarget)
         const id = formData.get('id')
         const first = formData.get('firstName')
         const last = formData.get('lastName')
-        const address = formData.get('address')
-        const phone = formData.get('phoneNumber')
+        const admin = formData.get('admin')
 
         //create necessary body to send to api for request
-        const endpoint = `customers/patch/${id}`
+        const endpoint = `employees/patch/${id}`
         const payload = { firstName: first,
                           lastName: last,
-                          address: address,
-                          phoneNumber: phone }
+                          admin: admin }
 
         const res = await fetch('/api/crud/patch', {
           method: 'PATCH',
@@ -39,32 +37,30 @@ const PatchCustomer = () => {
         return (
             <div>
                 <div>-----------------------</div>
-                <h3>Modify a Customer's Information:</h3>
+                <h3>Modify an Employee's Information:</h3>
 
-                <form onSubmit={handlePatchCustomerSubmit}>
-                    <input type="text" name="id" placeholder="Customer ID" required/>
+                <form onSubmit={handlePatchEmployeeSubmit}>
+                    <input type="text" name="id" placeholder="Employee ID" required/>
                     <input type="text" name="firstName" placeholder="First Name" />
                     <input type="text" name="lastName" placeholder="Last Name" />
-                    <input type="text" name="address" placeholder="Address"/>
-                    <input type="text" name="phoneNumber" placeholder="Phone Number"/>
+                    <input type="text" name="admin" placeholder="Admin?"/>
                     <button type="submit">Update</button>
                 </form>
 
-                <h1>customer data modified successfully!</h1>
+                <h1>employee data modified successfully!</h1>
             </div>
         )
     } else {
         return (
             <div>
                 <div>-----------------------</div>
-                <h3>Modify a Customer's Information:</h3>
+                <h3>Modify an Employee's Information:</h3>
 
-                <form onSubmit={handlePatchCustomerSubmit}>
-                    <input type="text" name="id" placeholder="Customer ID" required/>
+                <form onSubmit={handlePatchEmployeeSubmit}>
+                    <input type="text" name="id" placeholder="Employee ID" required/>
                     <input type="text" name="firstName" placeholder="First Name" />
                     <input type="text" name="lastName" placeholder="Last Name"/>
-                    <input type="text" name="address" placeholder="Address" />
-                    <input type="text" name="phoneNumber" placeholder="Phone Number"/>
+                    <input type="text" name="admin" placeholder="Admin?"/>
                     <button type="submit">Update</button>
                 </form>
             </div>
@@ -72,4 +68,4 @@ const PatchCustomer = () => {
     }
 }
 
-export default PatchCustomer
+export default PatchEmployee

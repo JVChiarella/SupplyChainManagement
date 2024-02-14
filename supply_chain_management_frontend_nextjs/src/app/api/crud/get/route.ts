@@ -1,7 +1,10 @@
 import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
 
-export async function GET(){
+export async function POST(request : Request){
+    //convert body of request
+    const data = await request.json();
+
     //get token from cookies
     const cookieStore = cookies();
     const token = cookieStore.get(COOKIE_NAME);
@@ -16,18 +19,18 @@ export async function GET(){
             }).then(async (res) => {
                 const result = await res.json();
                 if(result.message == "verified successfully"){
-                    //fetch requested data from spring api after token verification
-                    const result2 = await fetch(`http://localhost:8080/employees`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' ,
-                                'Authorization': auth},
+                    //perform post to db via spring api
+                    const endpoint = data.endpoint
+                    const post = await fetch(`http://localhost:8080/${endpoint}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' ,
+                                'Authorization': auth}
                     });
 
-                    const users = await result2.json();
-                    return new Response(JSON.stringify(users), {
+                    const apiResponse = await post.json();
+                    return new Response(JSON.stringify(apiResponse), {
                         status: 200,
-                    })
-                }
+                    })}
             }, () => {
                 return new Response(JSON.stringify("JWT validation failed"), {
                     status: 401,

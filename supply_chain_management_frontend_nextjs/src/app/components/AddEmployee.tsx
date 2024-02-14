@@ -14,15 +14,20 @@ const AddEmployee = () => {
         const last = formData.get('lastName')
         const admin = formData.get('admin')
 
-        const res = await fetch('/api/employees/add', {
+        //create necessary body to send to api for request
+        const endpoint = "employees/add"
+        const payload = { credentials: { username: name, 
+                                         password: pass },
+                            firstName: first,
+                            lastName: last,
+                            active: true,
+                            admin: admin}
+
+        const res = await fetch('/api/crud/post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: name,
-                                 password: pass,
-                                 firstName: first,
-                                 lastName: last,
-                                 admin: admin,
-          }),
+          body: JSON.stringify({ endpoint: endpoint,
+                                 payload: payload }),
         })
 
         if(res.statusText != "OK"){

@@ -4,6 +4,7 @@ import GetAllCustomers from "../components/GetAllCustomers";
 import AddEmployee from "../components/AddEmployee";
 import AddCustomer from "../components/AddCustomer";
 import PatchCustomer from "../components/PatchCustomer";
+import PatchEmployee from "../components/PatchEmployee";
 
 const UsersPage = () => {
   return (
@@ -11,6 +12,7 @@ const UsersPage = () => {
       <Navbar></Navbar>
       
       <GetAllEmployees></GetAllEmployees>
+      <PatchEmployee></PatchEmployee>
       <AddEmployee></AddEmployee>
 
       <div>-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</div>

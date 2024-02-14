@@ -52,9 +52,10 @@ const GetAllEmployees = () => {
 }
 
 async function getEmployees(){
-    const res = await fetch('/api/employees/getAll', {
-        method: 'GET',
+    const res = await fetch('/api/crud/get', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endpoint: "employees" })
       });
     
     const employees = await res.json();

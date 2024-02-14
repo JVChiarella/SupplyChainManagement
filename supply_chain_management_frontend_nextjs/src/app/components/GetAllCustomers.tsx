@@ -52,9 +52,10 @@ const GetAllCustomers = () => {
 }
 
 async function getCustomers(){
-    const res = await fetch('/api/customers/getAll', {
-      method: 'GET',
+    const res = await fetch('/api/crud/get', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint: "customers"})
     });
   
     const users = await res.json();
