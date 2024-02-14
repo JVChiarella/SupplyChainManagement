@@ -32,7 +32,7 @@ const GetAllEmployees = () => {
                 <h1>Employees</h1>
                 <div>-----------------------</div>
                 <ul>
-                    {employees.map(user => <li key={user.id}>{user.admin}{user.active}{user.firstName}{user.lastName}</li>)}
+                    {employees.map(user => <li key={user.id}>{user.id}{user.admin}{user.active}{user.firstName}{user.lastName}</li>)}
                 </ul>
             </div>
         )

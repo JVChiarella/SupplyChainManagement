@@ -206,12 +206,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		            .setSigningKey(key)
 		            .build()
 		            .parseClaimsJws(token);
-	    	 
-			//check credentials, username, password, and employee data was provided
-	        if(employeeRequestDto.getFirstName() == null || employeeRequestDto.getLastName() == null ||
-	           employeeRequestDto.getActive() == null || employeeRequestDto.getAdmin() == null) {
-	            throw new BadRequestException("one or more fields missing in request");
-	        }
 	
 	        //credentials should be a valid employee; only an active employee can add a new employee
 	        String username = (String)jwt.getBody().get("username");
@@ -239,11 +233,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        
 	        Employee foundEmployee = optionalUser.get();
 			
-			//update employee data with new data
-			foundEmployee.setActive(employeeRequestDto.getActive());
-			foundEmployee.setAdmin(employeeRequestDto.getAdmin());
-			foundEmployee.setFirstName(employeeRequestDto.getFirstName());
-			foundEmployee.setLastName(employeeRequestDto.getLastName());
+			//update employee data with provided new data
+	        Employee newEmployeeData = employeeMapper.requestDtoToEntity(employeeRequestDto);
+			if(!newEmployeeData.getAdmin().equals(foundEmployee.getAdmin())) {
+				foundEmployee.setAdmin(newEmployeeData.getAdmin());
+			}
+			if(!newEmployeeData.getFirstName().equals("")) {
+				foundEmployee.setFirstName(newEmployeeData.getFirstName());
+			}
+			if(!newEmployeeData.getLastName().equals("")) {
+				foundEmployee.setLastName(newEmployeeData.getLastName());
+			}
 			
 			//add new employee to db, save and return
 			return employeeMapper.entityToDto(employeeRepository.saveAndFlush(foundEmployee));

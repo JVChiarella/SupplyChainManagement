@@ -211,12 +211,6 @@ public class CustomerServiceImpl implements CustomerService {
 		            .build()
 		            .parseClaimsJws(token);
 	    	 
-			//check credentials, username, password, and customer data was provided
-	        if( customerRequestDto.getLastName() == null || customerRequestDto.getActive() == null ||
-	            customerRequestDto.getPhoneNumber() == null || customerRequestDto.getAddress() == null) {
-	            throw new BadRequestException("one or more fields missing in request");
-	        }
-	
 	        //find customer whose data is to be updated
 	        Optional<Customer> optionalCus = customerRepository.findById(id);
 	        if(optionalCus.isEmpty()) {
@@ -237,11 +231,19 @@ public class CustomerServiceImpl implements CustomerService {
 		    }
 			
 			//update customer data with new data
-			foundCustomer.setActive(customerRequestDto.getActive());
-			foundCustomer.setFirstName(customerRequestDto.getFirstName());
-			foundCustomer.setLastName(customerRequestDto.getLastName());
-			foundCustomer.setAddress(customerRequestDto.getAddress());
-			foundCustomer.setPhoneNumber(customerRequestDto.getPhoneNumber());
+		    Customer newCustomerData = customerMapper.requestDtoToEntity(customerRequestDto);
+		    if(!newCustomerData.getFirstName().equals("")) {
+		    	foundCustomer.setFirstName(newCustomerData.getFirstName());
+		    }
+			if(!newCustomerData.getLastName().equals("")) {
+				foundCustomer.setLastName(newCustomerData.getLastName());
+			}
+			if(!newCustomerData.getAddress().equals("")) {
+				foundCustomer.setAddress(newCustomerData.getAddress());
+			}
+			if(!newCustomerData.getPhoneNumber().equals("")) {
+				foundCustomer.setPhoneNumber(newCustomerData.getPhoneNumber());
+			}
 			
 			//save customer info to db, save and return
 			return customerMapper.entityToDto(customerRepository.saveAndFlush(foundCustomer));
