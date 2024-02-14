@@ -13,15 +13,20 @@ const AddStock = () => {
         const count = formData.get('count')
         const price = formData.get('price')
 
-        const res = await fetch('/api/stock/new', {
+        //create necessary body to send to api for request
+        const endpoint = `stock/new`
+        const payload = { name: name,
+                          description: descrip,
+                          count: count,
+                          price: price }
+
+        const res = await fetch('/api/crud/post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name,
-                                 description: descrip,
-                                 count: count,
-                                 price: price,
-          }),
+          body: JSON.stringify({ endpoint: endpoint,
+                                 payload: payload}),
         })
+
 
         if(res.statusText != "OK"){
             return "error"

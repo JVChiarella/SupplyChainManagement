@@ -1,15 +1,15 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const DeleteStock = () => {
+const DeleteEmployee = () => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
-    async function handleDeleteStockSubmit(event: FormEvent<HTMLFormElement>){
+    async function handleDeleteEmployeeSubmit(event: FormEvent<HTMLFormElement>){
         event?.preventDefault()
         const formData = new FormData(event.currentTarget)
         const id = formData?.get('id')
-        const endpoint = `stock/delete/${id}`
+        const endpoint = `employees/delete/${id}`
 
         const res = await fetch('/api/crud/patch', {
           method: 'PATCH',
@@ -28,24 +28,24 @@ const DeleteStock = () => {
         return (
             <div>
                 <div>------------------------------------------------------------------------------------------------------------------------------------</div>
-                <h3>Delete a Product from Stock:</h3>
+                <h3>Delete an Employee:</h3>
 
-                <form onSubmit={handleDeleteStockSubmit}>
-                    <input type="text" name="id" placeholder="Stock ID" required />
+                <form onSubmit={handleDeleteEmployeeSubmit}>
+                    <input type="text" name="id" placeholder="Employee ID" required />
                     <button type="submit">Delete</button>
                 </form>
 
-                <h1>product removed from stock successfully!</h1>
+                <h1>deleted from employee successfully!</h1>
             </div>
         )
     } else {
         return (
             <div>
                 <div>------------------------------------------------------------------------------------------------------------------------------------</div>
-                <h3>Delete a Product from Stock:</h3>
+                <h3>Delete an Employee:</h3>
 
-                <form onSubmit={handleDeleteStockSubmit}>
-                <input type="text" name="id" placeholder="Stock ID" required />
+                <form onSubmit={handleDeleteEmployeeSubmit}>
+                <input type="text" name="id" placeholder="Employee ID" required />
                     <button type="submit">Delete</button>
                 </form>
             </div>
@@ -53,4 +53,4 @@ const DeleteStock = () => {
     }
 }
 
-export default DeleteStock
+export default DeleteEmployee

@@ -1,6 +1,7 @@
 package com.jvc.scmb.services.impl;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,8 +55,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		    if(!jwt.getBody().getSubject().equals("employee")) {
 		    	throw new BadRequestException("only employees can make this request");
 		    }
+		    List<Employee> foundEmployees = employeeRepository.findAll();
+		    List<Employee> activeEmployees = new ArrayList<>();
+		    for(Employee user : foundEmployees) {
+		    	if(user.getActive()) {
+		    		activeEmployees.add(user);
+		    	}
+		    }
     	 
-	    	 return employeeMapper.requestEntitiesToDtos(employeeRepository.findAll());
+	    	return employeeMapper.requestEntitiesToDtos(activeEmployees);
 	    } catch (Exception e) {
 	    	throw new BadRequestException("invalid jwt in request");
 	    }

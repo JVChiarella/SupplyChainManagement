@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
+//WIP
 const NewOrder = () => {
 
     const [ postComplete, setPostComplete ] = useState(false)
@@ -10,11 +11,15 @@ const NewOrder = () => {
         const formData = new FormData(event.currentTarget)
         const items = formData?.get('items')
 
-        const res = await fetch('/api/orders/customer/new', {
+        //create necessary body to send to api for request
+        const endpoint = `orders/new`
+        const payload = ''
+
+        const res = await fetch('/api/crud/post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ordered_items: items,
-          }),
+          body: JSON.stringify({ endpoint: endpoint,
+                                 payload: payload}),
         })
 
         if(res.statusText != "OK"){

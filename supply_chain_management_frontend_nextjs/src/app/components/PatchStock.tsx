@@ -14,15 +14,28 @@ const PatchStock = () => {
         const count = formData.get('count')
         const price = formData.get('price')
 
-        const res = await fetch('/api/stock/patch', {
+        //check if price + count were provided; if not, set to -1 so db value is not modified
+        let tempCount = count;
+        let tempPrice = price;
+        if(!tempCount) {
+            tempCount = "-1"
+        }
+        if(!tempPrice){
+            tempPrice = "-1"
+        }
+
+        //create necessary body to send to api for request
+        const endpoint = `stock/patch/${id}`
+        const payload = { name: name,
+                          description: descrip,
+                          count: tempCount,
+                          price: tempPrice }
+
+        const res = await fetch('/api/crud/patch', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: id,
-                                 name: name,
-                                 description: descrip,
-                                 count: count,
-                                 price: price,
-          }),
+          body: JSON.stringify({ endpoint: endpoint,
+                                 payload: payload}),
         })
 
         if(res.statusText != "OK"){

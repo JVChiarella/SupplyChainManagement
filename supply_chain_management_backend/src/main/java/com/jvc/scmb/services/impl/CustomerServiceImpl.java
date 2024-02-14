@@ -1,6 +1,7 @@
 package com.jvc.scmb.services.impl;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +59,15 @@ public class CustomerServiceImpl implements CustomerService {
 		    	throw new BadRequestException("only employees can make this request");
 		    }
 		    
-	        return customerMapper.requestEntitiesToDtos(customerRepository.findAll());
+		    List<Customer> foundCustomers = customerRepository.findAll();
+		    List<Customer> activeCustomers = new ArrayList<>();
+		    for(Customer user : foundCustomers) {
+		    	if(user.getActive()) {
+		    		activeCustomers.add(user);
+		    	}
+		    }
+		    
+		    return customerMapper.requestEntitiesToDtos(activeCustomers);
 	    } catch (Exception e) {
 	    	throw new BadRequestException("invalid jwt in request");
 	    }

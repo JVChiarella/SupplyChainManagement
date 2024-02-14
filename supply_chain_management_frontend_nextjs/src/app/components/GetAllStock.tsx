@@ -51,9 +51,10 @@ const GetAllStock = () => {
 }
 
 async function getStock(){
-    const res = await fetch('/api/stock/getAll', {
-      method: 'GET',
+    const res = await fetch('/api/crud/get', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint: "stock"})
     });
   
     const users = await res.json();

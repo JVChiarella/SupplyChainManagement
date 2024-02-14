@@ -45,7 +45,7 @@ public class StockController {
 	}
 	
 	//patch an item in stock
-	@PatchMapping("/{id}")
+	@PatchMapping("/patch/{id}")
 	public StockResponseDto patchStock(@PathVariable Long id, @RequestBody StockRequestDto stockRequestDto, @RequestHeader (name="Authorization") String token) {
 		return StockService.patchStock(id, stockRequestDto, token);
 	}

@@ -52,12 +52,22 @@ const GetAllOrdersByCustomer = () => {
 }
 
 async function getOrders(){
-    const res = await fetch('/api/orders/customer/getAll', {
-      method: 'GET',
+    //get customer id from their token
+    const res1 = await fetch('/api/getCustomerID', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const id = await res1.json();
+
+    //get orders belonging to customer
+    const res2 = await fetch('/api/crud/get', {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint: `orders/customer/${id}`})
     });
   
-    const users = await res.json();
+    const users = await res2.json();
     return users;
 }
 
