@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
 
-export async function POST(request : Request){
+export async function PATCH(request : Request){
     //convert body of request
     const data = await request.json();
 
@@ -19,16 +19,12 @@ export async function POST(request : Request){
             }).then(async (res) => {
                 const result = await res.json();
                 if(result.message == "verified successfully"){
-                    //post new stock to spring api after token verification
-                    const post = await fetch(`http://localhost:8080/stock/new`, {
-                        method: 'POST',
+                    //soft delete stock in db via spring api
+                    const id = data.id;
+                    const post = await fetch(`http://localhost:8080/stock/delete/${id}`, {
+                        method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' ,
-                                'Authorization': auth},
-                        body: JSON.stringify({name: data.name,
-                                            description: data.description,
-                                            count: data.count,
-                                            price: data.price,
-                        })
+                                'Authorization': auth}
                     });
 
                     const newStock = await post.json();

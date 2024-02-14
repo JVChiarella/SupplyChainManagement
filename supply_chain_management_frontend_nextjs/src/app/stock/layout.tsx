@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../navbar/navbar";
 import AddStock from "../components/AddStock";
 import { userAuth } from "../components/UserAuth";
+import DeleteStock from "../components/DeleteStock";
 
 export default function StockPageLayout({
     children,
@@ -56,6 +57,7 @@ export default function StockPageLayout({
                 <Navbar></Navbar>
                 {children}
                 <AddStock></AddStock>
+                <DeleteStock></DeleteStock>
             </main>
         )}
     }

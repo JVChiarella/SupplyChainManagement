@@ -1,6 +1,7 @@
 package com.jvc.scmb.services.impl;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,9 +125,15 @@ public class StockServiceImpl implements StockService {
 		    	throw new BadRequestException("logged in user not found");
 		    }
 			
-			//get all stock and return
+			//get all active stock items and return
 			List<Stock> stockItems = stockRepository.findAll();
-			return stockMapper.requestEntitiesToDtos(stockItems);
+			List<Stock> activeStock = new ArrayList<>();
+			for(Stock item : stockItems) {
+				if(item.isActive()) {
+					activeStock.add(item);
+				}
+			}
+			return stockMapper.requestEntitiesToDtos(activeStock);
 			
 	    } catch (Exception e) {
 	    	throw new BadRequestException("invalid jwt in request");
@@ -166,6 +173,7 @@ public class StockServiceImpl implements StockService {
 			
 			//convert dto to entity and post to db
 			Stock stock = stockMapper.requestDtoToEntity(stockRequestDto);
+			stock.setActive(true);
 			return stockMapper.entityToDto(stockRepository.saveAndFlush(stock));
 			
 	    } catch (Exception e) {
@@ -263,8 +271,8 @@ public class StockServiceImpl implements StockService {
 			}
 			
 			Stock foundStock = optionalStock.get();
-			stockRepository.delete(foundStock);
-			return stockMapper.entityToDto(foundStock);
+			foundStock.setActive(false);
+			return stockMapper.entityToDto(stockRepository.saveAndFlush(foundStock));
 	    } catch (Exception e) {
 	    	throw new BadRequestException("invalid jwt in request");
 	    }

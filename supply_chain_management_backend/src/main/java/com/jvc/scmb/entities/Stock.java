@@ -32,6 +32,8 @@ public class Stock {
 	
 	private double price;
 	
+	private boolean active;
+	
 	@OneToMany(fetch = FetchType.EAGER,
 			   cascade = CascadeType.MERGE,
 			   mappedBy = "stock")

@@ -31,7 +31,7 @@ const GetAllStock = () => {
             <div>
                 <div>---------------------------------------------------------------------</div>
                 <ul>
-                {stock.map(item=> <li key={item.id}>{item.name}{item.description}{item.count}{item.price}</li>)}
+                {stock.map(item=> <li key={item.id}>{item.id}{item.name}{item.description}{item.count}{item.price}</li>)}
                 </ul>
             </div>
         )

@@ -41,36 +41,42 @@ public class Seeder implements CommandLineRunner {
 		item1.setDescription("42\" x 72\" Blinds");
 		item1.setCount(100);
 		item1.setPrice(29.99);
+		item1.setActive(true);
 		
 		Stock item2 = new Stock();
 		item2.setName("Ice Melt");
 		item2.setDescription("50lbs Bag of Ice Melt");
 		item2.setCount(50);
 		item2.setPrice(49.99);
+		item2.setActive(true);
 		
 		Stock item3 = new Stock();
 		item3.setName("AAA Batteries");
 		item3.setDescription("24 Pack of AAA Batteries");
 		item3.setCount(1000);
 		item3.setPrice(12.99);
+		item3.setActive(true);
 		
 		Stock item4 = new Stock();
 		item4.setName("AA Batteries");
 		item4.setDescription("24 Pack of AA Batteries");
 		item4.setCount(1000);
 		item4.setPrice(12.99);
+		item4.setActive(true);
 		
 		Stock item5 = new Stock();
 		item5.setName("9V Batteries");
 		item5.setDescription("12 Pack of 9V Batteries");
 		item5.setCount(500);
 		item5.setPrice(14.99);
+		item5.setActive(true);
 		
 		Stock item6 = new Stock();
 		item6.setName("Rags");
 		item6.setDescription("6 Pack of Shop Rags");
 		item6.setCount(1000);
 		item6.setPrice(7.99);
+		item6.setActive(true);
 		
 		stockRepository.saveAllAndFlush(Arrays.asList(item1, item2, item3, item4, item5, item6));;
 		
