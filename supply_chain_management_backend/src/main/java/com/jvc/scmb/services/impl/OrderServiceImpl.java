@@ -208,7 +208,6 @@ public class OrderServiceImpl implements OrderService {
 	    }
 	}
 
-	//bug here. not currently working -----------------------------------------
 	@Override
 	public OrderResponseDto patchOrder(Long id, OrderRequestDto orderRequestDto, String token) {
 		//verify jwt from header of request
@@ -268,7 +267,6 @@ public class OrderServiceImpl implements OrderService {
 			itemsToDelete = null;
 			stockChanges = null;
 			
-			//bug is in here (concurrent modification?)--------------------------------------
 			//update order to new items and update stock
 			//loop through ordered items and add to ordered items array + update stock numbers
 			List<OrderedItem> items = order.getOrdered_items();
@@ -350,7 +348,8 @@ public class OrderServiceImpl implements OrderService {
 		    	throw new BadRequestException("only an employee or the customer who placed the order can view its details");
 		    }
 			
-			//return ordered items to stock
+			//return all old items to stock
+			List<Stock> stockChanges = new ArrayList<>();
 			for(OrderedItem item : order.getOrdered_items()) {
 				Long item_id = item.getStock().getId();
 				Optional<Stock> optStock = stockRepository.findById(item_id);
@@ -360,15 +359,16 @@ public class OrderServiceImpl implements OrderService {
 				
 				Stock stock = optStock.get();
 				stock.setCount(stock.getCount() + item.getAmount());
-				orderedItemRepository.delete(item);
-				stockRepository.saveAndFlush(stock);
+				stockChanges.add(stock);
 			}
+			//remove ordered items list from order and update all changes to db
+			stockRepository.saveAll(stockChanges);
 			
 			//soft delete order and return
-			order.setOrdered_items(null);
 			Invoice invoice = order.getInvoice();
 			invoice.setStatus("cancelled");
 			invoiceRepository.saveAndFlush(invoice);
+			
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(order));
 	    } catch (Exception e) {
 	    	throw new BadRequestException(e.getMessage());
