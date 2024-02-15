@@ -65,7 +65,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     	 
 	    	return employeeMapper.requestEntitiesToDtos(activeEmployees);
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
     }
 	
@@ -98,7 +99,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//return found employee
 			return employeeMapper.entityToDto(foundEmployee);
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -149,7 +151,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//add new employee to db, save and return
 			return employeeMapper.entityToDto(employeeRepository.saveAndFlush(newEmployee));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -197,7 +200,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			foundEmployee.setActive(false);
 			return employeeMapper.entityToDto(employeeRepository.saveAndFlush(foundEmployee));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -256,7 +260,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//add new employee to db, save and return
 			return employeeMapper.entityToDto(employeeRepository.saveAndFlush(foundEmployee));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -272,7 +277,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		//remove token prefix
 		token = token.replace("Bearer ", "");
 		token = token.replace("\"",""); 
-		//System.out.println("TOKEN: " + token);
 		return token;
 	}
 }

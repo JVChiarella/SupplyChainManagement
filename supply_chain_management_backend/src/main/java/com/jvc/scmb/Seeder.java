@@ -142,12 +142,15 @@ public class Seeder implements CommandLineRunner {
 		oi1.setStock(item2);
 		oi1.setOrder(order1);
 		oi1.setAmount(5);
+		oi1.setActive(true);
 		oi2.setStock(item3);
 		oi2.setOrder(order1);
 		oi2.setAmount(10);
+		oi2.setActive(true);
 		oi3.setStock(item6);
 		oi3.setOrder(order1);
 		oi3.setAmount(20);
+		oi3.setActive(true);
 		order1.setOrdered_items(Arrays.asList(oi1, oi2, oi3));
 		
 		//change counts in stock table
@@ -185,12 +188,15 @@ public class Seeder implements CommandLineRunner {
 		oi4.setStock(item4);
 		oi4.setOrder(order2);
 		oi4.setAmount(100);
+		oi4.setActive(true);
 		oi5.setStock(item5);
 		oi5.setOrder(order2);
 		oi5.setAmount(24);
+		oi5.setActive(true);
 		oi6.setStock(item6);
 		oi6.setOrder(order2);
 		oi6.setAmount(11);
+		oi6.setActive(true);
 		order2.setOrdered_items(Arrays.asList(oi4, oi5, oi6));
 		
 		//change counts in stock table
@@ -227,9 +233,11 @@ public class Seeder implements CommandLineRunner {
 		oi7.setStock(item2);
 		oi7.setOrder(order3);
 		oi7.setAmount(1);
+		oi7.setActive(true);
 		oi8.setStock(item3);
 		oi8.setOrder(order3);
 		oi8.setAmount(20);
+		oi8.setActive(true);
 		order3.setOrdered_items(Arrays.asList(oi7, oi8));
 
 		//change counts in stock table
@@ -268,18 +276,23 @@ public class Seeder implements CommandLineRunner {
 		oi9.setStock(item1);
 		oi9.setOrder(order4);
 		oi9.setAmount(7);
+		oi9.setActive(true);
 		oi10.setStock(item2);
 		oi10.setOrder(order4);
 		oi10.setAmount(14);
+		oi10.setActive(true);
 		oi11.setStock(item3);
 		oi11.setOrder(order4);
 		oi11.setAmount(9);
+		oi11.setActive(true);
 		oi12.setStock(item4);
 		oi12.setOrder(order4);
 		oi12.setAmount(20);
+		oi12.setActive(true);
 		oi13.setStock(item5);
 		oi13.setOrder(order4);
 		oi13.setAmount(5);
+		oi13.setActive(true);
 		order4.setOrdered_items(Arrays.asList(oi9, oi10, oi11, oi12, oi13));
 		
 		//change counts in stock table

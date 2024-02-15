@@ -49,7 +49,7 @@ public class VerificationServiceImpl implements VerificationService {
 		    response.put("message", "verified successfully");
 		    return response;
 	    } catch(Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getStackTrace().toString());
 	    }
 		    
 		

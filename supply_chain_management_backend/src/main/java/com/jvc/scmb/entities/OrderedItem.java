@@ -36,6 +36,10 @@ public class OrderedItem {
 	
 	private int amount;
 	
+	//if an ordered was cancelled, the details remain stored in db. if this flag
+	//is set to false, then the item was returned to stock
+	private boolean active;
+	
     @Override
     public int hashCode() {
         return Objects.hashCode(id);

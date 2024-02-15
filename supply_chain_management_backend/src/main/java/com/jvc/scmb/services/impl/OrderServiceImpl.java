@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.jvc.scmb.dtos.OrderRequestDto;
 import com.jvc.scmb.dtos.OrderResponseDto;
-import com.jvc.scmb.dtos.OrderedItemDto;
+import com.jvc.scmb.dtos.OrderedItemRequestDto;
 import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.entities.Order;
@@ -82,6 +82,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			return orderMapper.entityToDto(foundOrder);
 	    } catch (Exception e) {
+	    	e.printStackTrace();
 	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
@@ -122,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			return orderMapper.requestEntitiesToDtos(foundOrders);
 	    } catch (Exception e) {
+	    	e.printStackTrace();
 	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
@@ -167,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
 			//loop through ordered items and add to ordered items array + update stock numbers
 			List<OrderedItem> items = new ArrayList<>();
 			List<Stock> stockChanges = new ArrayList<>();
-			for(OrderedItemDto oi : orderRequestDto.getOrdered_items()) {
+			for(OrderedItemRequestDto oi : orderRequestDto.getOrdered_items()) {
 				OrderedItem item = new OrderedItem();
 				Optional<Stock> optStock = stockRepository.findById(oi.getStock_id());
 				if(optStock.isEmpty()) {
@@ -188,6 +190,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 				item.setStock(stock);
 				item.setOrder(newOrder);
+				item.setActive(true);
 				items.add(item);
 				
 				stockChanges.add(stock);
@@ -204,6 +207,7 @@ public class OrderServiceImpl implements OrderService {
 			newOrder.setInvoice(newInvoice);
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(newOrder));
 	    } catch (Exception e) {
+	    	e.printStackTrace();
 	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
@@ -254,9 +258,13 @@ public class OrderServiceImpl implements OrderService {
 				stock.setCount(stock.getCount() + item.getAmount());
 				stockChanges.add(stock);
 				itemsToDelete.add(item);
+				
+				//remove reference from stock to ordered item to allow deleting previous ordered items
+				stock.getOrdered_items().remove(item);
 			}
 			//remove ordered items list from order and update all changes to db
 			order.getOrdered_items().removeAll(itemsToDelete);
+			order.setOrdered_items(null);
 			orderRepository.save(order);
 			orderedItemRepository.deleteAll(itemsToDelete);
 			stockRepository.saveAll(stockChanges);
@@ -269,9 +277,9 @@ public class OrderServiceImpl implements OrderService {
 			
 			//update order to new items and update stock
 			//loop through ordered items and add to ordered items array + update stock numbers
-			List<OrderedItem> items = order.getOrdered_items();
+			List<OrderedItem> items = new ArrayList<>();
 			List<Stock> stockChanges2 = new ArrayList<>();
-			for(OrderedItemDto oi : orderRequestDto.getOrdered_items()) {
+			for(OrderedItemRequestDto oi : orderRequestDto.getOrdered_items()) {
 				OrderedItem item = new OrderedItem();
 				Optional<Stock> optStock = stockRepository.findById(oi.getStock_id());
 				if(optStock.isEmpty()) {
@@ -292,6 +300,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 				item.setStock(stock);
 				item.setOrder(order);
+				item.setActive(true);
 				items.add(item);
 				
 				stockChanges2.add(stock);
@@ -302,7 +311,6 @@ public class OrderServiceImpl implements OrderService {
 			orderedItemRepository.saveAllAndFlush(items);
 			orderRepository.saveAndFlush(order);
 			stockRepository.saveAllAndFlush(stockChanges2);
-			//e.printStackTrace();
 			
 			Invoice newInvoice = new Invoice(order);
 			invoiceRepository.saveAndFlush(newInvoice);
@@ -311,11 +319,11 @@ public class OrderServiceImpl implements OrderService {
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(order));
 			
 	    } catch (Exception e) {
+	    	e.printStackTrace();
 	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
-	//bug here with JWT authentication - not working. worked before JWT authentication added-----------------------------------------
 	@Override
 	public OrderResponseDto deleteOrder(Long id, String token) {
 		//verify jwt from header of request
@@ -337,6 +345,13 @@ public class OrderServiceImpl implements OrderService {
 			
 			Order order = optionalOrder.get();
 			
+			//check if order has already been fulfilled or cancelled
+			if(order.getInvoice().getStatus().equals("fulfilled")) {
+				throw new BadRequestException("this order has already been fulfilled and cannot be cancelled");
+			} else if(order.getInvoice().getStatus().equals("cancelled")) {
+				throw new BadRequestException("this order has already been cancelled");
+			}
+			
 		    //check that jwt belongs to the customer who placed the order or an employee
 		    if(jwt.getBody().getSubject().equals("employee")) {
 		    	;
@@ -350,6 +365,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			//return all old items to stock
 			List<Stock> stockChanges = new ArrayList<>();
+			List<OrderedItem> itemsToUpdate = new ArrayList<>();
 			for(OrderedItem item : order.getOrdered_items()) {
 				Long item_id = item.getStock().getId();
 				Optional<Stock> optStock = stockRepository.findById(item_id);
@@ -360,17 +376,23 @@ public class OrderServiceImpl implements OrderService {
 				Stock stock = optStock.get();
 				stock.setCount(stock.getCount() + item.getAmount());
 				stockChanges.add(stock);
+				item.setActive(false);
+				itemsToUpdate.add(item);
 			}
-			//remove ordered items list from order and update all changes to db
+			//update stock changes to db
+			orderedItemRepository.saveAllAndFlush(itemsToUpdate);
+			orderRepository.save(order);
 			stockRepository.saveAll(stockChanges);
 			
 			//soft delete order and return
+			//keep all details about the order in db; items ordered, date, price, etc but the stock has been returned
 			Invoice invoice = order.getInvoice();
 			invoice.setStatus("cancelled");
 			invoiceRepository.saveAndFlush(invoice);
 			
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(order));
 	    } catch (Exception e) {
+	    	e.printStackTrace();
 	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
@@ -387,7 +409,6 @@ public class OrderServiceImpl implements OrderService {
 		//remove token prefix
 		token = token.replace("Bearer ", "");
 		token = token.replace("\"",""); 
-		//System.out.println("TOKEN: " + token);
 		return token;
 	}
 }

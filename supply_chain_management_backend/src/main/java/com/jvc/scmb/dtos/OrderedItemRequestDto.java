@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class OrderedItemDto {
+public class OrderedItemRequestDto {
 
 	private Long stock_id;
 	

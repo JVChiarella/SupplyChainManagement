@@ -11,5 +11,5 @@ public class OrderRequestDto {
 	
 	private Long customer_id;
 	
-	private List<OrderedItemDto> ordered_items;
+	private List<OrderedItemRequestDto> ordered_items;
 }

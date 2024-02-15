@@ -86,7 +86,8 @@ public class StockServiceImpl implements StockService {
 			return stockMapper.entityToDto(foundStock);
 			
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
@@ -136,7 +137,8 @@ public class StockServiceImpl implements StockService {
 			return stockMapper.requestEntitiesToDtos(activeStock);
 			
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
@@ -177,8 +179,8 @@ public class StockServiceImpl implements StockService {
 			return stockMapper.entityToDto(stockRepository.saveAndFlush(stock));
 			
 	    } catch (Exception e) {
-	    	System.out.println("exception: " + e.getMessage());
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
@@ -239,7 +241,8 @@ public class StockServiceImpl implements StockService {
 			
 			return stockMapper.entityToDto(stockRepository.saveAndFlush(foundStock));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
@@ -284,7 +287,8 @@ public class StockServiceImpl implements StockService {
 			foundStock.setActive(false);
 			return stockMapper.entityToDto(stockRepository.saveAndFlush(foundStock));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -300,7 +304,6 @@ public class StockServiceImpl implements StockService {
 		//remove token prefix
 		token = token.replace("Bearer ", "");
 		token = token.replace("\"",""); 
-		//System.out.println("TOKEN: " + token);
 		return token;
 	}
 }

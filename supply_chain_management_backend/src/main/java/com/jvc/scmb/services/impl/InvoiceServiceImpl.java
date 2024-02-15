@@ -64,7 +64,8 @@ public class InvoiceServiceImpl implements InvoiceService{
     	 
 			return invoiceMapper.entityToDto(foundInvoice);
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -80,7 +81,6 @@ public class InvoiceServiceImpl implements InvoiceService{
 		//remove token prefix
 		token = token.replace("Bearer ", "");
 		token = token.replace("\"",""); 
-		//System.out.println("TOKEN: " + token);
 		return token;
 	}
 }

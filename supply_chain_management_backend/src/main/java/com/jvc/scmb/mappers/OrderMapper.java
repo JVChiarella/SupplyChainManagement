@@ -9,7 +9,8 @@ import com.jvc.scmb.dtos.OrderRequestDto;
 import com.jvc.scmb.dtos.OrderResponseDto;
 import com.jvc.scmb.entities.Order;
 
-@Mapper(componentModel = "spring", uses = { CustomerMapper.class, InvoiceMapper.class, CredentialsMapper.class} )
+@Mapper(componentModel = "spring", uses = { CustomerMapper.class, InvoiceMapper.class, 
+									  		CredentialsMapper.class, OrderedItemMapper.class} )
 public interface OrderMapper {
 
 	@Mapping(target = "customer_id", source = "customer.id")
