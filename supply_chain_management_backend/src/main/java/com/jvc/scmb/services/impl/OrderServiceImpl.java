@@ -265,12 +265,14 @@ public class OrderServiceImpl implements OrderService {
 			invoiceRepository.delete(order.getInvoice());
 			order.setInvoice(null);
 			
-			/*
+			itemsToDelete = null;
+			stockChanges = null;
+			
 			//bug is in here (concurrent modification?)--------------------------------------
 			//update order to new items and update stock
 			//loop through ordered items and add to ordered items array + update stock numbers
-			List<OrderedItem> items = new ArrayList<>();
-			stockChanges.clear();
+			List<OrderedItem> items = order.getOrdered_items();
+			List<Stock> stockChanges2 = new ArrayList<>();
 			for(OrderedItemDto oi : orderRequestDto.getOrdered_items()) {
 				OrderedItem item = new OrderedItem();
 				Optional<Stock> optStock = stockRepository.findById(oi.getStock_id());
@@ -294,19 +296,20 @@ public class OrderServiceImpl implements OrderService {
 				item.setOrder(order);
 				items.add(item);
 				
-				stockChanges.add(stock);
+				stockChanges2.add(stock);
 			}
 			order.setOrdered_items(items);
 			
 			//create invoice, save all to database and return
-			orderRepository.saveAndFlush(order);
 			orderedItemRepository.saveAllAndFlush(items);
-			stockRepository.saveAllAndFlush(stockChanges);
+			orderRepository.saveAndFlush(order);
+			stockRepository.saveAllAndFlush(stockChanges2);
+			//e.printStackTrace();
 			
 			Invoice newInvoice = new Invoice(order);
 			invoiceRepository.saveAndFlush(newInvoice);
 			order.setInvoice(newInvoice);
-			*/
+			
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(order));
 			
 	    } catch (Exception e) {
@@ -362,6 +365,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			
 			//soft delete order and return
+			order.setOrdered_items(null);
 			Invoice invoice = order.getInvoice();
 			invoice.setStatus("cancelled");
 			invoiceRepository.saveAndFlush(invoice);
