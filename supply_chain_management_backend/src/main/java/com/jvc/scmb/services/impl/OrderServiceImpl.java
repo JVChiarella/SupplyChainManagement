@@ -82,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			return orderMapper.entityToDto(foundOrder);
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			return orderMapper.requestEntitiesToDtos(foundOrders);
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
@@ -174,13 +174,22 @@ public class OrderServiceImpl implements OrderService {
 					throw new IllegalArgumentException("invalid stock item id passed");
 				}
 				Stock stock = optStock.get();
+				
+				//check that enough count of stock is available
+				if(stock.getCount() == 0) {
+					throw new BadRequestException("no stock available for item with id " + stock.getId());
+				} else if(stock.getCount()-oi.getAmount() < 0) {
+					//give customer all remaining stock of the item
+					item.setAmount(stock.getCount());
+					stock.setCount(0);
+				} else {
+					item.setAmount(oi.getAmount());
+					stock.setCount(stock.getCount()-oi.getAmount());
+				}
 				item.setStock(stock);
-				item.setAmount(oi.getAmount());
 				item.setOrder(newOrder);
 				items.add(item);
 				
-				//subtract amount from stock and add stock item to changes array to save later
-				stock.setCount(stock.getCount()-oi.getAmount());
 				stockChanges.add(stock);
 			}
 			newOrder.setOrdered_items(items);
@@ -195,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
 			newOrder.setInvoice(newInvoice);
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(newOrder));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
@@ -253,6 +262,10 @@ public class OrderServiceImpl implements OrderService {
 			orderedItemRepository.deleteAll(itemsToDelete);
 			stockRepository.saveAll(stockChanges);
 			
+			invoiceRepository.delete(order.getInvoice());
+			order.setInvoice(null);
+			
+			/*
 			//bug is in here (concurrent modification?)--------------------------------------
 			//update order to new items and update stock
 			//loop through ordered items and add to ordered items array + update stock numbers
@@ -265,13 +278,22 @@ public class OrderServiceImpl implements OrderService {
 					throw new IllegalArgumentException("invalid stock item id passed");
 				}
 				Stock stock = optStock.get();
+				
+				//check that enough count of stock is available
+				if(stock.getCount() == 0) {
+					throw new BadRequestException("no stock available for item with id " + stock.getId());
+				} else if(stock.getCount()-oi.getAmount() < 0) {
+					//give customer all remaining stock of the item
+					item.setAmount(stock.getCount());
+					stock.setCount(0);
+				} else {
+					item.setAmount(oi.getAmount());
+					stock.setCount(stock.getCount()-oi.getAmount());
+				}
 				item.setStock(stock);
-				item.setAmount(oi.getAmount());
 				item.setOrder(order);
 				items.add(item);
 				
-				//subtract amount from stock and add stock item to changes array to save later
-				stock.setCount(stock.getCount()-oi.getAmount());
 				stockChanges.add(stock);
 			}
 			order.setOrdered_items(items);
@@ -284,9 +306,11 @@ public class OrderServiceImpl implements OrderService {
 			Invoice newInvoice = new Invoice(order);
 			invoiceRepository.saveAndFlush(newInvoice);
 			order.setInvoice(newInvoice);
+			*/
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(order));
+			
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 
@@ -343,7 +367,7 @@ public class OrderServiceImpl implements OrderService {
 			invoiceRepository.saveAndFlush(invoice);
 			return orderMapper.entityToDto(orderRepository.saveAndFlush(order));
 	    } catch (Exception e) {
-	    	throw new BadRequestException("invalid jwt in request");
+	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
 	
