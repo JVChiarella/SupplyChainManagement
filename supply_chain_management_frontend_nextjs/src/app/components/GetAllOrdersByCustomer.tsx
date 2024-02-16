@@ -35,14 +35,16 @@ const GetAllOrdersByCustomer = () => {
                         <tbody>
                             <tr>
                                 <th>Order ID</th>
-                                <th>Stock ID</th>
-                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th>Status</th>
                             </tr>
                             {orders.map(order => 
                                 <tr key={order.id}>
                                     <td>{order.id}</td>
-                                    {order.ordered_items.map(
-                                    (item) => <td key={item.stock_id}>{item.stock_id}{item.amount}</td>)}
+                                    <td>{order.invoice.totalPrice}</td>
+                                    <td>{order.date.toString().substring(0, 10)}</td>
+                                    <td>{order.invoice.status}</td>
                                 </tr>
                             )}
                         </tbody>

@@ -3,7 +3,7 @@ type Order = {
     customer_id : number;
     invoice : Invoice;
     ordered_items : OrderedItem[];
-    timestamp : Date;
+    date : Date;
 }
 
 type UserCredentials = {
