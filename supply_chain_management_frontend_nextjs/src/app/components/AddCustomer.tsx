@@ -54,9 +54,7 @@ const AddCustomer = () => {
                         <input type="text" name="address" placeholder="Address" required/>
                         <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
 
                 <h1>customer added successfully!</h1>
@@ -76,9 +74,7 @@ const AddCustomer = () => {
                         <input type="text" name="address" placeholder="Address" required/>
                         <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
             </div>
         )

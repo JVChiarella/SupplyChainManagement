@@ -29,6 +29,8 @@ public class Employee {
 	@Embedded
 	private Credentials credentials;
 	
+	private String phoneNumber;
+	
 	private Boolean active;
 	
 	private Boolean admin;

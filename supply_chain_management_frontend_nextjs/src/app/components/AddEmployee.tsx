@@ -12,6 +12,7 @@ const AddEmployee = () => {
         const pass = formData?.get('password')
         const first = formData.get('firstName')
         const last = formData.get('lastName')
+        const phone = formData.get('phoneNumber')
         const admin = formData.get('admin')
 
         //create necessary body to send to api for request
@@ -20,6 +21,7 @@ const AddEmployee = () => {
                                          password: pass },
                             firstName: first,
                             lastName: last,
+                            phoneNumber: phone,
                             active: true,
                             admin: admin}
 
@@ -48,11 +50,10 @@ const AddEmployee = () => {
                         <input type="password" name="password" placeholder="Password"/>
                         <input type="text" name="firstName" placeholder="First Name" required />
                         <input type="text" name="lastName" placeholder="Last Name" required/>
+                        <input type="text" name="phoneNumber" placeholder="Phone Number"/>
                         <input type="text" name="admin" placeholder="Admin?" required/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Add</button>
-                    </div>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
 
                 <h1>employee added successfully!</h1>
@@ -69,11 +70,10 @@ const AddEmployee = () => {
                         <input type="password" name="password" placeholder="Password"/>
                         <input type="text" name="firstName" placeholder="First Name" required />
                         <input type="text" name="lastName" placeholder="Last Name" required/>
+                        <input type="text" name="phoneNumber" placeholder="Phone Number"/>
                         <input type="text" name="admin" placeholder="Admin?" required/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Add</button>
-                    </div>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
             </div>
         )

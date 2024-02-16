@@ -18,6 +18,8 @@ public class EmployeeResponseDto {
 	
 	private String lastName;
 	
+	private String phoneNumber;
+	
 	private Boolean active;
 	
 	private Boolean admin;

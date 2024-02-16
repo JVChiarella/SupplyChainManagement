@@ -135,13 +135,13 @@ body {
   border: 2px solid #1BA098;
   color: white;
   padding-top: 3px;
+  margin: auto;
   margin-top: 30px;
-  margin-left: 130px;
 }
 
 .crud-items {
   color: #FFFFFFBF;
-  width: 500px;
+  width: 600px;
   box-shadow: 4px 4px 10px 5px rgba(202.94, 202.94, 202.94, 0.49);
   border-radius: 15px;
   border: 5px #DEB992 solid;
@@ -182,9 +182,13 @@ body {
   padding: 30px;
 }
 
+th, td {
+  padding-left: 15px;
+  text-align: left;
+  border-bottom: 1px solid #8f8787;
+}
+
 .table-container {
-  color: #FFFFFFBF;
-  width: 100%;
   display: flex;
   justify-content: center;
   padding-top: 30px;

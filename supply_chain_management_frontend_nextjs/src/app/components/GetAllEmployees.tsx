@@ -32,20 +32,24 @@ const GetAllEmployees = () => {
                 <div className='subtitle'>Employees</div>
                 <div className='table-container'>
                     <table>
-                        <tr>
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Admin?</th>
-                        </tr>
-                        {employees.map(user => 
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.firstName}</td>
-                                <td>{user.lastName}</td>
-                                <td>{user.admin}</td>
+                        <tbody>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Phone Number</th>
+                                <th>Admin?</th>
                             </tr>
-                        )}
+                            {employees.map(user => 
+                                <tr key={user.id}>
+                                    <td>{user.id}</td>
+                                    <td>{user.firstName}</td>
+                                    <td>{user.lastName}</td>
+                                    <td>{user.phoneNumber}</td>
+                                    <td>{user.admin.toString()}</td>
+                                </tr>
+                            )}
+                        </tbody>
                     </table>
                 </div>
             </div>

@@ -48,6 +48,7 @@ type Employee = {
     firstName: string;
     lastName: string;
     email: string;
+    phoneNumber: string;
     admin: boolean;
     active: boolean;
     invoices?: Invoice[];

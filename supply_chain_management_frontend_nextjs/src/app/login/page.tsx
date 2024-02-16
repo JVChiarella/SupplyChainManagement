@@ -98,9 +98,7 @@ function LoginPage() {
                 <input type="username" name="username" placeholder="Username" required />
                 <input type="password" name="password" placeholder="Password" required />
               </div>
-              <div className='login-button'>
-                <button type="submit">Login</button>
-              </div>
+              <button className='login-button' type="submit">Login</button>
             </form>
 
             <div className="spacing"></div>
@@ -111,9 +109,7 @@ function LoginPage() {
                 <input type="username" name="username" placeholder="Username" required />
                 <input type="password" name="password" placeholder="Password" required />
               </div>
-              <div className='login-button'>
-                <button type="submit">Login</button>
-              </div>
+              <button className='login-button' type="submit">Login</button>
             </form>
           </div>
         </div>

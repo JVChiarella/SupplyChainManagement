@@ -48,9 +48,7 @@ const PatchCustomer = () => {
                         <input type="text" name="address" placeholder="Address"/>
                         <input type="text" name="phoneNumber" placeholder="Phone Number"/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Update</button>
                 </form>
 
                 <h1>customer data modified successfully!</h1>
@@ -69,9 +67,7 @@ const PatchCustomer = () => {
                         <input type="text" name="address" placeholder="Address" />
                         <input type="text" name="phoneNumber" placeholder="Phone Number"/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Update</button>
                 </form>
             </div>
         )

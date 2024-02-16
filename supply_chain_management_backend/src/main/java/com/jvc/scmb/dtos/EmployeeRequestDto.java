@@ -17,6 +17,8 @@ public class EmployeeRequestDto {
 	@NotNull(message = "employee's last name must be provided")
 	private String lastName;
 	
+	private String phoneNumber;
+	
 	private Boolean active;
 	
 	private Boolean admin;

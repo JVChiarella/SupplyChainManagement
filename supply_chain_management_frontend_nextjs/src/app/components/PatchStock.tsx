@@ -58,9 +58,7 @@ const PatchStock = () => {
                         <input type="text" name="count" placeholder="Count" />
                         <input type="text" name="price" placeholder="Price" />
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Update</button>
                 </form>
 
                 <h1>updated product in stock successfully!</h1>
@@ -79,9 +77,7 @@ const PatchStock = () => {
                         <input type="text" name="count" placeholder="Count"/>
                         <input type="text" name="price" placeholder="Price"/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Update</button>
                 </form>
             </div>
         )

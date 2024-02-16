@@ -29,11 +29,29 @@ const GetAllStock = () => {
     if(gotStock){
         return (
             <div className="crud-items">
-                <h1>Browse Stock:</h1>
-                <div>---------------------------------------------------------</div>
-                <ul>
-                {stock.map(item=> <li key={item.id}>{item.id}{item.name}{item.description}{item.count}{item.price}</li>)}
-                </ul>
+                <div className='subtitle'>Browse Stock</div>
+                <div className='table-container'>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Count</th>
+                                <th>Price</th>
+                            </tr>
+                            {stock.map(item => 
+                                <tr key={item.id}>
+                                    <td>{item.id}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.description}</td>
+                                    <td>{item.count}</td>
+                                    <td>{item.price}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         )
     } else if(error){

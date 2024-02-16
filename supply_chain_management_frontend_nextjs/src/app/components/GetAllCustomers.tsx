@@ -29,12 +29,30 @@ const GetAllCustomers = () => {
     if(gotUsers){
         return (
             <div className="crud-items">
-                <h1>Customers</h1>
-                <div>-----------------------</div>
-                <ul>
-                {customers.map(user => <li key={user.id}>{user.id}{user.active}{user.firstName}{user.lastName}{user.phoneNumber}{user.address}{user.email}</li>)}
-                </ul>
-            </div>
+                <div className='subtitle'>Customers</div>
+                <div className='table-container'>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Phone Number</th>
+                                <th>Address</th>
+                            </tr>
+                            {customers.map(user => 
+                                <tr key={user.id}>
+                                    <td>{user.id}</td>
+                                    <td>{user.firstName}</td>
+                                    <td>{user.lastName}</td>
+                                    <td>{user.phoneNumber}</td>
+                                    <td>{user.address}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
         )
     } else if(error){
         return (

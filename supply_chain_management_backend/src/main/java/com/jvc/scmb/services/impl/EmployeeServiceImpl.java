@@ -256,6 +256,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if(!newEmployeeData.getLastName().equals("")) {
 				foundEmployee.setLastName(newEmployeeData.getLastName());
 			}
+			if(!newEmployeeData.getPhoneNumber().equals("")) {
+				foundEmployee.setPhoneNumber(newEmployeeData.getPhoneNumber());
+			}
 			
 			//add new employee to db, save and return
 			return employeeMapper.entityToDto(employeeRepository.saveAndFlush(foundEmployee));

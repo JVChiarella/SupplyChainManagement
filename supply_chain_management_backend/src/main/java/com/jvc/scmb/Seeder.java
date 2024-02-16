@@ -115,6 +115,7 @@ public class Seeder implements CommandLineRunner {
 		employee1.setCredentials(credentials3);
 		employee1.setFirstName("Jason");
 		employee1.setLastName("Chiarella");
+		employee1.setPhoneNumber("111-111-1111");
 		
 		employeeRepository.saveAndFlush(employee1);
 		
@@ -127,6 +128,7 @@ public class Seeder implements CommandLineRunner {
 		employee2.setCredentials(credentials4);
 		employee2.setFirstName("Test");
 		employee2.setLastName("Testy");
+		employee2.setPhoneNumber("222-222-2222");
 		
 		employeeRepository.saveAndFlush(employee2);
 		

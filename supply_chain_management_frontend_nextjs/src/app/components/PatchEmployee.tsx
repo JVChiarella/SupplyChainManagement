@@ -11,12 +11,14 @@ const PatchEmployee = () => {
         const id = formData.get('id')
         const first = formData.get('firstName')
         const last = formData.get('lastName')
+        const phone = formData.get('phoneNumber')
         const admin = formData.get('admin')
 
         //create necessary body to send to api for request
         const endpoint = `employees/patch/${id}`
         const payload = { firstName: first,
                           lastName: last,
+                          phoneNumber: phone,
                           admin: admin }
 
         const res = await fetch('/api/crud/patch', {
@@ -43,11 +45,10 @@ const PatchEmployee = () => {
                         <input type="text" name="id" placeholder="Employee ID" required/>
                         <input type="text" name="firstName" placeholder="First Name" />
                         <input type="text" name="lastName" placeholder="Last Name" />
+                        <input type="text" name="phoneNumber" placeholder="Phone Number"/>
                         <input type="text" name="admin" placeholder="Admin?"/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Update</button>
                 </form>
 
                 <h1>employee data modified successfully!</h1>
@@ -63,11 +64,10 @@ const PatchEmployee = () => {
                         <input type="text" name="id" placeholder="Employee ID" required/>
                         <input type="text" name="firstName" placeholder="First Name" />
                         <input type="text" name="lastName" placeholder="Last Name"/>
+                        <input type="text" name="phoneNumber" placeholder="Phone Number"/>
                         <input type="text" name="admin" placeholder="Admin?"/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Update</button>
-                    </div>
+                    <button className='submit-button' type="submit">Update</button>
                 </form>
             </div>
         )

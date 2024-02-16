@@ -34,9 +34,7 @@ const DeleteStock = () => {
                         <div className="fields">
                             <input type="text" name="id" placeholder="Stock ID" required />
                         </div>
-                    <div className='submit-button'>
-                        <button type="submit">Delete</button>
-                    </div>
+                        <button className='submit-button' type="submit">Delete</button>
                     </div>
                 </form>
 
@@ -52,9 +50,7 @@ const DeleteStock = () => {
                     <div className="fields">
                         <input type="text" name="id" placeholder="Stock ID" required />
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Delete</button>
-                    </div>
+                    <button className='submit-button' type="submit">Delete</button>
                 </form>
             </div>
         )

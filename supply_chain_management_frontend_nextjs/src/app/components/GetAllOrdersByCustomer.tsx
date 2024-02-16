@@ -29,12 +29,25 @@ const GetAllOrdersByCustomer = () => {
     if(gotOrders){
         return (
             <div className="crud-items">
-                <h1>Current Orders</h1>
-                <div>-----------------------</div>
-                <ul>
-                    {orders.map(order => <li key={order.id}>{order.id} {order.ordered_items.map(
-                                (item) => <ul key={item.stock_id}>{item.stock_id}{item.amount}</ul>)} </li>)}
-                </ul>
+                <div className='subtitle'>Current Orders</div>
+                <div className='table-container'>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Stock ID</th>
+                                <th>Amount</th>
+                            </tr>
+                            {orders.map(order => 
+                                <tr key={order.id}>
+                                    <td>{order.id}</td>
+                                    {order.ordered_items.map(
+                                    (item) => <td key={item.stock_id}>{item.stock_id}{item.amount}</td>)}
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         )
     } else if(error){

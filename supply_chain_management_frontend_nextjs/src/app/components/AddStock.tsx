@@ -47,9 +47,7 @@ const AddStock = () => {
                         <input type="text" name="count" placeholder="Count" required/>
                         <input type="text" name="price" placeholder="Price" required/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Add</button>
-                    </div>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
 
                 <h1>product added to stock successfully!</h1>
@@ -67,9 +65,7 @@ const AddStock = () => {
                         <input type="text" name="count" placeholder="Count" required/>
                         <input type="text" name="price" placeholder="Price" required/>
                     </div>
-                    <div className='submit-button'>
-                        <button type="submit">Add</button>
-                    </div>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
             </div>
         )

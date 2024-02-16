@@ -32,9 +32,8 @@ const DeleteEmployee = () => {
                 <form onSubmit={handleDeleteEmployeeSubmit}>
                     <div className="fields">
                         <input type="text" name="id" placeholder="Employee ID" required />
-                        <div className='submit-button'>
-                            <button type="submit">Delete</button>
-                        </div>
+                        <div className="space"></div>
+                        <button className='submit-button' type="submit">Delete</button>
                     </div>
                 </form>
 
@@ -49,9 +48,8 @@ const DeleteEmployee = () => {
                 <form onSubmit={handleDeleteEmployeeSubmit}>
                     <div className="fields">
                         <input type="text" name="id" placeholder="Employee ID" required />
-                        <div className='submit-button'>
-                            <button type="submit">Delete</button>
-                        </div>
+                        <div className="space"></div>
+                        <button className='submit-button' type="submit">Delete</button>
                     </div>
                 </form>
             </div>

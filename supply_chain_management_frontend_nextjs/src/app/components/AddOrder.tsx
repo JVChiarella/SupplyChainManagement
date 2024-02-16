@@ -37,7 +37,7 @@ const NewOrder = () => {
 
                 <form onSubmit={handleNewOrderSubmit}>
                     <input type="text" name="items" placeholder="Items" required/>
-                    <button type="submit">Add</button>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
 
                 <h1>order placed successfully!</h1>
@@ -51,7 +51,7 @@ const NewOrder = () => {
 
                 <form onSubmit={handleNewOrderSubmit}>
                     <input type="text" name="items" placeholder="Items" required/>
-                    <button type="submit">Add</button>
+                    <button className='submit-button' type="submit">Add</button>
                 </form>
             </div>
         )
