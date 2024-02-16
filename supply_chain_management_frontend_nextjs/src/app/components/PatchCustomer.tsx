@@ -41,11 +41,13 @@ const PatchCustomer = () => {
                 <h3>Modify a Customer's Information:</h3>
 
                 <form onSubmit={handlePatchCustomerSubmit}>
-                    <input type="text" name="id" placeholder="Customer ID" required/>
-                    <input type="text" name="firstName" placeholder="First Name" />
-                    <input type="text" name="lastName" placeholder="Last Name" />
-                    <input type="text" name="address" placeholder="Address"/>
-                    <input type="text" name="phoneNumber" placeholder="Phone Number"/>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Customer ID" required/>
+                        <input type="text" name="firstName" placeholder="First Name" />
+                        <input type="text" name="lastName" placeholder="Last Name" />
+                        <input type="text" name="address" placeholder="Address"/>
+                        <input type="text" name="phoneNumber" placeholder="Phone Number"/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Update</button>
                     </div>
@@ -60,11 +62,13 @@ const PatchCustomer = () => {
                 <h3>Modify a Customer's Information:</h3>
 
                 <form onSubmit={handlePatchCustomerSubmit}>
-                    <input type="text" name="id" placeholder="Customer ID" required/>
-                    <input type="text" name="firstName" placeholder="First Name" />
-                    <input type="text" name="lastName" placeholder="Last Name"/>
-                    <input type="text" name="address" placeholder="Address" />
-                    <input type="text" name="phoneNumber" placeholder="Phone Number"/>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Customer ID" required/>
+                        <input type="text" name="firstName" placeholder="First Name" />
+                        <input type="text" name="lastName" placeholder="Last Name"/>
+                        <input type="text" name="address" placeholder="Address" />
+                        <input type="text" name="phoneNumber" placeholder="Phone Number"/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Update</button>
                     </div>

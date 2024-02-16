@@ -37,7 +37,7 @@ const AddStock = () => {
 
     if(postComplete){
         return (
-            <div className="crud-container">
+            <div className="crud-items">
                 <h3>Add a New Product to Stock:</h3>
 
                 <form onSubmit={handleNewStockSubmit}>
@@ -46,6 +46,8 @@ const AddStock = () => {
                         <input type="text" name="description" placeholder="Description" required/>
                         <input type="text" name="count" placeholder="Count" required/>
                         <input type="text" name="price" placeholder="Price" required/>
+                    </div>
+                    <div className='submit-button'>
                         <button type="submit">Add</button>
                     </div>
                 </form>
@@ -55,7 +57,7 @@ const AddStock = () => {
         )
     } else {
         return (
-            <div className="crud-container">
+            <div className="crud-items">
                 <h3>Add a New Product to Stock:</h3>
 
                 <form onSubmit={handleNewStockSubmit}>
@@ -64,6 +66,8 @@ const AddStock = () => {
                         <input type="text" name="description" placeholder="Description" required/>
                         <input type="text" name="count" placeholder="Count" required/>
                         <input type="text" name="price" placeholder="Price" required/>
+                    </div>
+                    <div className='submit-button'>
                         <button type="submit">Add</button>
                     </div>
                 </form>

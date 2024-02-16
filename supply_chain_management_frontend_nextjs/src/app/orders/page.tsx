@@ -3,7 +3,7 @@ import GetAllOrdersByCustomer from '../components/GetAllOrdersByCustomer'
 
 const OrdersPage = () => {
   return (
-    <div className = "list-container">
+    <div>
         <GetAllOrdersByCustomer></GetAllOrdersByCustomer>
     </div>
   )

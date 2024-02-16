@@ -43,11 +43,13 @@ const AddEmployee = () => {
                 <h3>Add a New Employee:</h3>
 
                 <form onSubmit={handleNewEmployeeSubmit}>
-                    <input type="username" name="username" placeholder="Username"/>
-                    <input type="password" name="password" placeholder="Password"/>
-                    <input type="text" name="firstName" placeholder="First Name" required />
-                    <input type="text" name="lastName" placeholder="Last Name" required/>
-                    <input type="text" name="admin" placeholder="Admin?" required/>
+                    <div className="fields">
+                        <input type="username" name="username" placeholder="Username"/>
+                        <input type="password" name="password" placeholder="Password"/>
+                        <input type="text" name="firstName" placeholder="First Name" required />
+                        <input type="text" name="lastName" placeholder="Last Name" required/>
+                        <input type="text" name="admin" placeholder="Admin?" required/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Add</button>
                     </div>
@@ -62,11 +64,13 @@ const AddEmployee = () => {
                 <h3>Add a New Employee:</h3>
 
                 <form onSubmit={handleNewEmployeeSubmit}>
-                    <input type="username" name="username" placeholder="Username"/>
-                    <input type="password" name="password" placeholder="Password"/>
-                    <input type="text" name="firstName" placeholder="First Name" required />
-                    <input type="text" name="lastName" placeholder="Last Name" required/>
-                    <input type="text" name="admin" placeholder="Admin?" required/>
+                    <div className="fields">
+                        <input type="username" name="username" placeholder="Username"/>
+                        <input type="password" name="password" placeholder="Password"/>
+                        <input type="text" name="firstName" placeholder="First Name" required />
+                        <input type="text" name="lastName" placeholder="Last Name" required/>
+                        <input type="text" name="admin" placeholder="Admin?" required/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Add</button>
                     </div>

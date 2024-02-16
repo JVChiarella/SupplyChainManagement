@@ -52,7 +52,9 @@ export default function OrderPageLayout({
             return (
             <main className="background">
                 <Navbar type="customer"></Navbar>
-                {children}
+                <div className="page-conatiner">
+                    {children}
+                </div>
             </main>
         )}
     }

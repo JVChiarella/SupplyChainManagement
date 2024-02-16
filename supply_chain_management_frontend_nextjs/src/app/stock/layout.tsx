@@ -49,17 +49,21 @@ export default function StockPageLayout({
             return (
                 <main className="background">
                     <Navbar type="customer"></Navbar>
-                    {children}
+                    <div className="page-container">
+                        {children}
+                    </div>
                 </main>
         )} else {
         //employee page
         return (
             <main className="background">
                 <Navbar></Navbar>
-                {children}
-                <AddStock></AddStock>
-                <PatchStock></PatchStock>
-                <DeleteStock></DeleteStock>
+                <div className="page-container">
+                    {children}
+                    <AddStock></AddStock>
+                    <PatchStock></PatchStock>
+                    <DeleteStock></DeleteStock>
+                </div>
             </main>
         )}
     }

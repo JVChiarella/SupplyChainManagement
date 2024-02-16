@@ -47,17 +47,20 @@ const PatchStock = () => {
 
     if(postComplete){
         return (
-            <div className="list-container">
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-items">
                 <h3>Modify a Product in Stock:</h3>
 
                 <form onSubmit={handlePatchStockSubmit}>
-                    <input type="text" name="id" placeholder="Stock ID" required />
-                    <input type="text" name="name" placeholder="Product Name" />
-                    <input type="text" name="description" placeholder="Description" />
-                    <input type="text" name="count" placeholder="Count" />
-                    <input type="text" name="price" placeholder="Price" />
-                    <button type="submit">Update</button>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Stock ID" required />
+                        <input type="text" name="name" placeholder="Product Name" />
+                        <input type="text" name="description" placeholder="Description" />
+                        <input type="text" name="count" placeholder="Count" />
+                        <input type="text" name="price" placeholder="Price" />
+                    </div>
+                    <div className='submit-button'>
+                        <button type="submit">Update</button>
+                    </div>
                 </form>
 
                 <h1>updated product in stock successfully!</h1>
@@ -65,17 +68,20 @@ const PatchStock = () => {
         )
     } else {
         return (
-            <div className="list-container">
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-items">
                 <h3>Modify a Product in Stock:</h3>
 
                 <form onSubmit={handlePatchStockSubmit}>
-                    <input type="text" name="id" placeholder="Stock ID" required />
-                    <input type="text" name="name" placeholder="Product Name"/>
-                    <input type="text" name="description" placeholder="Description"/>
-                    <input type="text" name="count" placeholder="Count"/>
-                    <input type="text" name="price" placeholder="Price"/>
-                    <button type="submit">Update</button>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Stock ID" required />
+                        <input type="text" name="name" placeholder="Product Name"/>
+                        <input type="text" name="description" placeholder="Description"/>
+                        <input type="text" name="count" placeholder="Count"/>
+                        <input type="text" name="price" placeholder="Price"/>
+                    </div>
+                    <div className='submit-button'>
+                        <button type="submit">Update</button>
+                    </div>
                 </form>
             </div>
         )

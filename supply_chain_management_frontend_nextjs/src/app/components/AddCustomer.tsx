@@ -46,12 +46,14 @@ const AddCustomer = () => {
                 <h3>Add a New Customer:</h3>
 
                 <form onSubmit={handleNewCustomerSubmit}>
-                <input type="username" name="username" placeholder="Username"/>
-                    <input type="password" name="password" placeholder="Password"/>
-                    <input type="text" name="firstName" placeholder="First Name" required />
-                    <input type="text" name="lastName" placeholder="Last Name" required/>
-                    <input type="text" name="address" placeholder="Address" required/>
-                    <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
+                    <div className="fields">
+                        <input type="username" name="username" placeholder="Username"/>
+                        <input type="password" name="password" placeholder="Password"/>
+                        <input type="text" name="firstName" placeholder="First Name" required />
+                        <input type="text" name="lastName" placeholder="Last Name" required/>
+                        <input type="text" name="address" placeholder="Address" required/>
+                        <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Update</button>
                     </div>
@@ -66,12 +68,14 @@ const AddCustomer = () => {
                 <h3>Add a New Customer:</h3>
 
                 <form onSubmit={handleNewCustomerSubmit}>
-                    <input type="username" name="username" placeholder="Username"/>
-                    <input type="password" name="password" placeholder="Password"/>
-                    <input type="text" name="firstName" placeholder="First Name" required />
-                    <input type="text" name="lastName" placeholder="Last Name" required/>
-                    <input type="text" name="address" placeholder="Address" required/>
-                    <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
+                    <div className="fields">
+                        <input type="username" name="username" placeholder="Username"/>
+                        <input type="password" name="password" placeholder="Password"/>
+                        <input type="text" name="firstName" placeholder="First Name" required />
+                        <input type="text" name="lastName" placeholder="Last Name" required/>
+                        <input type="text" name="address" placeholder="Address" required/>
+                        <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Update</button>
                     </div>

@@ -57,7 +57,7 @@ body {
 
 .background {
   display: flex;
-  height: 100%;
+  height: 200vh;
   width: 100vw;
   flex-direction: column ;
   background-color: #051622
@@ -94,7 +94,7 @@ body {
 .login-container {
   display: flex;
   width: 100%;
-  height: 50%;
+  height: 25%;
   position: flex;
   align-items: center;
   flex-direction: column;
@@ -116,7 +116,7 @@ body {
 }
 
 .fields {
-  color: rgba(27, 160, 152, 0.75);
+  color: rgba(0, 0, 0, 0.75);
   font-size: 20px;
   padding-top: 20px;
 }

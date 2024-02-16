@@ -39,10 +39,12 @@ const PatchEmployee = () => {
                 <h3>Modify an Employee's Information:</h3>
 
                 <form onSubmit={handlePatchEmployeeSubmit}>
-                    <input type="text" name="id" placeholder="Employee ID" required/>
-                    <input type="text" name="firstName" placeholder="First Name" />
-                    <input type="text" name="lastName" placeholder="Last Name" />
-                    <input type="text" name="admin" placeholder="Admin?"/>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Employee ID" required/>
+                        <input type="text" name="firstName" placeholder="First Name" />
+                        <input type="text" name="lastName" placeholder="Last Name" />
+                        <input type="text" name="admin" placeholder="Admin?"/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Update</button>
                     </div>
@@ -57,10 +59,12 @@ const PatchEmployee = () => {
                 <h3>Modify an Employee's Information:</h3>
 
                 <form onSubmit={handlePatchEmployeeSubmit}>
-                    <input type="text" name="id" placeholder="Employee ID" required/>
-                    <input type="text" name="firstName" placeholder="First Name" />
-                    <input type="text" name="lastName" placeholder="Last Name"/>
-                    <input type="text" name="admin" placeholder="Admin?"/>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Employee ID" required/>
+                        <input type="text" name="firstName" placeholder="First Name" />
+                        <input type="text" name="lastName" placeholder="Last Name"/>
+                        <input type="text" name="admin" placeholder="Admin?"/>
+                    </div>
                     <div className='submit-button'>
                         <button type="submit">Update</button>
                     </div>
