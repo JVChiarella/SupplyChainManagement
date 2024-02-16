@@ -4,8 +4,8 @@ import React from 'react';
 import Link from 'next/link'
 const signOutButton = () => {
     return(
-        <div className= "navbar-button">
-            <button onClick={logoutUser}>
+        <div>
+            <button className= "navbar-button" onClick={logoutUser}>
                 <Link href= {"./"}>sign out</Link>
             </button>
         </div>

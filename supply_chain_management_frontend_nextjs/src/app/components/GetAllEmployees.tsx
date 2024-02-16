@@ -29,11 +29,25 @@ const GetAllEmployees = () => {
     if(gotUsers){
         return (
             <div className="crud-items">
-                <h1>Employees</h1>
-                <div>-----------------------</div>
-                <ul>
-                    {employees.map(user => <li key={user.id}>{user.id}{user.admin}{user.active}{user.firstName}{user.lastName}</li>)}
-                </ul>
+                <div className='subtitle'>Employees</div>
+                <div className='table-container'>
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Admin?</th>
+                        </tr>
+                        {employees.map(user => 
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.firstName}</td>
+                                <td>{user.lastName}</td>
+                                <td>{user.admin}</td>
+                            </tr>
+                        )}
+                    </table>
+                </div>
             </div>
         )
     } else if(error){
