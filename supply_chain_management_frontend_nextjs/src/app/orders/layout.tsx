@@ -50,7 +50,7 @@ export default function OrderPageLayout({
         //only customers can go to orders page
         if(isCustomer){
             return (
-            <main>
+            <main className="background">
                 <Navbar type="customer"></Navbar>
                 {children}
             </main>

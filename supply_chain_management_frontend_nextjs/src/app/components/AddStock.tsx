@@ -37,16 +37,17 @@ const AddStock = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-container">
                 <h3>Add a New Product to Stock:</h3>
 
                 <form onSubmit={handleNewStockSubmit}>
-                    <input type="text" name="name" placeholder="Product Name" required />
-                    <input type="text" name="description" placeholder="Description" required/>
-                    <input type="text" name="count" placeholder="Count" required/>
-                    <input type="text" name="price" placeholder="Price" required/>
-                    <button type="submit">Add</button>
+                    <div className="fields">
+                        <input type="text" name="name" placeholder="Product Name" required />
+                        <input type="text" name="description" placeholder="Description" required/>
+                        <input type="text" name="count" placeholder="Count" required/>
+                        <input type="text" name="price" placeholder="Price" required/>
+                        <button type="submit">Add</button>
+                    </div>
                 </form>
 
                 <h1>product added to stock successfully!</h1>
@@ -54,16 +55,17 @@ const AddStock = () => {
         )
     } else {
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-container">
                 <h3>Add a New Product to Stock:</h3>
 
                 <form onSubmit={handleNewStockSubmit}>
-                    <input type="text" name="name" placeholder="Product Name" required />
-                    <input type="text" name="description" placeholder="Description" required/>
-                    <input type="text" name="count" placeholder="Count" required/>
-                    <input type="text" name="price" placeholder="Price" required/>
-                    <button type="submit">Add</button>
+                    <div className="fields">
+                        <input type="text" name="name" placeholder="Product Name" required />
+                        <input type="text" name="description" placeholder="Description" required/>
+                        <input type="text" name="count" placeholder="Count" required/>
+                        <input type="text" name="price" placeholder="Price" required/>
+                        <button type="submit">Add</button>
+                    </div>
                 </form>
             </div>
         )

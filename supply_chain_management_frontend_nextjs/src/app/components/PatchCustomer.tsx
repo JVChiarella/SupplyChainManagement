@@ -37,8 +37,7 @@ const PatchCustomer = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>-----------------------</div>
+            <div className="crud-items">
                 <h3>Modify a Customer's Information:</h3>
 
                 <form onSubmit={handlePatchCustomerSubmit}>
@@ -47,7 +46,9 @@ const PatchCustomer = () => {
                     <input type="text" name="lastName" placeholder="Last Name" />
                     <input type="text" name="address" placeholder="Address"/>
                     <input type="text" name="phoneNumber" placeholder="Phone Number"/>
-                    <button type="submit">Update</button>
+                    <div className='submit-button'>
+                        <button type="submit">Update</button>
+                    </div>
                 </form>
 
                 <h1>customer data modified successfully!</h1>
@@ -55,8 +56,7 @@ const PatchCustomer = () => {
         )
     } else {
         return (
-            <div>
-                <div>-----------------------</div>
+            <div className="crud-items">
                 <h3>Modify a Customer's Information:</h3>
 
                 <form onSubmit={handlePatchCustomerSubmit}>
@@ -65,7 +65,9 @@ const PatchCustomer = () => {
                     <input type="text" name="lastName" placeholder="Last Name"/>
                     <input type="text" name="address" placeholder="Address" />
                     <input type="text" name="phoneNumber" placeholder="Phone Number"/>
-                    <button type="submit">Update</button>
+                    <div className='submit-button'>
+                        <button type="submit">Update</button>
+                    </div>
                 </form>
             </div>
         )

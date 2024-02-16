@@ -39,8 +39,7 @@ const AddEmployee = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>-----------------------</div>
+            <div className="crud-items">
                 <h3>Add a New Employee:</h3>
 
                 <form onSubmit={handleNewEmployeeSubmit}>
@@ -49,7 +48,9 @@ const AddEmployee = () => {
                     <input type="text" name="firstName" placeholder="First Name" required />
                     <input type="text" name="lastName" placeholder="Last Name" required/>
                     <input type="text" name="admin" placeholder="Admin?" required/>
-                    <button type="submit">Add</button>
+                    <div className='submit-button'>
+                        <button type="submit">Add</button>
+                    </div>
                 </form>
 
                 <h1>employee added successfully!</h1>
@@ -57,8 +58,7 @@ const AddEmployee = () => {
         )
     } else {
         return (
-            <div>
-                <div>-----------------------</div>
+            <div className="crud-items">
                 <h3>Add a New Employee:</h3>
 
                 <form onSubmit={handleNewEmployeeSubmit}>
@@ -67,7 +67,9 @@ const AddEmployee = () => {
                     <input type="text" name="firstName" placeholder="First Name" required />
                     <input type="text" name="lastName" placeholder="Last Name" required/>
                     <input type="text" name="admin" placeholder="Admin?" required/>
-                    <button type="submit">Add</button>
+                    <div className='submit-button'>
+                        <button type="submit">Add</button>
+                    </div>
                 </form>
             </div>
         )

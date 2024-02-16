@@ -47,7 +47,7 @@ const PatchStock = () => {
 
     if(postComplete){
         return (
-            <div>
+            <div className="list-container">
                 <div>------------------------------------------------------------------------------------------------------------------------------------</div>
                 <h3>Modify a Product in Stock:</h3>
 
@@ -65,7 +65,7 @@ const PatchStock = () => {
         )
     } else {
         return (
-            <div>
+            <div className="list-container">
                 <div>------------------------------------------------------------------------------------------------------------------------------------</div>
                 <h3>Modify a Product in Stock:</h3>
 

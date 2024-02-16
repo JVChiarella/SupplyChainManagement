@@ -26,13 +26,16 @@ const DeleteStock = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="list-container">
                 <h3>Delete a Product from Stock:</h3>
 
                 <form onSubmit={handleDeleteStockSubmit}>
-                    <input type="text" name="id" placeholder="Stock ID" required />
-                    <button type="submit">Delete</button>
+                    <div className="fields">
+                        <div className="fields">
+                            <input type="text" name="id" placeholder="Stock ID" required />
+                            <button type="submit">Delete</button>
+                            </div>
+                        </div>
                 </form>
 
                 <h1>product removed from stock successfully!</h1>
@@ -40,8 +43,7 @@ const DeleteStock = () => {
         )
     } else {
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="list-container">
                 <h3>Delete a Product from Stock:</h3>
 
                 <form onSubmit={handleDeleteStockSubmit}>

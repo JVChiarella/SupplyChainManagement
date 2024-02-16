@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { userAuth } from "../components/UserAuth";
+import Navbar from "../navbar/navbar";
 
 export default function UsersPageLayout({
     children,
@@ -41,8 +42,11 @@ export default function UsersPageLayout({
         </p>
     )} else { 
     return (
-        <main>
-            {children}
+        <main className="background">
+            <Navbar></Navbar>
+            <div className="page-container">
+                {children}
+            </div>
         </main>
     )}
 }

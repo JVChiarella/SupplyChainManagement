@@ -44,14 +44,14 @@ export default function HomePageLayout({
         //customer home page
         if(isCustomer){
             return (
-                <main>
+                <main className = "background">
                     <Navbar type="customer"></Navbar>
                     {children}
                 </main>
         )} else {
         //employee home page
         return (
-            <main>
+            <main className = "background">
                 <Navbar></Navbar>
                 {children}
             </main>

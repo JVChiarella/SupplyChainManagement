@@ -26,27 +26,33 @@ const DeleteCustomer = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-items">
                 <h3>Delete a Customer:</h3>
 
                 <form onSubmit={handleDeleteCustomerSubmit}>
-                    <input type="text" name="id" placeholder="Customer ID" required />
-                    <button type="submit">Delete</button>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Customer ID" required />
+                        <div className='submit-button'>
+                            <button type="submit">Delete</button>
+                        </div>
+                    </div>
                 </form>
 
-                <h1>deleted from Customer successfully!</h1>
+                <h1>deleted customer successfully!</h1>
             </div>
         )
     } else {
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-items">
                 <h3>Delete a Customer:</h3>
 
                 <form onSubmit={handleDeleteCustomerSubmit}>
-                <input type="text" name="id" placeholder="Customer ID" required />
-                    <button type="submit">Delete</button>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Customer ID" required />
+                        <div className='submit-button'>
+                            <button type="submit">Delete</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         )

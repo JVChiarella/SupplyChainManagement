@@ -28,7 +28,8 @@ const GetAllStock = () => {
   
     if(gotStock){
         return (
-            <div>
+            <div className="crud-items">
+                <h1>Browse Stock:</h1>
                 <div>---------------------------------------------------------------------</div>
                 <ul>
                 {stock.map(item=> <li key={item.id}>{item.id}{item.name}{item.description}{item.count}{item.price}</li>)}

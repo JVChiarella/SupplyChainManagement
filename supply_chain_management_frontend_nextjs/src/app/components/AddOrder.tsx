@@ -31,7 +31,7 @@ const NewOrder = () => {
 
     if(postComplete){
         return (
-            <div>
+            <div className="list-container">
                 <div>-----------------------</div>
                 <h3>Place a New Order:</h3>
 
@@ -45,7 +45,7 @@ const NewOrder = () => {
         )
     } else {
         return (
-            <div>
+            <div className="list-container">
                 <div>-----------------------</div>
                 <h3>Place a New Order:</h3>
 

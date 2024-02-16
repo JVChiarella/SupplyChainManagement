@@ -42,8 +42,7 @@ const AddCustomer = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>-----------------------</div>
+            <div className="crud-items">
                 <h3>Add a New Customer:</h3>
 
                 <form onSubmit={handleNewCustomerSubmit}>
@@ -53,7 +52,9 @@ const AddCustomer = () => {
                     <input type="text" name="lastName" placeholder="Last Name" required/>
                     <input type="text" name="address" placeholder="Address" required/>
                     <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
-                    <button type="submit">Add</button>
+                    <div className='submit-button'>
+                        <button type="submit">Update</button>
+                    </div>
                 </form>
 
                 <h1>customer added successfully!</h1>
@@ -61,8 +62,7 @@ const AddCustomer = () => {
         )
     } else {
         return (
-            <div>
-                <div>-----------------------</div>
+            <div className="crud-items">
                 <h3>Add a New Customer:</h3>
 
                 <form onSubmit={handleNewCustomerSubmit}>
@@ -72,7 +72,9 @@ const AddCustomer = () => {
                     <input type="text" name="lastName" placeholder="Last Name" required/>
                     <input type="text" name="address" placeholder="Address" required/>
                     <input type="text" name="phoneNumber" placeholder="Phone Number" required/>
-                    <button type="submit">Add</button>
+                    <div className='submit-button'>
+                        <button type="submit">Update</button>
+                    </div>
                 </form>
             </div>
         )

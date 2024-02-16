@@ -26,27 +26,33 @@ const DeleteEmployee = () => {
 
     if(postComplete){
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-items">
                 <h3>Delete an Employee:</h3>
 
                 <form onSubmit={handleDeleteEmployeeSubmit}>
-                    <input type="text" name="id" placeholder="Employee ID" required />
-                    <button type="submit">Delete</button>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Employee ID" required />
+                        <div className='submit-button'>
+                            <button type="submit">Delete</button>
+                        </div>
+                    </div>
                 </form>
 
-                <h1>deleted from employee successfully!</h1>
+                <h1>deleted employee successfully!</h1>
             </div>
         )
     } else {
         return (
-            <div>
-                <div>------------------------------------------------------------------------------------------------------------------------------------</div>
+            <div className="crud-items">
                 <h3>Delete an Employee:</h3>
 
                 <form onSubmit={handleDeleteEmployeeSubmit}>
-                <input type="text" name="id" placeholder="Employee ID" required />
-                    <button type="submit">Delete</button>
+                    <div className="fields">
+                        <input type="text" name="id" placeholder="Employee ID" required />
+                        <div className='submit-button'>
+                            <button type="submit">Delete</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         )

@@ -28,7 +28,7 @@ const GetAllEmployees = () => {
   
     if(gotUsers){
         return (
-            <div>
+            <div className="crud-items">
                 <h1>Employees</h1>
                 <div>-----------------------</div>
                 <ul>

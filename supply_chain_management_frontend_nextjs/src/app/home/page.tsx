@@ -2,8 +2,8 @@ import React from 'react'
 
 const HomePage = () => {
   return (
-    <div>
-        Home Page is working!
+    <div className="title">
+        Home Page! -- wow such nothing :O
     </div>
   )
 }

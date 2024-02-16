@@ -28,7 +28,7 @@ const GetAllCustomers = () => {
   
     if(gotUsers){
         return (
-            <div>
+            <div className="crud-items">
                 <h1>Customers</h1>
                 <div>-----------------------</div>
                 <ul>

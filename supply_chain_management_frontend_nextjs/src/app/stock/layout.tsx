@@ -47,14 +47,14 @@ export default function StockPageLayout({
         //customer page
         if(isCustomer){
             return (
-                <main>
+                <main className="background">
                     <Navbar type="customer"></Navbar>
                     {children}
                 </main>
         )} else {
         //employee page
         return (
-            <main>
+            <main className="background">
                 <Navbar></Navbar>
                 {children}
                 <AddStock></AddStock>

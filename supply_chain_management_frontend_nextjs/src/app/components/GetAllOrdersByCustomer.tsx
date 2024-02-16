@@ -18,7 +18,6 @@ const GetAllOrdersByCustomer = () => {
                 setError(true)
             } else {       
                 //update state and return
-                console.log(data);
                 setOrders(data);
                 setGotOrders(true);
                 return
@@ -29,11 +28,12 @@ const GetAllOrdersByCustomer = () => {
   
     if(gotOrders){
         return (
-            <div>
+            <div className="crud-items">
                 <h1>Current Orders</h1>
                 <div>-----------------------</div>
                 <ul>
-                    {orders.map(order => <li key={order.id}>{order.id} {order.ordered_items.map((item) => <ul key={item.stock_id}>{item.stock_id}{item.amount}</ul>)} </li>)}
+                    {orders.map(order => <li key={order.id}>{order.id} {order.ordered_items.map(
+                                (item) => <ul key={item.stock_id}>{item.stock_id}{item.amount}</ul>)} </li>)}
                 </ul>
             </div>
         )
