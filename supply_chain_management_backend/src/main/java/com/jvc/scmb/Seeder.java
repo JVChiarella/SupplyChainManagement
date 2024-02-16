@@ -165,6 +165,7 @@ public class Seeder implements CommandLineRunner {
 		//create invoice
 		Invoice invoice1 = new Invoice(order1);
 		invoice1.setEmployee(employee1);
+		invoice1.setStatus("in progress");
 		
 		//assign employee to invoice
 		List<Invoice> newList1 = new ArrayList<>();
@@ -211,6 +212,7 @@ public class Seeder implements CommandLineRunner {
 		//create invoice
 		Invoice invoice2 = new Invoice(order2);
 		invoice2.setEmployee(employee1);
+		invoice2.setStatus("in progress");
 		
 		//assign employee to invoice
 		List<Invoice> newList2 = new ArrayList<>();
@@ -251,6 +253,7 @@ public class Seeder implements CommandLineRunner {
 		//create invoice
 		Invoice invoice3 = new Invoice(order3);
 		invoice3.setEmployee(employee1);
+		invoice3.setStatus("in progress");
 		
 		//assign employee to invoice
 		List<Invoice> newList3 = new ArrayList<>();
@@ -309,6 +312,7 @@ public class Seeder implements CommandLineRunner {
 		//create invoice
 		Invoice invoice4 = new Invoice(order4);
 		invoice4.setEmployee(employee2);
+		invoice4.setStatus("in progress");
 		
 		//assign employee to invoice
 		List<Invoice> newList4 = new ArrayList<>();

@@ -1,7 +1,6 @@
 package com.jvc.scmb.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Order;
 
 import lombok.AllArgsConstructor;
@@ -22,5 +21,5 @@ public class InvoiceResponseDto {
 	
 	private String status;
 	
-	private Employee employee;
+	private Long employee_id;
 }

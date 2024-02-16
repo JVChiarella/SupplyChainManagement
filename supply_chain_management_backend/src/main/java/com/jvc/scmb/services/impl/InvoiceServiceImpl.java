@@ -1,6 +1,8 @@
 package com.jvc.scmb.services.impl;
 
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -8,10 +10,13 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.jvc.scmb.dtos.EmployeeRequestDto;
 import com.jvc.scmb.dtos.InvoiceResponseDto;
+import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.mappers.InvoiceMapper;
+import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.repositories.InvoiceRepository;
 import com.jvc.scmb.services.InvoiceService;
 
@@ -27,6 +32,7 @@ public class InvoiceServiceImpl implements InvoiceService{
 
 	private final InvoiceRepository invoiceRepository;
 	private final InvoiceMapper invoiceMapper;
+	private final EmployeeRepository employeeRepository;
 	
 	@Value("${jwt.secret}")
 	private String secret;
@@ -64,6 +70,87 @@ public class InvoiceServiceImpl implements InvoiceService{
     	 
 			return invoiceMapper.entityToDto(foundInvoice);
 	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
+	    }
+	}
+	
+	public InvoiceResponseDto assignEmployee(Long id, String token, EmployeeRequestDto employeeRequestDto) {
+		//verify jwt from header of request
+		token = JwtVerification(token);
+		
+	    Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+
+	    try {
+	    	 Jws<Claims> jwt = Jwts.parserBuilder()
+		            .setSigningKey(key)
+		            .build()
+		            .parseClaimsJws(token);
+	    	 
+	    	 //find employee in db
+	    	 Optional<Employee> optEmployee = employeeRepository.findByCredentialsUsername(employeeRequestDto.getCredentials().getUsername());
+	    	 if(optEmployee.isEmpty()) {
+	    		 throw new BadRequestException("employee with provided username not found");
+	    	 }
+	    	 
+	    	 //check that employee is active
+	    	 Employee foundEmployee = optEmployee.get();
+	    	 if(!foundEmployee.getActive()) {
+	    		 throw new BadRequestException("employee with provided username is not active");
+	    	 }
+	    	 
+		    //check that jwt belongs to the employee requested or an admin
+		    if(jwt.getBody().getSubject().equals("employee")) {
+		    	if(jwt.getBody().get("username") == foundEmployee.getCredentials().getUsername()) {
+		    		;
+		    	} else if ((boolean)jwt.getBody().get("admin")) {
+		    		;
+		    	} else {
+		    		throw new BadRequestException("jwt mismatch; only an employee or an admin can assign themselves to an invoice");
+		    	}
+		    } else {
+		    	throw new BadRequestException("only an employee or the customer who placed the order can view its details");
+		    }
+	    	 
+	    	 //find invoice in db
+	    	 Optional<Invoice> optInvoice = invoiceRepository.findById(id);
+	    	 if(optInvoice.isEmpty()) {
+	    		 throw new BadRequestException("invoice with provided id not found");
+	    	 }
+	    	 
+	    	 //check invoice status
+	    	 Invoice invoice = optInvoice.get();
+	    	 
+	    	 if(invoice.getStatus().equals("unfulfilled")) {
+	    		 invoice.setStatus("in progress");
+	    	 } else if(invoice.getStatus().equals("fulfilled")) {
+	    		 throw new BadRequestException("this order has already been completed");
+	    	 }
+	    	 
+	    	 if(invoice.getEmployee() != null) {
+	    		 throw new BadRequestException("this invoice already belongs to an employee");
+	    	 }
+	    	 
+	    	 //update invoice assignee and employee invoice list
+	    	 invoice.setEmployee(foundEmployee);
+	    	 List<Invoice> newList = new ArrayList<>();
+	    	 List<Invoice> oldList = foundEmployee.getInvoices();
+	    	 for(Invoice inv : oldList) {
+	    		 //check that this invoice is not already in employee's list; shouldn't be possible but check anyway
+	    		 if(inv.equals(invoice)) {
+	    			 throw new BadRequestException("this order is already being fulfilled by this employee");
+	    		 }
+	    		 newList.add(inv);
+	    	 }
+	    	 newList.add(invoice);
+	    	 oldList = null;
+	    	 foundEmployee.setInvoices(newList);
+	    	 
+	    	 //save and return
+	    	 employeeRepository.saveAndFlush(foundEmployee);
+	    	 return invoiceMapper.entityToDto(invoiceRepository.saveAndFlush(invoice));
+	    	 
+	    } catch(Exception e) {
 	    	e.printStackTrace();
 	    	throw new BadRequestException(e.getMessage());
 	    }

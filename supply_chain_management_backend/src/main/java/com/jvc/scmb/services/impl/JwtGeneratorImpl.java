@@ -30,6 +30,9 @@ public class JwtGeneratorImpl implements JwtGenerator{
 	
 	@Override
 	public Map<String, String> generateEmployeeToken(Employee employee) {
+		//get admin status of employee
+		boolean adminStatus = employee.getAdmin();
+		
 		//Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_16LE), SignatureAlgorithm.HS256.getJcaName());
 		Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 		Instant now = Instant.now();
@@ -37,6 +40,7 @@ public class JwtGeneratorImpl implements JwtGenerator{
 		String jwtToken = Jwts.builder()
 		.claim("username",  employee.getCredentials().getUsername())
 		.claim("id", employee.getId())
+		.claim("admin", adminStatus)
 		.setSubject("employee")
 		.setId(UUID.randomUUID().toString())
 		.setIssuedAt(Date.from(now))
