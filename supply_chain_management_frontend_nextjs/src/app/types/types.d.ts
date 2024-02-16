@@ -1,8 +1,8 @@
 type Order = {
     id? : number;
-    customer : Customer;
+    customer_id : number;
     invoice : Invoice;
-    orderedItems : OrderedItem;
+    ordered_items : OrderedItem[];
     timestamp : Date;
 }
 
@@ -13,14 +13,14 @@ type UserCredentials = {
 
 type Invoice = {
     id? : number;
-    order : Order;
-    customerID : number;
+    order? : Order;
+    status: string;
     totalPrice : number;
 }
 
 type OrderedItem = {
     id? : number;
-    stockID : number;
+    stock_id : number;
     amount : number;
 }
 
