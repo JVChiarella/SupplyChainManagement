@@ -31,14 +31,14 @@ export default function StockPageLayout({
             //customer logged in; save in state
             if(user.type == "customer"){
                 setIsCustomer(true);
+            } else {
+                //check admin status of employee
+                const admin = await getAdmin();
+                if(admin){
+                    setIsAdmin(true);
+                }
             }
 
-            //check admin status
-            const admin = await getAdmin();
-            if(admin){
-                setIsAdmin(true);
-            }
-            
             //successful login
             setIsLoggedIn(true);
         };
