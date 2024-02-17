@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
 import jwt from "jsonwebtoken";
 
-//function to retrieve customer id from cookie for required requests
+//function to retrieve user id from cookie for required requests
 export async function GET(){
     const cookieStore = cookies();
     const token = cookieStore.get(COOKIE_NAME);

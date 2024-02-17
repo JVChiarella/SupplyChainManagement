@@ -237,7 +237,7 @@ public class InvoiceServiceImpl implements InvoiceService{
 	    	 
 		     //check that jwt belongs to the employee requested
 		     if(jwt.getBody().getSubject().equals("employee")) {
-		    	 if(jwt.getBody().get("username") == foundEmployee.getCredentials().getUsername()) {
+		    	 if(jwt.getBody().get("username").equals(foundEmployee.getCredentials().getUsername())) {
 		    		 ;
 		    	 } else if ((boolean)jwt.getBody().get("admin")) {
 		    		 ;

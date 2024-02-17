@@ -4,6 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { userAuth } from "../components/UserAuth";
 import Navbar from "../navbar/navbar";
+import GetAllCustomers from "../components/GetAllCustomers";
+import AddEmployee from "../components/AddEmployee";
+import AddCustomer from "../components/AddCustomer";
+import PatchCustomer from "../components/PatchCustomer";
+import PatchEmployee from "../components/PatchEmployee";
+import DeleteCustomer from "../components/DeleteCustomer";
+import DeleteEmployee from "../components/DeleteEmployee";
 
 export default function UsersPageLayout({
     children,
@@ -11,6 +18,7 @@ export default function UsersPageLayout({
     children: React.ReactNode;
 }){
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+    const [ isAdmin, setIsAdmin ] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -28,6 +36,12 @@ export default function UsersPageLayout({
                 router.push("/home")
                 return
             }
+
+            //check admin status
+            const admin = await getAdmin();
+            if(admin){
+                setIsAdmin(true);
+            }
             
             //successful login
             setIsLoggedIn(true);
@@ -40,13 +54,41 @@ export default function UsersPageLayout({
         <p>
             Loading...
         </p>
+    )} else if(isAdmin){ 
+        return (
+            <main className="admin-users-page-background">
+                <Navbar></Navbar>
+                <div className="page-container">
+                    {children}
+                    <PatchEmployee></PatchEmployee>
+                    <AddEmployee></AddEmployee>
+                    <DeleteEmployee></DeleteEmployee>
+
+                    <GetAllCustomers></GetAllCustomers>
+                    <PatchCustomer></PatchCustomer>
+                    <AddCustomer></AddCustomer>
+                    <DeleteCustomer></DeleteCustomer>
+                </div>
+            </main>
     )} else { 
-    return (
-        <main className="background">
-            <Navbar></Navbar>
-            <div className="page-container">
-                {children}
-            </div>
-        </main>
+        return (
+            <main className="background">
+                <Navbar></Navbar>
+                <div className="page-container">
+                    {children}
+                </div>
+            </main>
     )}
+}
+
+async function getAdmin(){
+    //get admin status from employee token
+    const res1 = await fetch('/api/getAdminStatus', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const id = await res1.json();
+
+    return id;
 }

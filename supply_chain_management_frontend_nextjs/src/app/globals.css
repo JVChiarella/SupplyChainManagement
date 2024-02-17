@@ -57,7 +57,25 @@ body {
 
 .background {
   display: flex;
-  height: 300vh;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column ;
+  background-color: #051622;
+  color: #FFFFFFBF;
+}
+
+.admin-users-page-background {
+  display: flex;
+  height: 320vh;
+  width: 100vw;
+  flex-direction: column ;
+  background-color: #051622;
+  color: #FFFFFFBF;
+}
+
+.admin-stock-page-background {
+  display: flex;
+  height: 110vh;
   width: 100vw;
   flex-direction: column ;
   background-color: #051622;

@@ -18,6 +18,7 @@ const Navbar = (props : any) => {
       <div className="navbar-container">
           <NavButton name="home"></NavButton>
           <NavButton name="users"></NavButton>
+          <NavButton name="invoices"></NavButton>
           <NavButton name="stock"></NavButton>
           <SignOutButton></SignOutButton>
       </div>

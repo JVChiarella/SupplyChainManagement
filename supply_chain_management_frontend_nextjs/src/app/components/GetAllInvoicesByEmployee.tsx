@@ -1,50 +1,50 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
-const GetAllOrdersByCustomer = () => {
+const GetAllInvoicesByEmployee = () => {
 
-    const defaultOrders : Order[] = [];
-    const [gotOrders, setGotOrders] = useState(false);
-    const [orders, setOrders] = useState(defaultOrders);
+    const defaultInvoices : Invoice[] = [];
+    const [gotInvoices, setGotInvoices] = useState(false);
+    const [invoices, setInvoices] = useState(defaultInvoices);
     const [error, setError] = useState(false);
     
     useEffect(() => {
         const getData = async () => {
             //fetch data from spring api
-            const data : Order[] | any = await getOrders();
+            const data : Invoice[] | any = await getInvoices();
 
             if(data['message']){
                 //handle error
                 setError(true)
             } else {       
                 //update state and return
-                setOrders(data);
-                setGotOrders(true);
+                setInvoices(data);
+                setGotInvoices(true);
                 return
             }
         };
         getData();
     }, []);
   
-    if(gotOrders){
+    if(gotInvoices){
         return (
             <div className="crud-items">
-                <div className='subtitle'>Current Orders</div>
+                <div className='subtitle'>Current Invoices</div>
                 <div className='table-container'>
                     <table>
                         <tbody>
                             <tr>
-                                <th>Order ID</th>
+                                <th>Invoice ID</th>
                                 <th>Price</th>
                                 <th>Date</th>
                                 <th>Status</th>
                             </tr>
-                            {orders.map(order => 
-                                <tr key={order.id}>
-                                    <td>{order.id}</td>
-                                    <td>{order.invoice.totalPrice}</td>
-                                    <td>{order.date.toString().substring(0, 10)}</td>
-                                    <td>{order.invoice.status}</td>
+                            {invoices.map(invoice => 
+                                <tr key={invoice.id}>
+                                    <td>{invoice.id}</td>
+                                    <td>{invoice.totalPrice}</td>
+                                    <td>{invoice.order?.date.toString().substring(0, 10)}</td>
+                                    <td>{invoice.status}</td>
                                 </tr>
                             )}
                         </tbody>
@@ -55,20 +55,20 @@ const GetAllOrdersByCustomer = () => {
     } else if(error){
         return (
             <div>
-                --An Error Occured While Loading Orders--
+                --An Error Occured While Loading Invoices--
             </div>
         )
     } else {
         return (
             <div>
-                Loading Orders...
+                Loading Invoices...
             </div>
         )
     }
 }
 
-async function getOrders(){
-    //get customer id from their token
+async function getInvoices(){
+    //get employee id from their token
     const res1 = await fetch('/api/getUserID', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
@@ -76,16 +76,16 @@ async function getOrders(){
 
     const id = await res1.json();
 
-    //get orders belonging to customer
+    //get invoices belonging to employee
     const res2 = await fetch('/api/crud/get', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ endpoint: `orders/customer/${id}`})
+      body: JSON.stringify({ endpoint: `invoices/employee/${id}`})
     });
   
     const users = await res2.json();
     return users;
 }
 
-export default GetAllOrdersByCustomer
+export default GetAllInvoicesByEmployee
   

@@ -1,21 +1,18 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../navbar/navbar";
-import AddStock from "../components/AddStock";
 import { userAuth } from "../components/UserAuth";
-import DeleteStock from "../components/DeleteStock";
-import PatchStock from "../components/PatchStock";
+import GetAllInvoicesByEmployee from '../components/GetAllInvoicesByEmployee'
 
-export default function StockPageLayout({
+export default function InvoicesPageLayout({
     children,
 }:{
     children: React.ReactNode;
 }){
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const router = useRouter();
-    const [ isCustomer, setIsCustomer ] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -27,9 +24,10 @@ export default function StockPageLayout({
                 return
             }
 
-            //customer logged in; save in state
+            //customer logged in; return to home
             if(user.type == "customer"){
-                setIsCustomer(true);
+                router.push("/home")
+                return
             }
             
             //successful login
@@ -44,27 +42,14 @@ export default function StockPageLayout({
             Loading...
         </p>
     )} else {
-        //customer page
-        if(isCustomer){
-            return (
-                <main className="background">
-                    <Navbar type="customer"></Navbar>
-                    <div className="page-container">
-                        {children}
-                    </div>
-                </main>
-        )} else {
         //employee page
         return (
-            <main className="admin-stock-page-background">
+            <main className="background">
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}
-                    <AddStock></AddStock>
-                    <PatchStock></PatchStock>
-                    <DeleteStock></DeleteStock>
+                    <GetAllInvoicesByEmployee></GetAllInvoicesByEmployee>
                 </div>
             </main>
-        )}
-    }
+    )}
 }
