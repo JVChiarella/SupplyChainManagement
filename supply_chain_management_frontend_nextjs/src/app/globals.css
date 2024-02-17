@@ -66,7 +66,7 @@ body {
 
 .admin-users-page-background {
   display: flex;
-  height: 320vh;
+  height: 200vh;
   width: 100vw;
   flex-direction: column ;
   background-color: #051622;

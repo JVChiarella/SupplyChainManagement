@@ -16,6 +16,7 @@ export default function StockPageLayout({
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const router = useRouter();
     const [ isCustomer, setIsCustomer ] = useState(false);
+    const [ isAdmin, setIsAdmin ] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -31,6 +32,12 @@ export default function StockPageLayout({
             if(user.type == "customer"){
                 setIsCustomer(true);
             }
+
+            //check admin status
+            const admin = await getAdmin();
+            if(admin){
+                setIsAdmin(true);
+            }
             
             //successful login
             setIsLoggedIn(true);
@@ -43,18 +50,17 @@ export default function StockPageLayout({
         <p>
             Loading...
         </p>
-    )} else {
+    )} else if(isCustomer){
         //customer page
-        if(isCustomer){
-            return (
-                <main className="background">
-                    <Navbar type="customer"></Navbar>
-                    <div className="page-container">
-                        {children}
-                    </div>
-                </main>
-        )} else {
-        //employee page
+        return (
+            <main className="background">
+                <Navbar type="customer"></Navbar>
+                <div className="page-container">
+                    {children}
+                </div>
+            </main>
+    )} else if(isAdmin){ 
+        //admin employee page
         return (
             <main className="admin-stock-page-background">
                 <Navbar></Navbar>
@@ -65,6 +71,26 @@ export default function StockPageLayout({
                     <DeleteStock></DeleteStock>
                 </div>
             </main>
-        )}
-    }
+    )} else { 
+        //basic employee page
+        return(
+        <main className="background">
+            <Navbar></Navbar>
+            <div className="page-container">
+                {children}
+            </div>
+        </main>
+    )}
+}
+
+async function getAdmin(){
+    //get admin status from employee token
+    const res1 = await fetch('/api/getAdminStatus', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const id = await res1.json();
+
+    return id;
 }
