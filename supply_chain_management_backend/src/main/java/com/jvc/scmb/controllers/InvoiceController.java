@@ -1,5 +1,7 @@
 package com.jvc.scmb.controllers;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,9 +25,22 @@ public class InvoiceController {
 	
 	private final InvoiceService invoiceService;
 
+	//get one invoice
 	@GetMapping("/{id}")
 	public InvoiceResponseDto getInvoice(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
 		return invoiceService.getInvoice(id, token);
+	}
+	
+	//get all invoices belonging to customer
+	@GetMapping("/customer/{id}")
+	public List<InvoiceResponseDto> getAllInvoicesByCustomer(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
+		return invoiceService.getAllInvoicesByCustomer(id, token);
+	}
+	
+	//get all invoices in progress by employee
+	@GetMapping("/employee/{id}")
+	public List<InvoiceResponseDto> getAllInvoicesByEmployee(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
+		return invoiceService.getAllInvoicesByEmployee(id, token);
 	}
 	
 	@PatchMapping("/patch/{id}")

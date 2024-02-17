@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.jvc.scmb.dtos.EmployeeRequestDto;
 import com.jvc.scmb.dtos.InvoiceResponseDto;
+import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
 import com.jvc.scmb.entities.Invoice;
 import com.jvc.scmb.exceptions.BadRequestException;
 import com.jvc.scmb.mappers.InvoiceMapper;
+import com.jvc.scmb.repositories.CustomerRepository;
 import com.jvc.scmb.repositories.EmployeeRepository;
 import com.jvc.scmb.repositories.InvoiceRepository;
 import com.jvc.scmb.services.InvoiceService;
@@ -33,6 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService{
 	private final InvoiceRepository invoiceRepository;
 	private final InvoiceMapper invoiceMapper;
 	private final EmployeeRepository employeeRepository;
+	private final CustomerRepository customerRepository;
 	
 	@Value("${jwt.secret}")
 	private String secret;
@@ -155,6 +158,111 @@ public class InvoiceServiceImpl implements InvoiceService{
 	    	throw new BadRequestException(e.getMessage());
 	    }
 	}
+	
+	public List<InvoiceResponseDto> getAllInvoicesByCustomer(Long id, String token){
+		//verify jwt from header of request
+		token = JwtVerification(token);
+		
+	    Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+
+	    try {
+	    	 Jws<Claims> jwt = Jwts.parserBuilder()
+		            .setSigningKey(key)
+		            .build()
+		            .parseClaimsJws(token);
+	    	 
+	    	 //find customer in db
+	    	 Optional<Customer> optCustomer = customerRepository.findById(id);
+	    	 if(optCustomer.isEmpty()) {
+	    		 throw new BadRequestException("customer with provided username not found");
+	    	 }
+	    	 Customer customer = optCustomer.get();
+	    	 
+		    //check that jwt belongs to the customer or an admin employee
+		    if(jwt.getBody().getSubject().equals("employee")) {
+		    	if((boolean)jwt.getBody().get("admin")) {
+		    		;
+		    	} else {
+		    		throw new BadRequestException("only admin employees can make this request");
+		    	}
+		    } else if(jwt.getBody().getSubject().equals("customer")) {
+		    	if(jwt.getBody().get("username").equals(customer.getCredentials().getUsername())) {
+		    		;
+		    	} else {
+		    		throw new BadRequestException("only the customer who placed the orders can view their details");
+		    	}
+		    } else {
+		    	throw new BadRequestException("only an admin employee or the customer who placed the orders can view their details");
+		    }
+	    	 
+	    	//get all invoices by customer id
+	    	Optional<List<Invoice>> optInvoices = invoiceRepository.findByOrderCustomerId(id);
+	    	if(optInvoices.isEmpty()) {
+	    		throw new BadRequestException("no invoices found belonging to customer with this id");
+	    	}
+	    	 
+	    	//get invoices and return
+	    	List<Invoice> invoices = optInvoices.get();
+	    	return invoiceMapper.requestEntitiesToDtos(invoices);
+	    	 
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
+	    }
+	}
+
+	public List<InvoiceResponseDto> getAllInvoicesByEmployee(Long id, String token){
+		//verify jwt from header of request
+		token = JwtVerification(token);
+		
+	    Key key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+
+	    try {
+	    	 Jws<Claims> jwt = Jwts.parserBuilder()
+		            .setSigningKey(key)
+		            .build()
+		            .parseClaimsJws(token);
+	    	 
+	    	 //find employee in db
+	    	 Optional<Employee> optEmployee = employeeRepository.findById(id);
+	    	 if(optEmployee.isEmpty()) {
+	    		 throw new BadRequestException("employee with provided id not found");
+	    	 }
+	    	 
+	    	 //check that employee is active
+	    	 Employee foundEmployee = optEmployee.get();
+	    	 if(!foundEmployee.getActive()) {
+	    		 throw new BadRequestException("employee with provided username is not active");
+	    	 }
+	    	 
+		     //check that jwt belongs to the employee requested
+		     if(jwt.getBody().getSubject().equals("employee")) {
+		    	 if(jwt.getBody().get("username") == foundEmployee.getCredentials().getUsername()) {
+		    		 ;
+		    	 } else if ((boolean)jwt.getBody().get("admin")) {
+		    		 ;
+		    	 } else {
+		    		 throw new BadRequestException("jwt mismatch; only the employee themselves or an admin can view their invoices");
+		    	 }
+		     } else {
+		    	throw new BadRequestException("only an employee can perform this request");
+		     }
+
+	    	 //get all invoices by employee id
+	    	 Optional<List<Invoice>> optInvoices = invoiceRepository.findByEmployeeId(id);
+	    	 if(optInvoices.isEmpty()) {
+	    		 throw new BadRequestException("no invoices found belonging to employee with this id");
+	    	 }
+	    	 
+	    	//get invoices and return
+	    	 List<Invoice> invoices = optInvoices.get();
+	    	 return invoiceMapper.requestEntitiesToDtos(invoices);
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    	throw new BadRequestException(e.getMessage());
+	    }
+	}
+
 	
 	public String JwtVerification(String token) {
 		if(token == null) {

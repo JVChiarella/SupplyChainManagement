@@ -18,5 +18,5 @@ public interface InvoiceMapper {
 	Invoice requestDtoToEntity(InvoiceRequestDto invoiceRequestDto);
 	
 	@Mapping(target = "employee_id", source = "employee.id")
-	List<Invoice> requestEntitiesToDtos(List<InvoiceRequestDto> invoiceRequestDtos);
+	List<InvoiceResponseDto> requestEntitiesToDtos(List<Invoice> invoices);
 }
