@@ -52,36 +52,36 @@ function LoginPage() {
     }
   }
 
+  function handleNewCustomer(){
+    router.push("/newCustomer");
+  }
+
   if(loginFailState){
     return (
       <div className = "background">
         <div className="title">Supply Chain Management App</div>
         <div className = "login-container">
           <div className="login-items">
-          <div className="subtitle">Customer Login</div>
-            <form onSubmit={handleCustomerSubmit}>
-              <div className="fields">
-                <input type="username" name="username" placeholder="Username" required />
-                <input type="password" name="password" placeholder="Password" required />
-              </div>
-              <div className='login-button'>
-                <button type="submit">Login</button>
-              </div>
-            </form>
-
-            <div className="subtitle">Employee Login</div>
+          <div className="subtitle">Employee Login</div>
             <form onSubmit={handleEmployeeSubmit}>
               <div className="fields">
                 <input type="username" name="username" placeholder="Username" required />
                 <input type="password" name="password" placeholder="Password" required />
               </div>
-              <div className='login-button'>
-                <button type="submit">Login</button>
-              </div>
+              <button className='login-button' type="submit">Login</button>
             </form>
-            <h2>
-              Incorrect Username or Password
-            </h2>
+
+            <div className="spacing"></div>
+
+            <div className="subtitle">Customer Login</div>
+            <form onSubmit={handleCustomerSubmit}>
+              <div className="fields">
+                <input type="username" name="username" placeholder="Username" required />
+                <input type="password" name="password" placeholder="Password" required />
+              </div>
+              <button className='login-button' type="submit">Login</button>
+            </form>
+            <h2>Incorrect Username or Password</h2>
           </div>
         </div>
       </div>
@@ -92,8 +92,8 @@ function LoginPage() {
         <div className="title">Supply Chain Management App</div>
         <div className = "login-container">
           <div className="login-items">
-            <div className="subtitle">Customer Login</div>
-            <form onSubmit={handleCustomerSubmit}>
+          <div className="subtitle">Employee Login</div>
+            <form onSubmit={handleEmployeeSubmit}>
               <div className="fields">
                 <input type="username" name="username" placeholder="Username" required />
                 <input type="password" name="password" placeholder="Password" required />
@@ -103,8 +103,8 @@ function LoginPage() {
 
             <div className="spacing"></div>
 
-            <div className="subtitle">Employee Login</div>
-            <form onSubmit={handleEmployeeSubmit}>
+            <div className="subtitle">Customer Login</div>
+            <form onSubmit={handleCustomerSubmit}>
               <div className="fields">
                 <input type="username" name="username" placeholder="Username" required />
                 <input type="password" name="password" placeholder="Password" required />
