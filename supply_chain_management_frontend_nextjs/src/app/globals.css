@@ -207,9 +207,35 @@ th, td {
   border-bottom: 1px solid #8f8787;
 }
 
+.select-menu {
+  color: #000000bf;
+  font-size: 15px;
+}
+
 .table-container {
   display: flex;
   justify-content: center;
   padding-top: 30px;
   padding-bottom: 30px;
+}
+
+.add-item-button {
+  width: 50px;
+  height: 30px;
+  font-size: 15px;
+  border-radius: 50px;
+  border: 2px solid #1BA098;
+  color: white;
+  justify-content: center;
+}
+
+.remove-item-button {
+  width: 80px;
+  height: 30px;
+  font-size: 15px;
+  border-radius: 50px;
+  border: 2px solid #1BA098;
+  color: white;
+  flex-direction: row;
+  display: inline-block;
 }

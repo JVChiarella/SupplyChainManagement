@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import NewOrderItem from '../components/NewOrderItem'
 
 //WIP -> need to be able to add stock to ordered items array of newOrder + set state to submit to API
 const AddOrder = () => {
@@ -9,11 +10,15 @@ const AddOrder = () => {
                                   ordered_items : [],
                                   date : new Date(0)}
     const defaultStock : StockItem[] = [];
+    const defaultOrderItem : OrderedItem = { stock_id : 1,
+                                             amount : -1}
+    const defaultItems : OrderedItem[] = [defaultOrderItem];
 
     const [ postComplete, setPostComplete ] = useState(false);
     const [ gotStock, setGotStock ] = useState(false);
     const [ stock, setStock ] = useState(defaultStock)
     const [ newOrder, setNewOrder ] = useState(defaultOrder);
+    const [ orderedItems, setOrderedItems] = useState(defaultItems);
     const [ error, setError] = useState(false)
         
     useEffect(() => {
@@ -33,6 +38,18 @@ const AddOrder = () => {
         };
         getData();
     }, []);
+
+    function incrementOrderItems(){
+        setOrderedItems([...orderedItems.concat(defaultOrderItem)])
+    }
+
+    function decrementOrderItems(removeItemIndex : number){
+        if(removeItemIndex < orderedItems.length){
+            setOrderedItems(orderedItems.splice(0, removeItemIndex).concat(orderedItems.splice(removeItemIndex+1,)))
+        } else {
+            setOrderedItems(orderedItems.splice(0, removeItemIndex))
+        }
+    }
 
     async function handleNewOrderSubmit(order : Order){
         //create necessary body to send to api for request
@@ -84,28 +101,43 @@ const AddOrder = () => {
             </div>
         )
     } else if(gotStock){
+        //create dropdown menu
+        let select = document.getElementById("selectId")
+        for(let i = 0; i < stock.length; i++) {
+            var el = document.createElement("option");
+            el.textContent = stock[i].name;
+            el.value = stock[i].name;
+            if(!(select?.contains(el))){
+                select?.appendChild(el);
+            }
+        }
+        let curItemId : any;
+        let stockItem : StockItem = {id : 0,    
+                                    name: "",
+                                    description: "",
+                                    count : 0,
+                                    price: 0};
+
         return (
             <div className="crud-items">
                 <div className='subtitle'>Place a New Order</div>
                 <div className='table-container'>
-                <table>
+                    <table>
                         <tbody>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Description</th>
-                                <th>Count</th>
+                                <th>Available</th>
                                 <th>Price</th>
+                                <th>Amount</th>
                             </tr>
-                            {stock.map(item => 
-                                <tr key={item.id}>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.description}</td>
-                                    <td>{item.count}</td>
-                                    <td>{item.price}</td>
+                            {orderedItems.map((item, idx) => 
+                                <tr key={item.stock_id}>
+                                    <NewOrderItem stock_id={item.stock_id}></NewOrderItem>
+                                    <button className='remove-item-button' onClick={() => decrementOrderItems(idx)}>Remove</button>
                                 </tr>
                             )}
+                            <button className='add-item-button' onClick={() => incrementOrderItems()}>Add</button>
                         </tbody>
                     </table>
                 </div>
