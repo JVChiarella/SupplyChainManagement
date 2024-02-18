@@ -10,7 +10,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.jvc.scmb.dtos.EmployeeRequestDto;
 import com.jvc.scmb.dtos.InvoiceResponseDto;
 import com.jvc.scmb.entities.Customer;
 import com.jvc.scmb.entities.Employee;
@@ -78,7 +77,7 @@ public class InvoiceServiceImpl implements InvoiceService{
 	    }
 	}
 	
-	public InvoiceResponseDto assignEmployee(Long id, String token, EmployeeRequestDto employeeRequestDto) {
+	public InvoiceResponseDto assignEmployee(Long id, String token) {
 		//verify jwt from header of request
 		token = JwtVerification(token);
 		
@@ -91,9 +90,9 @@ public class InvoiceServiceImpl implements InvoiceService{
 		            .parseClaimsJws(token);
 	    	 
 	    	 //find employee in db
-	    	 Optional<Employee> optEmployee = employeeRepository.findByCredentialsUsername(employeeRequestDto.getCredentials().getUsername());
+	    	 Optional<Employee> optEmployee = employeeRepository.findByCredentialsUsername((String)jwt.getBody().get("username"));
 	    	 if(optEmployee.isEmpty()) {
-	    		 throw new BadRequestException("employee with provided username not found");
+	    		 throw new BadRequestException("employee with provided username not found"); //shouldnt be possible
 	    	 }
 	    	 
 	    	 //check that employee is active
@@ -101,19 +100,6 @@ public class InvoiceServiceImpl implements InvoiceService{
 	    	 if(!foundEmployee.getActive()) {
 	    		 throw new BadRequestException("employee with provided username is not active");
 	    	 }
-	    	 
-		    //check that jwt belongs to the employee requested or an admin
-		    if(jwt.getBody().getSubject().equals("employee")) {
-		    	if(jwt.getBody().get("username") == foundEmployee.getCredentials().getUsername()) {
-		    		;
-		    	} else if ((boolean)jwt.getBody().get("admin")) {
-		    		;
-		    	} else {
-		    		throw new BadRequestException("jwt mismatch; only an employee or an admin can assign themselves to an invoice");
-		    	}
-		    } else {
-		    	throw new BadRequestException("only an employee or the customer who placed the order can view its details");
-		    }
 	    	 
 	    	 //find invoice in db
 	    	 Optional<Invoice> optInvoice = invoiceRepository.findById(id);

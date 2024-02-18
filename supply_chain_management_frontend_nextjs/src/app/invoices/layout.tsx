@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../navbar/navbar";
 import { userAuth } from "../components/UserAuth";
 import GetAllInvoicesByEmployee from '../components/GetAllInvoicesByEmployee'
+import AssignInvoice from "../components/AssignInvoice";
 
 export default function InvoicesPageLayout({
     children,
@@ -49,6 +50,7 @@ export default function InvoicesPageLayout({
                 <div className="page-container">
                     {children}
                     <GetAllInvoicesByEmployee></GetAllInvoicesByEmployee>
+                    <AssignInvoice></AssignInvoice>
                 </div>
             </main>
     )}
