@@ -60,13 +60,13 @@ export default function UsersPageLayout({
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}
-                    <PatchEmployee></PatchEmployee>
                     <AddEmployee></AddEmployee>
+                    <PatchEmployee></PatchEmployee>
                     <DeleteEmployee></DeleteEmployee>
 
                     <GetAllCustomers></GetAllCustomers>
-                    <PatchCustomer></PatchCustomer>
                     <AddCustomer></AddCustomer>
+                    <PatchCustomer></PatchCustomer>
                     <DeleteCustomer></DeleteCustomer>
                 </div>
             </main>

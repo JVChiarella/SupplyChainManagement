@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 
-//WIP -> need to be able to add stock to ordered items array of newOrder + set state to submit to API
 const AddOrder = () => {
 
     const defaultStock : StockItem[] = [];
@@ -111,7 +110,10 @@ const AddOrder = () => {
                             )}
                             <tr>
                                 <td>
-                                    <select id="selectId" value={selectedVal} onChange={handleSelectionChange} className = 'select-menu'></select>
+                                    <select value={selectedVal} onChange={handleSelectionChange} className = 'select-menu'>
+                                        {stock.map( item => 
+                                            <option key={item.name}>{item.name}</option>)}
+                                    </select>
                                 </td>
                                 <td>{getStockFromName(selectedVal)?.count}</td>
                                 <td>{getStockFromName(selectedVal)?.price}</td>
@@ -128,17 +130,6 @@ const AddOrder = () => {
             </div>
         )
     } else if(gotStock){
-        //create dropdown menu
-        const select = document.getElementById("selectId")
-        for(let i = 0; i < stock.length; i++) {
-            var el = document.createElement("option");
-            el.textContent = stock[i].name;
-            el.value = stock[i].name;
-            if(!(select?.contains(el))){
-                select?.appendChild(el);
-            }
-        }
-
         return (
             <div className="crud-items">
                 <div className='subtitle'>Place a New Order</div>
@@ -162,7 +153,10 @@ const AddOrder = () => {
                             )}
                             <tr>
                                 <td>
-                                    <select id="selectId" value={selectedVal} onChange={handleSelectionChange} className = 'select-menu'></select>
+                                    <select value={selectedVal} onChange={handleSelectionChange} className = 'select-menu'>
+                                        {stock.map( item => 
+                                            <option key={item.name}>{item.name}</option>)}
+                                    </select>
                                 </td>
                                 <td>{getStockFromName(selectedVal)?.count}</td>
                                 <td>{getStockFromName(selectedVal)?.price}</td>

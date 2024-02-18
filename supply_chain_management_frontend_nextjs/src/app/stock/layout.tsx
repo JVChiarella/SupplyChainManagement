@@ -85,7 +85,7 @@ export default function StockPageLayout({
 
 async function getAdmin(){
     //get admin status from employee token
-    const res1 = await fetch('/api/getuserInfo', {
+    const res1 = await fetch('/api/getUserInfo', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
