@@ -29,7 +29,8 @@ const NewOrderItem = (props : any) => {
     const stockItem = getStockFromId(id, stock)
     return(
       <div className=''>
-        {stockItem?.name}
+        {stockItem?.count}
+        {stockItem?.price}
       </div>
     )
   } else {

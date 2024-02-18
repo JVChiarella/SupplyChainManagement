@@ -10,9 +10,10 @@ const AddOrder = () => {
                                   ordered_items : [],
                                   date : new Date(0)}
     const defaultStock : StockItem[] = [];
-    const defaultOrderItem : OrderedItem = { stock_id : 1,
+    const defaultOrderItem : OrderedItem = { stock_id : -1,
                                              amount : -1}
-    const defaultItems : OrderedItem[] = [defaultOrderItem];
+    const defaultItems : OrderedItem[] = [];
+    const [ selectedVal, setSelectedVal ] = useState("");
 
     const [ postComplete, setPostComplete ] = useState(false);
     const [ gotStock, setGotStock ] = useState(false);
@@ -39,8 +40,10 @@ const AddOrder = () => {
         getData();
     }, []);
 
-    function incrementOrderItems(){
-        setOrderedItems([...orderedItems.concat(defaultOrderItem)])
+    function incrementOrderItems(newItemName : String){
+        let newItem : OrderedItem = {stock_id : getStockFromName(newItemName)?.id,
+                                     amount : 0}
+        setOrderedItems([...orderedItems].concat(newItem))
     }
 
     function decrementOrderItems(removeItemIndex : number){
@@ -49,6 +52,18 @@ const AddOrder = () => {
         } else {
             setOrderedItems(orderedItems.splice(0, removeItemIndex))
         }
+    }
+
+    function getStockFromName(name : any){
+        return  stock.find(obj => obj.name == name)
+      }
+
+      function getStockFromId(id : any){
+        return stock.find(obj => obj.id == id)
+      }
+
+    const handleChange = (event : any) => {
+        setSelectedVal(event.target.value)
     }
 
     async function handleNewOrderSubmit(order : Order){
@@ -125,7 +140,6 @@ const AddOrder = () => {
                     <table>
                         <tbody>
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
                                 <th>Available</th>
                                 <th>Price</th>
@@ -133,11 +147,22 @@ const AddOrder = () => {
                             </tr>
                             {orderedItems.map((item, idx) => 
                                 <tr key={item.stock_id}>
-                                    <NewOrderItem stock_id={item.stock_id}></NewOrderItem>
-                                    <button className='remove-item-button' onClick={() => decrementOrderItems(idx)}>Remove</button>
+                                    <td>{getStockFromId(item.stock_id)?.name}</td>
+                                    <td>{getStockFromId(item.stock_id)?.count}</td>
+                                    <td>{getStockFromId(item.stock_id)?.price}</td>
+                                    <td>{0}</td>
+                                    <td><button className='remove-item-button' onClick={() => decrementOrderItems(idx)}>Remove</button></td>
                                 </tr>
                             )}
-                            <button className='add-item-button' onClick={() => incrementOrderItems()}>Add</button>
+                            <tr>
+                                <td>
+                                    <select id="selectId" value={selectedVal} onChange={handleChange} className = 'select-menu'></select>
+                                </td>
+                                <td>{getStockFromName(selectedVal)?.count}</td>
+                                <td>{getStockFromName(selectedVal)?.price}</td>
+                                <td>{0}</td>
+                            </tr>
+                            <button className='add-item-button' onClick={() => incrementOrderItems(selectedVal)}>Add</button>
                         </tbody>
                     </table>
                 </div>

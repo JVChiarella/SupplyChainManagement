@@ -20,12 +20,12 @@ type Invoice = {
 
 type OrderedItem = {
     id? : number;
-    stock_id : number;
+    stock_id? : number;
     amount : number;
 }
 
 type StockItem = {
-    id? : number;
+    id : number;
     name: string,
     description: string,
     count : number;
