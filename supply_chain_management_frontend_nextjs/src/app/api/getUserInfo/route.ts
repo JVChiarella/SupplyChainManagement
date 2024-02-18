@@ -2,13 +2,13 @@ import { cookies } from "next/headers";
 import { COOKIE_NAME } from "@/app/constants";
 import jwt from "jsonwebtoken";
 
-//function to retrieve user id from cookie for required requests
+//function to retrieve user info from cookie for required requests
 export async function GET(){
     const cookieStore = cookies();
     const token = cookieStore.get(COOKIE_NAME);
     if(token){
         const options : any = jwt.decode(token?.value)
-        return new Response(JSON.stringify(options.id), {
+        return new Response(JSON.stringify(options), {
             status: 200,
         })
     } else {

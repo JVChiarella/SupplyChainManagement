@@ -42,9 +42,9 @@ const GetAllOrdersByCustomer = () => {
                             {orders.map(order => 
                                 <tr key={order.id}>
                                     <td>{order.id}</td>
-                                    <td>{order.invoice.totalPrice}</td>
-                                    <td>{order.date.toString().substring(0, 10)}</td>
-                                    <td>{order.invoice.status}</td>
+                                    <td>{order.invoice?.totalPrice}</td>
+                                    <td>{order.date?.toString().substring(0, 10)}</td>
+                                    <td>{order.invoice?.status}</td>
                                 </tr>
                             )}
                         </tbody>
@@ -69,12 +69,13 @@ const GetAllOrdersByCustomer = () => {
 
 async function getOrders(){
     //get customer id from their token
-    const res1 = await fetch('/api/getUserID', {
+    const res1 = await fetch('/api/getUserInfo', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
 
-    const id = await res1.json();
+    const data = await res1.json();
+    const id = data.id
 
     //get orders belonging to customer
     const res2 = await fetch('/api/crud/get', {

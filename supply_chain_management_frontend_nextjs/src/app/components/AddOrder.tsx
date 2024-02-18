@@ -1,24 +1,17 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import NewOrderItem from '../components/NewOrderItem'
 
 //WIP -> need to be able to add stock to ordered items array of newOrder + set state to submit to API
 const AddOrder = () => {
 
-    const defaultOrder : Order = {customer_id : 0,
-                                  invoice : {status : "", totalPrice : 0},
-                                  ordered_items : [],
-                                  date : new Date(0)}
     const defaultStock : StockItem[] = [];
-    const defaultOrderItem : OrderedItem = { stock_id : -1,
-                                             amount : -1}
     const defaultItems : OrderedItem[] = [];
-    const [ selectedVal, setSelectedVal ] = useState("");
 
+    const [ selectedVal, setSelectedVal ] = useState("");
+    const [ amount, setAmount ] = useState(0);
     const [ postComplete, setPostComplete ] = useState(false);
     const [ gotStock, setGotStock ] = useState(false);
     const [ stock, setStock ] = useState(defaultStock)
-    const [ newOrder, setNewOrder ] = useState(defaultOrder);
     const [ orderedItems, setOrderedItems] = useState(defaultItems);
     const [ error, setError] = useState(false)
         
@@ -40,9 +33,9 @@ const AddOrder = () => {
         getData();
     }, []);
 
-    function incrementOrderItems(newItemName : String){
+    function incrementOrderItems(newItemName : String, curAmount : number){
         let newItem : OrderedItem = {stock_id : getStockFromName(newItemName)?.id,
-                                     amount : 0}
+                                     amount : curAmount}
         setOrderedItems([...orderedItems].concat(newItem))
     }
 
@@ -62,11 +55,20 @@ const AddOrder = () => {
         return stock.find(obj => obj.id == id)
       }
 
-    const handleChange = (event : any) => {
+    const handleSelectionChange = (event : any) => {
         setSelectedVal(event.target.value)
     }
 
-    async function handleNewOrderSubmit(order : Order){
+    const handleAmountChange = (event : any) => {
+        setAmount(event.target.value)
+    }
+
+    async function handleNewOrderSubmit(){
+        //set order
+        const id = await getUserId();
+        const order : Order = {customer_id : id,
+                               ordered_items : orderedItems}
+
         //create necessary body to send to api for request
         const endpoint = `orders/new`
         const payload = order
@@ -93,31 +95,41 @@ const AddOrder = () => {
                     <table>
                         <tbody>
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
-                                <th>Description</th>
-                                <th>Count</th>
+                                <th>Available</th>
                                 <th>Price</th>
+                                <th>Amount</th>
                             </tr>
-                            {stock.map(item => 
-                                <tr key={item.id}>
-                                    <td>{item.id}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.description}</td>
-                                    <td>{item.count}</td>
-                                    <td>{item.price}</td>
+                            {orderedItems.map((item, idx) => 
+                                <tr key={item.stock_id}>
+                                    <td>{getStockFromId(item.stock_id)?.name}</td>
+                                    <td>{getStockFromId(item.stock_id)?.count}</td>
+                                    <td>{getStockFromId(item.stock_id)?.price}</td>
+                                    <td>{item.amount}</td>
+                                    <td><button className='remove-item-button' onClick={() => decrementOrderItems(idx)}>Remove</button></td>
                                 </tr>
                             )}
+                            <tr>
+                                <td>
+                                    <select id="selectId" value={selectedVal} onChange={handleSelectionChange} className = 'select-menu'></select>
+                                </td>
+                                <td>{getStockFromName(selectedVal)?.count}</td>
+                                <td>{getStockFromName(selectedVal)?.price}</td>
+                                <td>
+                                    <input type={'number'} value={amount} onChange={handleAmountChange} className="amount-box"></input>
+                                </td>
+                            </tr>
+                            <button className='add-item-button' onClick={() => incrementOrderItems(selectedVal, amount)}>Add</button>
                         </tbody>
                     </table>
                 </div>
-                <button className='submit-button' onClick={()=> handleNewOrderSubmit(newOrder)}>Submit</button>
-                <h1>order placed successfully!</h1>
+                <div>order placed successfully!</div>
+                <button className='submit-button' onClick={handleNewOrderSubmit}>Submit</button>
             </div>
         )
     } else if(gotStock){
         //create dropdown menu
-        let select = document.getElementById("selectId")
+        const select = document.getElementById("selectId")
         for(let i = 0; i < stock.length; i++) {
             var el = document.createElement("option");
             el.textContent = stock[i].name;
@@ -126,12 +138,6 @@ const AddOrder = () => {
                 select?.appendChild(el);
             }
         }
-        let curItemId : any;
-        let stockItem : StockItem = {id : 0,    
-                                    name: "",
-                                    description: "",
-                                    count : 0,
-                                    price: 0};
 
         return (
             <div className="crud-items">
@@ -150,23 +156,25 @@ const AddOrder = () => {
                                     <td>{getStockFromId(item.stock_id)?.name}</td>
                                     <td>{getStockFromId(item.stock_id)?.count}</td>
                                     <td>{getStockFromId(item.stock_id)?.price}</td>
-                                    <td>{0}</td>
+                                    <td>{item.amount}</td>
                                     <td><button className='remove-item-button' onClick={() => decrementOrderItems(idx)}>Remove</button></td>
                                 </tr>
                             )}
                             <tr>
                                 <td>
-                                    <select id="selectId" value={selectedVal} onChange={handleChange} className = 'select-menu'></select>
+                                    <select id="selectId" value={selectedVal} onChange={handleSelectionChange} className = 'select-menu'></select>
                                 </td>
                                 <td>{getStockFromName(selectedVal)?.count}</td>
                                 <td>{getStockFromName(selectedVal)?.price}</td>
-                                <td>{0}</td>
+                                <td>
+                                    <input type={'number'} value={amount} onChange={handleAmountChange} className="amount-box"></input>
+                                </td>
                             </tr>
-                            <button className='add-item-button' onClick={() => incrementOrderItems(selectedVal)}>Add</button>
+                            <button className='add-item-button' onClick={() => incrementOrderItems(selectedVal, amount)}>Add</button>
                         </tbody>
                     </table>
                 </div>
-                <button className='submit-button' onClick={()=> handleNewOrderSubmit(newOrder)}>Submit</button>
+                <button className='submit-button' onClick={handleNewOrderSubmit}>Submit</button>
             </div>
         )
     } else if(error){
@@ -189,6 +197,18 @@ async function getStock(){
   
     const users = await res.json();
     return users;
+}
+
+async function getUserId(){
+    //get customer id from token
+    const res1 = await fetch('/api/getUserInfo', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const data = await res1.json();
+
+    return data.id;
 }
 
 export default AddOrder

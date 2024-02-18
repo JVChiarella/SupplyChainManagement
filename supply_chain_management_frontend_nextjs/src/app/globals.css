@@ -212,6 +212,12 @@ th, td {
   font-size: 15px;
 }
 
+.amount-box {
+  color: #000000bf;
+  font-size: 15px;
+  width: 70px;
+}
+
 .table-container {
   display: flex;
   justify-content: center;

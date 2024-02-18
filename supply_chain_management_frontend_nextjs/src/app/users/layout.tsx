@@ -83,12 +83,12 @@ export default function UsersPageLayout({
 
 async function getAdmin(){
     //get admin status from employee token
-    const res1 = await fetch('/api/getAdminStatus', {
+    const res1 = await fetch('/api/getUserInfo', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
 
-    const id = await res1.json();
+    const data = await res1.json();
 
-    return id;
+    return data.admin;
 }

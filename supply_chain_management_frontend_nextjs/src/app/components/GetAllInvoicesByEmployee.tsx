@@ -43,7 +43,7 @@ const GetAllInvoicesByEmployee = () => {
                                 <tr key={invoice.id}>
                                     <td>{invoice.id}</td>
                                     <td>{invoice.totalPrice}</td>
-                                    <td>{invoice.order?.date.toString().substring(0, 10)}</td>
+                                    <td>{invoice.order?.date?.toString().substring(0, 10)}</td>
                                     <td>{invoice.status}</td>
                                 </tr>
                             )}
@@ -69,12 +69,13 @@ const GetAllInvoicesByEmployee = () => {
 
 async function getInvoices(){
     //get employee id from their token
-    const res1 = await fetch('/api/getUserID', {
+    const res1 = await fetch('/api/getUserInfo', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
 
-    const id = await res1.json();
+    const data = await res1.json();
+    const id = data.id;
 
     //get invoices belonging to employee
     const res2 = await fetch('/api/crud/get', {

@@ -1,9 +1,9 @@
 type Order = {
     id? : number;
     customer_id : number;
-    invoice : Invoice;
+    invoice? : Invoice;
     ordered_items : OrderedItem[];
-    date : Date;
+    date? : Date;
 }
 
 type UserCredentials = {
