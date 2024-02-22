@@ -1,12 +1,13 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const AddStock = () => {
+const AddStock = (props : any) => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
     async function handleNewStockSubmit(event: FormEvent<HTMLFormElement>){
         event?.preventDefault()
+        setPostComplete(false);
         const formData = new FormData(event.currentTarget)
         const name = formData?.get('name')
         const descrip = formData.get('description')
@@ -32,6 +33,7 @@ const AddStock = () => {
             return "error"
         } else{
             setPostComplete(true);
+            props.setUpdateFetch(true);
         }
     }
 

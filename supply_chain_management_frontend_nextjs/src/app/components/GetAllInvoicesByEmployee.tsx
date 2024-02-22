@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
-const GetAllInvoicesByEmployee = () => {
+const GetAllInvoicesByEmployee = (props : any) => {
 
     const defaultInvoices : Invoice[] = [];
     const [gotInvoices, setGotInvoices] = useState(false);
@@ -9,6 +9,7 @@ const GetAllInvoicesByEmployee = () => {
     const [error, setError] = useState(false);
     
     useEffect(() => {
+        setGotInvoices(false);
         const getData = async () => {
             //fetch data from spring api
             const data : Invoice[] | any = await getInvoices();
@@ -23,8 +24,12 @@ const GetAllInvoicesByEmployee = () => {
                 return
             }
         };
-        getData();
-    }, []);
+        getData().then(() => {
+            if(props.updateFetch){
+                props.setUpdateFetch(false)
+            }
+        })
+    }, [props.updateFetch]);
   
     if(gotInvoices){
         return (

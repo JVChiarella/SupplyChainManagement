@@ -61,7 +61,7 @@ export default function UsersPageLayout({
         </p>
     )} else if(isAdmin){ 
         return (
-            <main className="background">
+            <main className="background-large">
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}

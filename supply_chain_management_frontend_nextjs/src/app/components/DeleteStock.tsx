@@ -1,12 +1,13 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const DeleteStock = () => {
+const DeleteStock = (props : any) => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
     async function handleDeleteStockSubmit(event: FormEvent<HTMLFormElement>){
         event?.preventDefault()
+        setPostComplete(false);
         const formData = new FormData(event.currentTarget)
         const id = formData?.get('id')
         const endpoint = `stock/delete/${id}`
@@ -21,6 +22,7 @@ const DeleteStock = () => {
             return "error"
         } else{
             setPostComplete(true);
+            props.setUpdateFetch(true);
         }
     }
 

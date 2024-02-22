@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 
-const AddOrder = () => {
+const AddOrder = (props : any) => {
 
     const defaultStock : StockItem[] = [];
     const defaultItems : OrderedItem[] = [];
@@ -64,6 +64,7 @@ const AddOrder = () => {
 
     async function handleNewOrderSubmit(){
         //set order
+        setPostComplete(false);
         const id = await getUserId();
         const order : Order = {customer_id : id,
                                ordered_items : orderedItems}
@@ -83,6 +84,10 @@ const AddOrder = () => {
             return "error"
         } else{
             setPostComplete(true);
+            props.setUpdateFetch(true);
+            setOrderedItems([]);
+            setSelectedVal("");
+            setAmount(0);
         }
     }
 

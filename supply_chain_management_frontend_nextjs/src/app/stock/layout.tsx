@@ -7,6 +7,7 @@ import AddStock from "../components/AddStock";
 import { userAuth } from "../components/UserAuth";
 import DeleteStock from "../components/DeleteStock";
 import PatchStock from "../components/PatchStock";
+import GetAllStock from "../components/GetAllStock";
 
 export default function StockPageLayout({
     children,
@@ -17,6 +18,9 @@ export default function StockPageLayout({
     const router = useRouter();
     const [ isCustomer, setIsCustomer ] = useState(false);
     const [ isAdmin, setIsAdmin ] = useState(false);
+
+    //state to pass to children to reload table on changes
+    const [ updateFetch, setUpdateFetch ] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -57,18 +61,20 @@ export default function StockPageLayout({
                 <Navbar type="customer"></Navbar>
                 <div className="page-container">
                     {children}
+                    <GetAllStock updateFetch={updateFetch} setUpdateFetch={setUpdateFetch}></GetAllStock>
                 </div>
             </main>
     )} else if(isAdmin){ 
         //admin employee page
         return (
-            <main className="admin-stock-page-background">
+            <main className="background-large">
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}
-                    <AddStock></AddStock>
-                    <PatchStock></PatchStock>
-                    <DeleteStock></DeleteStock>
+                    <GetAllStock updateFetch={updateFetch} setUpdateFetch={setUpdateFetch}></GetAllStock>
+                    <AddStock setUpdateFetch={setUpdateFetch}></AddStock>
+                    <PatchStock setUpdateFetch={setUpdateFetch}></PatchStock>
+                    <DeleteStock setUpdateFetch={setUpdateFetch}></DeleteStock>
                 </div>
             </main>
     )} else { 
@@ -78,6 +84,7 @@ export default function StockPageLayout({
             <Navbar></Navbar>
             <div className="page-container">
                 {children}
+                <GetAllStock updateFetch={updateFetch} setUpdateFetch={setUpdateFetch}></GetAllStock>
             </div>
         </main>
     )}

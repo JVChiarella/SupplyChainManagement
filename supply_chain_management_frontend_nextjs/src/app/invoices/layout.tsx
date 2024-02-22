@@ -15,6 +15,9 @@ export default function InvoicesPageLayout({
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const router = useRouter();
 
+    //props to pass to children to manage table refresh
+    const [ updateFetch, setUpdateFetch ] = useState(false);
+
     useEffect(() => {
         const getData = async () => {
             const { user, error } = await userAuth();
@@ -49,8 +52,8 @@ export default function InvoicesPageLayout({
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}
-                    <GetAllInvoicesByEmployee></GetAllInvoicesByEmployee>
-                    <AssignInvoice></AssignInvoice>
+                    <GetAllInvoicesByEmployee updateFetch={updateFetch} setUpdateFetch={setUpdateFetch}></GetAllInvoicesByEmployee>
+                    <AssignInvoice setUpdateFetch={setUpdateFetch}></AssignInvoice>
                 </div>
             </main>
     )}

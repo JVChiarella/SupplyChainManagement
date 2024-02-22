@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
-const GetAllStock = () => {
+const GetAllStock = (props : any) => {
 
     const defaultStock : StockItem[] = [];
     const [gotStock, setGotStock] = useState(false);
@@ -9,6 +9,7 @@ const GetAllStock = () => {
     const [error, setError] = useState(false)
     
     useEffect(() => {
+        setGotStock(false);
         const getData = async () => {
             //fetch data from spring api
             const data : StockItem[] | any = await getStock();
@@ -23,8 +24,12 @@ const GetAllStock = () => {
                 return
             }
         };
-        getData();
-    }, []);
+        getData().then(() => {
+            if(props.updateFetch){
+                props.setUpdateFetch(false);
+            }
+        })
+    }, [props.updateFetch]);
   
     if(gotStock){
         return (
