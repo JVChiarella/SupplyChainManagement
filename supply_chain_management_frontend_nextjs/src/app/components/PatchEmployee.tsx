@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const PatchEmployee = () => {
+const PatchEmployee = (props : any) => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
@@ -32,6 +32,7 @@ const PatchEmployee = () => {
             return "error"
         } else{
             setPostComplete(true);
+            props.setUpdateEmployeeFetch(true);
         }
     }
 

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const AddCustomer = () => {
+const AddCustomer = (props : any) => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
@@ -37,6 +37,7 @@ const AddCustomer = () => {
             return "error"
         } else{
             setPostComplete(true);
+            props.setUpdateCustomerFetch(true);
         }
     }
 

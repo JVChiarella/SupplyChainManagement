@@ -57,16 +57,16 @@ body {
 
 .background {
   display: flex;
-  height: 100vh;
-  width: 100vw;
   flex-direction: column ;
   background-color: #051622;
   color: #FFFFFFBF;
+  height: 100%;
+  width: 100%;
 }
 
 .admin-users-page-background {
   display: flex;
-  height: 200vh;
+  height: 300vh;
   width: 100vw;
   flex-direction: column ;
   background-color: #051622;
@@ -75,7 +75,7 @@ body {
 
 .admin-stock-page-background {
   display: flex;
-  height: 110vh;
+  height: 200vh;
   width: 100vw;
   flex-direction: column ;
   background-color: #051622;
@@ -99,7 +99,7 @@ body {
 
 .title {
   color: #1BA098;
-  font-size: 65px;
+  font-size: 50px;
   align-items: center;
   text-align: center;
   margin-top: 50px;
@@ -122,8 +122,8 @@ body {
 
 .login-items {
   color: #FFFFFFBF;
-  width: 33vw;
-  height: 66vh;
+  width: 450px;
+  height: 560px;
   box-shadow: 4px 4px 10px 5px rgba(202.94, 202.94, 202.94, 0.49);
   border-radius: 15px;
   border: 5px #DEB992 solid;
@@ -135,6 +135,7 @@ body {
 }
 
 .fields {
+  width: 300px;
   color: rgba(0, 0, 0, 0.75);
   font-size: 20px;
   padding-top: 20px;
@@ -185,8 +186,8 @@ body {
 
 .page-container{
   display: flex;
+  height: 75%;
   width: 100%;
-  height: 50%;
   position: flex;
   align-items: center;
   flex-direction: column;

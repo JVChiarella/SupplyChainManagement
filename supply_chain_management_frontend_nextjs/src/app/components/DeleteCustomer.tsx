@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, FormEvent } from 'react'
 
-const DeleteCustomer = () => {
+const DeleteCustomer = (props : any) => {
 
     const [ postComplete, setPostComplete ] = useState(false)
 
@@ -21,6 +21,7 @@ const DeleteCustomer = () => {
             return "error"
         } else{
             setPostComplete(true);
+            props.setUpdateCustomerFetch(true);
         }
     }
 

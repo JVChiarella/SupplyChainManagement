@@ -11,6 +11,7 @@ import PatchCustomer from "../components/PatchCustomer";
 import PatchEmployee from "../components/PatchEmployee";
 import DeleteCustomer from "../components/DeleteCustomer";
 import DeleteEmployee from "../components/DeleteEmployee";
+import GetAllEmployees from "../components/GetAllEmployees";
 
 export default function UsersPageLayout({
     children,
@@ -20,6 +21,10 @@ export default function UsersPageLayout({
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const [ isAdmin, setIsAdmin ] = useState(false);
     const router = useRouter();
+
+    //state to pass to children to reload tables on change
+    const [ updateEmployeeFetch, setUpdateEmployeeFetch ] = useState(false);
+    const [ updateCustomerFetch, setUpdateCustomerFetch ] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -56,18 +61,19 @@ export default function UsersPageLayout({
         </p>
     )} else if(isAdmin){ 
         return (
-            <main className="admin-users-page-background">
+            <main className="background">
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}
-                    <AddEmployee></AddEmployee>
-                    <PatchEmployee></PatchEmployee>
-                    <DeleteEmployee></DeleteEmployee>
+                    <GetAllEmployees updateEmployeeFetch={updateEmployeeFetch} setUpdateEmployeeFetch={setUpdateEmployeeFetch}></GetAllEmployees>
+                    <AddEmployee setUpdateEmployeeFetch={setUpdateEmployeeFetch}></AddEmployee>
+                    <PatchEmployee setUpdateEmployeeFetch={setUpdateEmployeeFetch}></PatchEmployee>
+                    <DeleteEmployee setUpdateEmployeeFetch={setUpdateEmployeeFetch}></DeleteEmployee>
 
-                    <GetAllCustomers></GetAllCustomers>
-                    <AddCustomer></AddCustomer>
-                    <PatchCustomer></PatchCustomer>
-                    <DeleteCustomer></DeleteCustomer>
+                    <GetAllCustomers updateCustomerFetch={updateCustomerFetch} setUpdateCustomerFetch={setUpdateCustomerFetch}></GetAllCustomers>
+                    <AddCustomer setUpdateCustomerFetch={setUpdateCustomerFetch}></AddCustomer>
+                    <PatchCustomer setUpdateCustomerFetch={setUpdateCustomerFetch}></PatchCustomer>
+                    <DeleteCustomer setUpdateCustomerFetch={setUpdateCustomerFetch}></DeleteCustomer>
                 </div>
             </main>
     )} else { 
@@ -76,6 +82,7 @@ export default function UsersPageLayout({
                 <Navbar></Navbar>
                 <div className="page-container">
                     {children}
+                    <GetAllEmployees updateEmployeeFetch={updateEmployeeFetch} setUpdateEmployeeFetch={setUpdateEmployeeFetch}></GetAllEmployees>
                 </div>
             </main>
     )}

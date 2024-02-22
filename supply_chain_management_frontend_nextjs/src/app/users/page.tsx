@@ -2,9 +2,7 @@ import GetAllEmployees from "../components/GetAllEmployees";
 
 const UsersPage = () => {
   return (
-    <div>
-      <GetAllEmployees></GetAllEmployees>
-    </div>
+    <div className="title">User Management</div>
   )
 }
 

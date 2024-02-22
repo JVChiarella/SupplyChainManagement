@@ -59,7 +59,7 @@ function LoginPage() {
   if(loginFailState){
     return (
       <div className = "background">
-        <div className="title">Supply Chain Management App</div>
+        <div className="title">Supply Chain Management</div>
         <div className = "login-container">
           <div className="login-items">
           <div className="subtitle">Employee Login</div>
@@ -89,7 +89,7 @@ function LoginPage() {
   } else {
     return (
       <div className = "background">
-        <div className="title">Supply Chain Management App</div>
+        <div className="title">Supply Chain Management</div>
         <div className = "login-container">
           <div className="login-items">
           <div className="subtitle">Employee Login</div>
