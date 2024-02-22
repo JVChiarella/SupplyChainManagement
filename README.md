@@ -3,7 +3,9 @@
 Java, NodeJS and PostgreSQL must be installed on your machine to run this application
 
 Launch server in an IDE such as eclipse from loading the pom.xml, Launch nextjs frontend in npm
+
                                           OR
+                                          
 Install concurrently with npm and run "npm run deploy" in a terminal from the frontend folder to launch both the frontend and backend with a single command
 
 ## ERD
